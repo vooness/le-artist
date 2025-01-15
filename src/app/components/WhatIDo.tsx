@@ -147,15 +147,7 @@ const WhatIDo = () => {
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
         ></motion.div>
 
-        {/* Breathing Glow for Tablet and Mobile */}
-        <motion.div
-          className="absolute inset-0 flex justify-center items-center lg:hidden z-0"
-          initial={{ scale: 1, opacity: 0.5 }}
-          animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.7, 0.5] }}
-          transition={{ duration: 3, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
-        >
-          <div className="w-40 sm:w-48 md:w-64 h-40 sm:h-48 md:h-64 bg-orange-500 rounded-full opacity-50"></div>
-        </motion.div>
+       
 
         {/* Výzva ke Spolupráci */}
         <motion.div
