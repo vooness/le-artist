@@ -137,15 +137,25 @@ const WhatIDo = () => {
 
         {/* Parallax Světelné Efekty */}
         <motion.div
-          className="absolute -top-24 -left-16 w-96 h-96 bg-orange-500 rounded-full blur-[200px] opacity-30 z-0"
+          className="hidden lg:block absolute -top-24 -left-16 w-96 h-96 bg-orange-500 rounded-full blur-[200px] opacity-30 z-0"
           animate={{ x: [0, 20, -20], y: [0, 20, -20] }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
         ></motion.div>
         <motion.div
-          className="absolute top-48 right-0 w-72 h-72 bg-yellow-500 rounded-full blur-[150px] opacity-20 z-0"
+          className="hidden lg:block absolute top-48 right-0 w-72 h-72 bg-yellow-500 rounded-full blur-[150px] opacity-20 z-0"
           animate={{ x: [0, -15, 15], y: [0, -15, 15] }}
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
         ></motion.div>
+
+        {/* Breathing Glow for Tablet and Mobile */}
+        <motion.div
+          className="absolute inset-0 flex justify-center items-center lg:hidden z-0"
+          initial={{ scale: 1, opacity: 0.5 }}
+          animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.7, 0.5] }}
+          transition={{ duration: 3, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
+        >
+          <div className="w-40 sm:w-48 md:w-64 h-40 sm:h-48 md:h-64 bg-orange-500 rounded-full opacity-50"></div>
+        </motion.div>
 
         {/* Výzva ke Spolupráci */}
         <motion.div
