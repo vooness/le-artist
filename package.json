@@ -1,0 +1,40 @@
+{
+  "name": "react-leartist-portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@nextui-org/card": "^2.0.34",
+    "@nextui-org/react": "^2.4.8",
+    "@nextui-org/system": "^2.2.6",
+    "@nextui-org/theme": "^2.2.11",
+    "@types/node": "22.9.3",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "autoprefixer": "^10.4.20",
+    "eslint": "9.15.0",
+    "eslint-config-next": "15.0.3",
+    "framer-motion": "^10.15.1",
+    "next": "^15.1.4",
+    "postcss": "^8.4.49",
+    "react": "18.3.1",
+    "react-circular-progressbar": "^2.1.0",
+    "react-countup": "^6.5.3",
+    "react-dom": "18.3.1",
+    "react-icons": "^4.10.1",
+    "react-slick": "^0.30.3",
+    "react-vertical-timeline-component": "^3.6.0",
+    "slick-carousel": "^1.8.1",
+    "tailwindcss": "^3.4.15"
+  },
+  "devDependencies": {
+    "@types/react-slick": "^0.23.13",
+    "@types/react-vertical-timeline-component": "^3.3.6",
+    "typescript": "5.7.2"
+  }
+}
