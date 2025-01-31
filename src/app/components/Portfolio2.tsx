@@ -12,17 +12,7 @@ const banners = [
   { id: 2, image: "/imgs/malate.png", alt: "Banner 2" },
 ]
 
-// Data pro vertikální videa
-const verticalVideos = [
-  { id: 1, video: "/imgs/jimbo.webm" },
-  { id: 2, video: "/imgs/saty.mp4" },
-  { id: 3, video: "/imgs/serda.webm" },
-  { id: 4, video: "/imgs/magnesium.webm" },
-  { id: 5, video: "/imgs/probiotika.webm" },
-  { id: 6, video: "/imgs/mag-banner.webm" },
-  { id: 7, video: "/imgs/maleteban.webm" },
-  { id: 8, video: "/imgs/kolagen.webm" },
-]
+
 
 // Data pro PlayStation Store grafiky
 const psStoreGraphics = [
@@ -135,45 +125,7 @@ const Portfolio2 = () => {
         </div>
       </motion.div>
 
-      {/* Slider s vertikálními videi */}
-      <motion.div
-        className="max-w-7xl mx-auto mb-16 lg:mb-32"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8, delay: 0.3 }}
-      >
-        <h2 className="text-4xl font-bold text-center mb-12">Vertikální videa</h2>
-        <Slider {...videoSliderSettings}>
-          {verticalVideos.map((video) => (
-            <div key={video.id} className="px-4">
-              <div className="relative">
-                <motion.video
-                  src={video.video}
-                  muted
-                  playsInline
-                  className="w-full h-auto object-cover rounded-lg shadow-lg"
-                />
-                {/* Play Button */}
-                <button
-                  className="absolute inset-0 flex items-center justify-center focus:outline-none transition-transform hover:scale-110"
-                  onClick={(e) =>
-                    handlePlayPause(
-                      video.id,
-                      (e.currentTarget.parentElement?.querySelector("video") as HTMLVideoElement)
-                    )
-                  }
-                >
-                  {/* Kruh kolem ikony */}
-                  <div className="bg-gray-800 bg-opacity-50 rounded-full w-10 h-10 flex items-center justify-center">
-                    {playingVideoId === video.id ? "❚❚" : "▶"}
-                  </div>
-                </button>
-              </div>
-            </div>
-          ))}
-        </Slider>
-      </motion.div>
+      
 
       {/* PlayStation Store grafika */}
       <motion.div

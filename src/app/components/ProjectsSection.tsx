@@ -2,6 +2,9 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import { BsCheck2Circle } from "react-icons/bs";
+import { FiMonitor, FiEdit, FiVideo } from "react-icons/fi";
+import { useState } from "react";
 
 const projectsData = [
   {
@@ -11,7 +14,7 @@ const projectsData = [
       "Webová aplikace vytvořená na míru pro veterinární ordinaci, která umožňuje snadnou správu klientů a plánování schůzek.",
     technologies: ".NET Core, C#, HTML, CSS, JavaScript",
     video: "/imgs/veterina.webm",
-    link: "https://veterinagottwaldova.cz", // Odkaz na detail nebo demo
+    link: "https://veterinagottwaldova.cz",
     invertLayout: false,
   },
   {
@@ -21,7 +24,7 @@ const projectsData = [
       "Moderní portfolio, které kombinuje čistý design s interaktivními prvky a ukázkami AI projektů.",
     technologies: "React, Next.js, Tailwind CSS, Three.js",
     video: "/imgs/ai.webm",
-    link: "https://www.ai-andrt.cz", // Odkaz na detail nebo demo
+    link: "https://www.ai-andrt.cz",
     invertLayout: true,
   },
   {
@@ -31,7 +34,7 @@ const projectsData = [
       "Aplikace umožňující vyhledávání, filtrování a sledování informací o filmech pomocí API.",
     technologies: "React, Tailwind CSS, REST API",
     video: "/imgs/film.webm",
-    link: "https://movieapp-mu-gilt.vercel.app", // Odkaz na detail nebo demo
+    link: "https://movieapp-mu-gilt.vercel.app",
     invertLayout: false,
   },
   {
@@ -41,7 +44,7 @@ const projectsData = [
       "Osobní projekt zaměřený na uchování vzpomínek a vztahů prostřednictvím vzkazů pro vaše blízké.",
     technologies: "React, Node.js, MongoDB, Tailwind CSS",
     video: "/imgs/vzkaz.webm",
-    link: "https://last-message-liard.vercel.app", // Odkaz na detail nebo demo
+    link: "https://last-message-liard.vercel.app",
     invertLayout: true,
   },
   {
@@ -51,10 +54,23 @@ const projectsData = [
       "Chcete vlastní eshop, ale nevíte jak na to? Pomůžu vám vytvořit pomocí Shoptetu váš první eshop. Navíc umím kódovat úpravy vzhledu i funkcí!",
     technologies: "Shoptet programátor",
     video: "/imgs/kz.webm",
-    link: "wwww.kralostvizdravi.cz", // Odkaz na detail nebo demo
+    link: "https://www.kralostvizdravi.cz",
     invertLayout: false,
   },
 ];
+
+const cardAnimation = {
+  hidden: { opacity: 0, y: 50 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.3,
+      duration: 0.8,
+      ease: "easeOut",
+    },
+  }),
+};
 
 const ProjectsSection: React.FC = () => {
   return (
@@ -62,18 +78,14 @@ const ProjectsSection: React.FC = () => {
       id="portfolio"
       className="relative overflow-hidden bg-[#0F172A] py-24 px-8 text-orange-600"
     >
-      {/* Dekorativní prvky */}
-      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-        <div
-          className="absolute w-[500px] h-[500px] bg-purple-600 rounded-full blur-3xl opacity-30 animate-float"
-          style={{
-            top: "-10%",
-            left: "-20%",
-          }}
-        />
+      {/* Tmavé rozmazané gradientové pozadí */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 opacity-70 blur-lg"></div>
+        <div className="absolute top-0 left-1/4 w-1/2 h-full bg-gradient-to-t from-transparent via-gray-700 to-transparent opacity-50 blur-xl"></div>
+        <div className="absolute bottom-0 right-1/4 w-1/2 h-full bg-gradient-to-b from-transparent via-gray-700 to-transparent opacity-50 blur-xl"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto relative z-10 mt-12">
+      <div className="max-w-7xl mx-auto relative z-10">
         {/* Hlavička sekce */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -110,7 +122,12 @@ const ProjectsSection: React.FC = () => {
               {!project.invertLayout ? (
                 <>
                   {/* Video vlevo */}
-                  <div>
+                  <div className="relative">
+                    {/* Projektové číslo */}
+                    <div className="absolute top-4 left-4 bg-orange-500 bg-opacity-75 text-white text-sm font-bold px-3 py-1 rounded-full z-10">
+                      #{project.id}
+                    </div>
+                    {/* Video */}
                     <motion.video
                       src={project.video}
                       autoPlay
@@ -119,7 +136,7 @@ const ProjectsSection: React.FC = () => {
                       playsInline
                       disablePictureInPicture
                       controls={false}
-                      className="w-full h-auto object-cover rounded-lg shadow-lg lg:max-h-[600px] pointer-events-none"
+                      className="w-full h-auto object-cover rounded-lg shadow-lg lg:max-h-[800px] pointer-events-none relative z-10"
                       whileHover={{ scale: 1.02 }}
                     />
                   </div>
@@ -134,6 +151,8 @@ const ProjectsSection: React.FC = () => {
                     </p>
                     <a
                       href={project.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="inline-block px-6 py-3 bg-orange-500 text-white font-medium rounded-full hover:bg-orange-600 transition"
                     >
                       Mrknout na web
@@ -153,13 +172,20 @@ const ProjectsSection: React.FC = () => {
                     </p>
                     <a
                       href={project.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="inline-block px-6 py-3 bg-orange-500 text-white font-medium rounded-full hover:bg-orange-600 transition"
                     >
-                        Mrknout na web
+                      Mrknout na web
                     </a>
                   </div>
                   {/* Video vpravo */}
-                  <div className="order-1 lg:order-2">
+                  <div className="order-1 lg:order-2 relative">
+                    {/* Projektové číslo */}
+                    <div className="absolute top-4 left-4 bg-orange-500 bg-opacity-75 text-white text-sm font-bold px-3 py-1 rounded-full z-10">
+                      #{project.id}
+                    </div>
+                    {/* Video */}
                     <motion.video
                       src={project.video}
                       autoPlay
@@ -168,7 +194,7 @@ const ProjectsSection: React.FC = () => {
                       playsInline
                       disablePictureInPicture
                       controls={false}
-                      className="w-full h-auto object-cover rounded-lg shadow-lg lg:max-h-[600px] pointer-events-none"
+                      className="w-full h-auto object-cover rounded-lg shadow-lg lg:max-h-[800px] pointer-events-none relative z-10"
                       whileHover={{ scale: 1.02 }}
                     />
                   </div>

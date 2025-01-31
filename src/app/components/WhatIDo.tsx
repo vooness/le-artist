@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion"
 import { BsCheck2Circle } from "react-icons/bs"
+import { FiMonitor, FiEdit, FiVideo } from "react-icons/fi" // Import ikon
 import Image from "next/image"
 import { useState } from "react"
 
@@ -10,17 +11,20 @@ const services = [
     title: "Grafika",
     description:
       "Působivé brandingy, tvorba loga a vizuální prvky, které zaujmou.",
+    icon: <FiEdit />, // Ikona pro grafiku
     checkmarks: ["Individuální návrhy loga", "Kompletní vizuální styl", "Grafika pro sociální sítě"],
   },
   {
     title: "Střih Videa",
     description: "Profesionální střih videí s důrazem na příběh a kvalitní efekty.",
+    icon: <FiVideo />, // Ikona pro střih videa
     checkmarks: ["Motion design", "AI voiceover", "Krátké reklamy"],
   },
   {
     title: "Webovky",
     description:
       "Moderní, funkční a responzivní webové stránky a e-shopy šité na míru.",
+    icon: <FiMonitor />, // Ikona pro webové stránky
     checkmarks: ["Moderní webovky", "Shoptet eshop", "SEO optimalizace"],
   },
 ]
@@ -56,7 +60,7 @@ const WhatIDo = () => {
           className="text-center"
         >
           <h2 className="text-4xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight relative inline-block">
-            S čím se na mě můžete spolehnout?
+            Moje služby
             <motion.div
               initial={{ scaleX: 0, opacity: 0 }}
               whileInView={{ scaleX: 1, opacity: 1 }}
@@ -70,26 +74,12 @@ const WhatIDo = () => {
             ></motion.div>
           </h2>
           
-          {/* Přidaný obrázek Shiba Inu pod nadpis */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-            className="flex justify-center mt-4"
-          >
-            {/* Použití komponenty Image z Next.js pro optimalizaci */}
-            <Image
-              src="/imgs/pixel-hi1.png" // Upravte cestu dle potřeby
-              alt="Shiba Inu Charakter"
-              width={350} // Nastavte šířku podle potřeby
-              height={350} // Nastavte výšku podle potřeby
-              className="w-40 h-40 sm:w-48 sm:h-48 lg:w-64 lg:h-64 rounded-full object-contain mt-12"
-            />
-          </motion.div>
-          
           <p className="mt-12 text-gray-400 text-lg max-w-2xl mx-auto">
-            Dodávám kreativní řešení s precizností, vášní a nejmodernějšími technologiemi.
+            Dodávám kreativní řešení s vášní a nejmodernějšími technologiemi.
+          </p>
+          {/* Přidaný odstavec */}
+          <p className="mt-4 text-gray-400 text-lg max-w-2xl mx-auto">
+            Ceny dělám na míru podle potřeb vašeho rozpočtu.
           </p>
         </motion.div>
 
@@ -113,8 +103,9 @@ const WhatIDo = () => {
             >
               <div className="absolute inset-0 z-0 bg-gradient-to-r from-orange-500 to-yellow-500 opacity-0 group-hover:opacity-20 rounded-xl transition-all duration-500"></div>
               <div className="relative z-10">
-                {/* Název Služby */}
+                {/* Název Služby s Ikonou */}
                 <div className="flex justify-center items-center mb-6">
+                  <div className="text-4xl text-orange-500 mr-4">{service.icon}</div>
                   <h3 className="text-3xl font-bold text-orange-500">{service.title}</h3>
                 </div>
                 <p className="text-gray-400 leading-relaxed">{service.description}</p>
@@ -146,8 +137,6 @@ const WhatIDo = () => {
           animate={{ x: [0, -15, 15], y: [0, -15, 15] }}
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
         ></motion.div>
-
-       
 
         {/* Výzva ke Spolupráci */}
         <motion.div

@@ -83,9 +83,7 @@ const Navbar = () => {
               <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-orange-500 transition-all duration-300 group-hover:w-full"></span>
             </a>
           </li>
-          <li>
-            
-          </li>
+          
           <li>
             <a
               href="#portfolio"
@@ -111,49 +109,10 @@ const Navbar = () => {
               <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-orange-500 transition-all duration-300 group-hover:w-full"></span>
             </a>
           </li>
-          <li>
-            <a
-              href="#faq"
-              className="relative group text-white transition duration-300"
-            >
-             FAQ
-              <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-orange-500 transition-all duration-300 group-hover:w-full"></span>
-            </a>
-          </li>
+          
         </ul>
 
-        {/* Right Side: Online Status + Language Switch (Desktop) */}
-        <div className="hidden lg:flex items-center gap-6">
-          {/* Online Status */}
-          <div className="flex items-center gap-2">
-            <span
-              className={`w-3 h-3 rounded-full ${
-                status ? "bg-green-500" : "bg-red-500"
-              }`}
-            ></span>
-            <span className="text-white">{status ? "Online" : "Offline"}</span>
-          </div>
-
-          {/* Language Switch */}
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setLanguage("CZ")}
-              className={`${
-                language === "CZ" ? "text-orange-500 font-bold" : "text-white"
-              } transition-colors`}
-            >
-              CZ
-            </button>
-            <button
-              onClick={() => setLanguage("ENG")}
-              className={`${
-                language === "ENG" ? "text-orange-500 font-bold" : "text-white"
-              } transition-colors`}
-            >
-              ENG
-            </button>
-          </div>
-        </div>
+        
 
         {/* Desktop Contact Button */}
         <a
@@ -247,15 +206,7 @@ const Navbar = () => {
                   Kontakt
                 </a>
               </li>
-              <li>
-                <a
-                  href="#faq"
-                  onClick={() => setIsOpen(false)}
-                  className="hover:text-black transition"
-                >
-                  FAQ
-                </a>
-              </li>
+              
             </motion.ul>
 
             {/* Contact Info */}
@@ -264,8 +215,9 @@ const Navbar = () => {
               <p className="text-sm">
                 Webovky, grafika a videa k vaším službám!
               </p>
-              <p className="mt-4">📞 +420 605 707</p>
+              <p className="mt-4">📞 +420 605 707 036</p>
               <p className="mt-1">✉️ dotazy.le.artist@gmail.com</p>
+              <p className="mt-1">Marek Frňka</p>
             </div>
 
             {/* Close Button at Bottom */}

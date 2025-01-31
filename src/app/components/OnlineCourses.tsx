@@ -3,28 +3,32 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { BsCheckCircle } from "react-icons/bs";
+import { FiMonitor, FiEdit, FiVideo } from "react-icons/fi"; // Import ikon
+import Image from "next/image";
 
 const courses = [
- 
+  {
+    id: 1,
+    title: "Webovky",
+    description:
+      "Moderní, funkční a responzivní webové stránky a e-shopy šité na míru.",
+    icon: <FiMonitor />, // Ikona pro webovky
+    highlights: ["Moderní webovky", "Shoptet eshop", "SEO optimalizace"],
+  },
   {
     id: 2,
-    title: "Grafický Design",
+    title: "Grafika",
     description:
-      "Naučte se vytvářet profesionální designy pomocí nástrojů jako Photoshop a AI toolek.",
+      "Působivé brandingy, tvorba loga a vizuální prvky, které zaujmou.",
+    icon: <FiEdit />, // Ikona pro grafiku
     highlights: ["Adobe Photoshop", "AI toolky", "Pravidla Brandingu"],
   },
   {
     id: 3,
-    title: "Editace Videí",
-    description: "Editujte úchvatná videa pomocí Premiere Pro a DaVinci Resolve.",
-    highlights: ["Základy After effects", "Animace", "Krátké videa"],
-  },
-  {
-    id: 4,
-    title: "Front-End Vývoj",
-    description:
-      "Vytvářejte moderní, responzivní webové stránky pomocí React, Next.js a moderního CSS.",
-    highlights: ["Základy React.js", "CSS Animace", "Responzivní Design"],
+    title: "Střih Videa",
+    description: "Profesionální střih videí s důrazem na příběh a kvalitní efekty.",
+    icon: <FiVideo />, // Ikona pro střih videa
+    highlights: ["Motion design", "Animace", "Krátká videa"],
   },
 ];
 
@@ -85,6 +89,24 @@ const OnlineCourses = () => {
               className="absolute left-1/3 -translate-x-1/3 bottom-[-10px] h-[5px] w-2/3 bg-gradient-to-r from-[#F97316] to-yellow-500 rounded-full origin-center"
             ></motion.div>
           </h2>
+
+          {/* Přidaný obrázek */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="flex justify-center mt-12"
+          >
+            <Image
+              src="/imgs/shibabg.png" // Upravte cestu k obrázku
+              alt="Ilustrace lektorování"
+              width={600} // Nastavte šířku podle potřeby
+              height={600} // Nastavte výšku podle potřeby
+              className="rounded-lg object-contain"
+            />
+          </motion.div>
+
           <p className="mt-12 text-gray-400 text-lg max-w-2xl mx-auto">
             Tyto kurzy jsou financovány Evropským sociálním fondem pro vzdělávání a jsou
             skoro zdarma pro účastníky, ať už jste zaměstnaní, samostatně výdělečně činní nebo nezaměstnaní (10% hradí učastník).
@@ -108,8 +130,9 @@ const OnlineCourses = () => {
               {/* Neonový Okraj */}
               <div className="absolute inset-0 z-0 bg-gradient-to-r from-[#F97316] to-yellow-500 opacity-0 group-hover:opacity-20 rounded-xl transition-all duration-500"></div>
               <div className="relative z-10 p-6 flex flex-col flex-grow">
-                {/* Název Kurzu */}
-                <h3 className="text-3xl font-bold text-orange-600 mb-4">
+                {/* Název Kurzu s Ikonou */}
+                <h3 className="text-3xl font-bold text-orange-600 mb-4 flex items-center">
+                  <span className="text-lg mr-2">{course.icon}</span>
                   {course.title}
                 </h3>
                 {/* Popis Kurzu */}
@@ -136,9 +159,15 @@ const OnlineCourses = () => {
         {/* Doplňkový Text */}
         <div className="mt-16 text-center">
           <p className="text-lg sm:text-xl text-gray-400">
-            Pokud máte zájem, <a href="https://softinum.com/skoleni" className="text-[#F97316] font-bold underline">mrkněte zde</a> na dostupné kurzy a termíny!
-            Pokud si přejete jako firma vyškolit někoho zvlášť, neváhejte mě kontaktovat přes formulář dole.
-            
+            Pokud máte zájem,{" "}
+            <a
+              href="https://softinum.com/skoleni"
+              className="text-[#F97316] font-bold underline"
+            >
+              mrkněte zde
+            </a>{" "}
+            na dostupné kurzy a termíny! Pokud si přejete jako firma vyškolit
+            někoho zvlášť, neváhejte mě kontaktovat přes formulář dole.
           </p>
         </div>
       </div>

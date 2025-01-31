@@ -1,8 +1,8 @@
-"use client";
+"use client"
 
-import React from "react";
-import { motion } from "framer-motion";
-import { FaStar, FaClock, FaThumbsUp, FaHandshake } from "react-icons/fa";
+import React from "react"
+import { motion } from "framer-motion"
+import { FaStar, FaClock, FaThumbsUp, FaHandshake } from "react-icons/fa"
 
 const reasons = [
   {
@@ -29,19 +29,60 @@ const reasons = [
     description:
       "Důraz na detaily a kvalitu zaručuje, že každý projekt je proveden na nejvyšší úrovni.",
   },
-];
+]
 
 const WhyTrustMe = () => {
   return (
-    <section className="relative bg-gradient-to-r bg-gray-900 text-white py-20 px-6 sm:px-12 overflow-hidden">
-      {/* Dekorativní prvky – přidané gradientové vrstvy a jemné animace */}
-      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-       
-        {/* Můžete přidat další dekorativní prvky podle potřeby */}
+    <section className="relative bg-gray-900 text-white py-20 px-6 sm:px-12 overflow-hidden">
+      {/* Dekorativní prvky – vlnky a linie */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+        {/* Levé vlnky */}
+        <div className="absolute w-[600px] h-[600px] top-0 left-[-150px]">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 400 400"
+            fill="none"
+            className="w-full h-full opacity-10"
+          >
+            <path
+              d="M200 0C300 100 100 300 200 400"
+              stroke="url(#leftGradient)"
+              strokeWidth="2"
+            />
+            <defs>
+              <linearGradient id="leftGradient" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="#F97316" />
+                <stop offset="100%" stopColor="#3B82F6" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+
+        {/* Pravé vlnky */}
+        <div className="absolute w-[600px] h-[600px] bottom-0 right-[-150px]">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 400 400"
+            fill="none"
+            className="w-full h-full opacity-10"
+          >
+            <path
+              d="M200 0C300 100 100 300 200 400"
+              stroke="url(#rightGradient)"
+              strokeWidth="2"
+            />
+            <defs>
+              <linearGradient id="rightGradient" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="#3B82F6" />
+                <stop offset="100%" stopColor="#F97316" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
-        {/* Hlavička Sekce */}
+        {/* Hlavička sekce */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -59,11 +100,12 @@ const WhyTrustMe = () => {
             ></motion.div>
           </h2>
           <p className="text-gray-300 text-lg mt-12 max-w-2xl mx-auto">
-            Objevte důvody, proč vám mohu poskytnout nejlepší služby a jak vám mohu pomoci dosáhnout vašich cílů.
+            Objevte důvody, proč vám mohu poskytnout nejlepší služby a jak vám
+            mohu pomoci dosáhnout vašich cílů.
           </p>
         </motion.div>
 
-        {/* Důvody Sekce */}
+        {/* Sekce s důvody */}
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12"
           initial="hidden"
@@ -78,11 +120,8 @@ const WhyTrustMe = () => {
               transition={{ duration: 0.8, delay: index * 0.2 }}
               className="flex flex-col items-center text-center p-6 bg-[#1e293b] rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500"
             >
-              {/* Ikona */}
               <div className="text-orange-500 text-4xl mb-4">{reason.icon}</div>
-              {/* Název Důvodu */}
               <h3 className="text-2xl font-bold mb-2">{reason.title}</h3>
-              {/* Popis Důvodu */}
               <p className="text-gray-300 text-sm">{reason.description}</p>
             </motion.div>
           ))}
@@ -105,7 +144,7 @@ const WhyTrustMe = () => {
         </motion.div>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default WhyTrustMe;
+export default WhyTrustMe

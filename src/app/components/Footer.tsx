@@ -6,11 +6,11 @@ import React from "react";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-orange-600 text-white py-12 px-6">
+    <footer className="bg-gray-800 text-white py-12 px-6">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
         {/* About Section */}
         <div>
-          <h3 className="text-gray-800 text-xl font-semibold mb-4">O nás</h3>
+          <h3 className="text-orange-600 text-xl font-semibold mb-4">O mně</h3>
           <p>
             Jsem vášnivý designér a vývojář zaměřený na vytváření výjimečných digitálních zážitků.
           </p>
@@ -18,7 +18,7 @@ const Footer: React.FC = () => {
 
         {/* Quick Links */}
         <div>
-          <h3 className="text-gray-800 text-xl font-semibold mb-4">Rychlé odkazy</h3>
+          <h3 className="text-orange-600 text-xl font-semibold mb-4">Rychlé odkazy</h3>
           <ul className="space-y-2">
             <li>
               <a href="#home" className="hover:text-white transition-colors duration-300">
@@ -45,7 +45,7 @@ const Footer: React.FC = () => {
 
         {/* Services */}
         <div>
-          <h3 className="text-gray-800 text-xl font-semibold mb-4">Služby</h3>
+          <h3 className="text-orange-600 text-xl font-semibold mb-4">Služby</h3>
           <ul className="space-y-2">
             <li>
               <a href="#web-design" className="hover:text-white transition-colors duration-300">
@@ -72,7 +72,7 @@ const Footer: React.FC = () => {
 
         {/* Contact Information */}
         <div>
-          <h3 className="text-gray-800 text-xl font-semibold mb-4">Kontaktujte nás</h3>
+          <h3 className="text-orange-600 text-xl font-semibold mb-4">Kontaktujte nás</h3>
           <p>Email: vooness@stream.cz</p>
           <p>Telefon: +420 605 707 036</p>
           {/* Přidání jména společnosti a IČO */}
@@ -120,7 +120,7 @@ const Footer: React.FC = () => {
       </div>
 
       {/* Footer Bottom */}
-      <div className="mt-12 border-t border-white pt-6 text-center">
+      <div className="mt-12  pt-6 text-center text-orange-600">
         <p className="text-sm">
           &copy; {new Date().getFullYear()} Le Artist - WEB - GRAFIKA - VIDEO. Všechna práva vyhrazena.
         </p>

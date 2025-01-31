@@ -50,12 +50,7 @@ export const HeroSection = () => {
               >
                 Chci svůj web!
               </a>
-              <a
-                href="#contact"
-                className="px-5 py-2 sm:px-6 sm:py-3 border-2 border-orange-500 text-orange-500 font-medium rounded-full hover:bg-orange-500 hover:text-white transition"
-              >
-                Kontaktuj mě
-              </a>
+              
             </div>
           </motion.div>
 
@@ -109,27 +104,27 @@ export const HeroSection = () => {
         >
           <div className="flex flex-col items-center">
             <h3 className="text-3xl sm:text-4xl font-bold text-orange-500">
-              <CountUp start={0} end={5} duration={2} />+
+              <CountUp start={0} end={12} duration={2} />+
             </h3>
-            <p className="text-xs sm:text-sm text-gray-400">Roky praxe</p>
+            <p className="text-xs sm:text-sm text-gray-400">let praxe</p>
           </div>
           <div className="flex flex-col items-center">
             <h3 className="text-3xl sm:text-4xl font-bold text-orange-500">
-              <CountUp start={0} end={50} duration={2} />+
+              <CountUp start={0} end={150} duration={2} />+
             </h3>
             <p className="text-xs sm:text-sm text-gray-400">Hotových projektů</p>
           </div>
           <div className="flex flex-col items-center">
             <h3 className="text-3xl sm:text-4xl font-bold text-orange-500">
-              <CountUp start={0} end={10} duration={2} />+
+              <CountUp start={0} end={40} duration={2} />+
             </h3>
             <p className="text-xs sm:text-sm text-gray-400">Použité technologie</p>
           </div>
           <div className="flex flex-col items-center">
             <h3 className="text-3xl sm:text-4xl font-bold text-orange-500">
-              <CountUp start={0} end={500} duration={2} />+
+              <CountUp start={0} end={5000} duration={2} />+
             </h3>
-            <p className="text-xs sm:text-sm text-gray-400">Dodané návrhy</p>
+            <p className="text-xs sm:text-sm text-gray-400">Dodaných návrhů</p>
           </div>
         </motion.div>
       </div>
