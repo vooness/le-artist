@@ -6,7 +6,7 @@ import React from "react";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-gray-800 text-white py-12 px-6">
+    <footer className="bg-[#0F172A] text-white py-12 px-6">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
         {/* About Section */}
         <div>

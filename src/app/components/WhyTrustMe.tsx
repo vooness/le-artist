@@ -23,17 +23,12 @@ const reasons = [
     description:
       "Snažím se vždy udržovat profesionální a přátelský vztah s klienty, což vede k dlouhodobé spolupráci.",
   },
-  {
-    icon: <FaStar />,
-    title: "Vysoká kvalita práce",
-    description:
-      "Důraz na detaily a kvalitu zaručuje, že každý projekt je proveden na nejvyšší úrovni.",
-  },
+  
 ]
 
 const WhyTrustMe = () => {
   return (
-    <section className="relative bg-gray-900 text-white py-20 px-6 sm:px-12 overflow-hidden">
+    <section className="relative bg-[#0f172a] text-white py-20 px-6 sm:px-12 overflow-hidden">
       {/* Dekorativní prvky – vlnky a linie */}
       <div className="absolute inset-0 pointer-events-none z-0">
         {/* Levé vlnky */}
@@ -107,7 +102,7 @@ const WhyTrustMe = () => {
 
         {/* Sekce s důvody */}
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}

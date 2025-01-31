@@ -49,7 +49,7 @@ const OnlineCourses = () => {
   return (
     <section
       id="kurzy"
-      className="relative py-24 px-6 sm:px-12 bg-gradient-to-br from-[#0d1117] via-[#161b22] to-[#0f172a] text-white overflow-hidden"
+      className="relative py-24 px-6 sm:px-12 bg-[#0f172a] text-white overflow-hidden"
     >
       {/* Pixelové Okraje */}
       <div

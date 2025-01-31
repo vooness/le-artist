@@ -72,26 +72,12 @@ const AboutMeSection = () => {
   const shouldReduceMotion = useReducedMotion();
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center px-6 py-16 bg-gray-900 overflow-hidden">
-      {/* Video na pozadí */}
-      <div className="absolute inset-0 z-0">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="w-full h-full object-cover"
-          preload="auto"
-          poster="/imgs/about-poster.jpg" // Fallback image
-        >
-          <source src="/imgs/about.webm" type="video/webm" />
-          <source src="/imgs/about.mp4" type="video/mp4" />
-          Váš prohlížeč nepodporuje HTML5 video.
-        </video>
-      </div>
-
-      {/* Překrytí */}
-      <div className="absolute inset-0 bg-black bg-opacity-50 z-10"></div>
+    <section className="relative min-h-screen flex items-center justify-center px-6 py-16 bg-[#0f172a] overflow-hidden">
+      {/* Odstraněné Video na pozadí */}
+      {/* Video na pozadí bylo odstraněno */}
+      
+      {/* Odstraněno Překrytí */}
+      {/* <div className="absolute inset-0 bg-black bg-opacity-50 z-10"></div> */}
 
       {/* Obsah */}
       <div className="relative z-20 max-w-7xl mx-auto text-white text-center">

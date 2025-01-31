@@ -95,7 +95,7 @@ const Portfolio2 = () => {
   }
 
   return (
-    <section className="bg-gray-900 text-white py-16 px-8">
+    <section className="bg-[#0f172a] text-white py-16 px-8">
       {/* Ukázka bannerů */}
       <motion.div
         className="max-w-7xl mx-auto mb-16 lg:mb-32"
