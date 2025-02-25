@@ -85,7 +85,7 @@ const ProjectsSection: React.FC = () => {
         <div className="absolute bottom-0 right-1/4 w-1/2 h-full bg-gradient-to-b from-transparent via-gray-700 to-transparent opacity-50 blur-xl"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto relative z-10">
+      <div className="max-w-7xl mx-auto relative z-10 mt-12">
         {/* Hlavička sekce */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}

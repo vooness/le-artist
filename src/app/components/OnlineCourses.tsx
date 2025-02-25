@@ -107,9 +107,9 @@ const OnlineCourses = () => {
             />
           </motion.div>
 
-          <p className="mt-12 text-gray-400 text-lg max-w-2xl mx-auto">
+          <p className="mt-12 text-white text-lg max-w-2xl mx-auto">
             Tyto kurzy jsou financovány Evropským sociálním fondem pro vzdělávání a jsou
-            skoro zdarma pro účastníky, ať už jste zaměstnaní, samostatně výdělečně činní nebo nezaměstnaní (10% hradí učastník).
+            skoro zdarma pro účastníky, ať už jste zaměstnaní, samostatně výdělečně činní nebo nezaměstnaní (20% hradí učastník).
           </p>
         </motion.div>
 
@@ -167,7 +167,7 @@ const OnlineCourses = () => {
               mrkněte zde
             </a>{" "}
             na dostupné kurzy a termíny! Pokud si přejete jako firma vyškolit
-            někoho zvlášť, neváhejte mě kontaktovat přes formulář dole.
+            někoho zvlášť, neváhejte mě kontaktovat přes kontaktní formulář.
           </p>
         </div>
       </div>

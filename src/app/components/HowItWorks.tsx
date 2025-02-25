@@ -95,7 +95,7 @@ const EnhancedTimeline = () => {
       id="spoluprace"
       className="relative text-white py-20 px-6 overflow-hidden bg-[#0F172A]"
     >
-      <div className="max-w-7xl mx-auto relative z-10 mt-12">
+      <div className="max-w-7xl mx-auto relative z-10 mt-20">
         {/* Nadpis Sekce */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}

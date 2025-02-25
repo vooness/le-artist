@@ -62,11 +62,7 @@ const Footer: React.FC = () => {
                 Editace videí
               </a>
             </li>
-            <li>
-              <a href="#seo" className="hover:text-white transition-colors duration-300">
-                SEO optimalizace
-              </a>
-            </li>
+            
           </ul>
         </div>
 
@@ -76,7 +72,7 @@ const Footer: React.FC = () => {
           <p>Email: vooness@stream.cz</p>
           <p>Telefon: +420 605 707 036</p>
           {/* Přidání jména společnosti a IČO */}
-          <p className="mt-4">Název společnosti: Le Artist</p>
+          
           <p>IČO: 11834153</p>
           <p>Jméno: Marek Frňka</p>
           {/* Odstranění sociálních ikon */}

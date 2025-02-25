@@ -59,14 +59,14 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full transition-all duration-300 z-40 ${
+      className={`fixed top-0 left-0 w-full transition-all duration-300 z-40  ${
         isScrolled ? "bg-black/70 backdrop-blur-md shadow-md" : "bg-transparent"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 flex justify-between items-center py-4">
         {/* Logo */}
         <a
-          href="#home"
+          href="/"
           className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-yellow-500 text-transparent bg-clip-text px-3 py-1"
         >
           Le Artist
@@ -76,17 +76,17 @@ const Navbar = () => {
         <ul className="hidden lg:flex items-center gap-8">
           <li>
             <a
-              href="#services"
+              href="/sluzby"
               className="relative group text-white transition duration-300"
             >
-              Co umím
+              Služby a ceník
               <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-orange-500 transition-all duration-300 group-hover:w-full"></span>
             </a>
           </li>
           
           <li>
             <a
-              href="#portfolio"
+              href="/portfolio"
               className="relative group text-white transition duration-300"
             >
               Portfolio
@@ -94,7 +94,7 @@ const Navbar = () => {
             </a>
           </li>
           <a
-              href="#spoluprace"
+              href="/postup"
               className="relative group text-white transition duration-300"
             >
               Postup tvorby webu
@@ -102,7 +102,7 @@ const Navbar = () => {
             </a>
           <li>
             <a
-              href="#kurzy"
+              href="/lektor"
               className="relative group text-white transition duration-300"
             >
               Online kurzy
@@ -116,7 +116,7 @@ const Navbar = () => {
 
         {/* Desktop Contact Button */}
         <a
-          href="#kontakt"
+          href="/kontakt"
           className="hidden lg:block px-4 py-2 bg-orange-500 text-white rounded-full font-medium hover:bg-orange-600 transition"
         >
           Kontaktujte mě
@@ -162,17 +162,17 @@ const Navbar = () => {
             >
               <li>
                 <a
-                  href="#services"
+                  href="/sluzby"
                   onClick={() => setIsOpen(false)}
                   className="hover:text-black transition"
                 >
-                  Co umím
+                  Služby a ceník
                 </a>
               </li>
               
               <li>
                 <a
-                  href="#portfolio"
+                  href="/portfolio"
                   onClick={() => setIsOpen(false)}
                   className="hover:text-black transition"
                 >
@@ -181,16 +181,16 @@ const Navbar = () => {
               </li>
               <li>
                 <a
-                  href="#spoluprace"
+                  href="/postup"
                   onClick={() => setIsOpen(false)}
                   className="hover:text-black transition"
                 >
-                  Spolupráce
+                  Postup tvorby webu
                 </a>
               </li>
               <li>
                 <a
-                  href="#kurzy"
+                  href="/lektor"
                   onClick={() => setIsOpen(false)}
                   className="hover:text-black transition"
                 >
@@ -199,7 +199,7 @@ const Navbar = () => {
               </li>
               <li>
                 <a
-                  href="#kontakt"
+                  href="/kontakt"
                   onClick={() => setIsOpen(false)}
                   className="hover:text-black transition"
                 >

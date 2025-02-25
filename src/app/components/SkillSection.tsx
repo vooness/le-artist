@@ -27,7 +27,7 @@ const skills: Skill[] = [
   { name: "JavaScript", value: 80, icon: <FaJsSquare /> },
   { name: "Next.js", value: 75, icon: <SiNextdotjs /> },
   { name: "Grafický Design", value: 95, icon: <FaPencilAlt /> },
-  { name: "Editace Videí", value: 90, icon: <FaVideo /> },
+  { name: "Tvorba videí", value: 90, icon: <FaVideo /> },
   { name: ".NET Core", value: 80, icon: <SiDotnet /> },
   { name: "Tailwind CSS", value: 85, icon: <SiTailwindcss /> },
 ];
@@ -42,7 +42,7 @@ const SkillCard: React.FC<{ skill: Skill }> = ({ skill }) => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.8, delay: 0.2 }}
-      className="flex flex-col items-center space-y-4 p-4 bg-gray-800 bg-opacity-50 rounded-lg shadow-lg"
+      className="flex flex-col items-center space-y-4 p-4 bg-gray-800 bg-opacity-50 rounded-lg shadow-lg mb-8"
     >
       {/* Ikona */}
       <div className="text-4xl text-orange-500">{skill.icon}</div>

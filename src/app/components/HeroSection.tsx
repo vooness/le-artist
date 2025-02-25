@@ -8,7 +8,7 @@ export const HeroSection = () => {
   return (
     <section className="relative bg-[#0f172a] text-white py-12 sm:py-20 lg:py-28 flex items-center justify-center overflow-hidden px-6 sm:px-8 lg:px-20 min-h-screen">
       {/* Wrapper pro obsah */}
-      <div className="flex flex-col items-center w-full max-w-7xl">
+      <div className="flex flex-col items-center w-full max-w-7xl mt-12">
         {/* Horní část: Text a obrázek */}
         <div className="flex flex-col lg:flex-row items-center justify-center w-full flex-wrap">
           {/* Levá strana: Text */}
@@ -41,14 +41,21 @@ export const HeroSection = () => {
               </span>
             </h1>
             <p className="text-sm sm:text-base lg:text-lg text-gray-400 max-w-md sm:max-w-lg mx-auto lg:mx-0 mt-4">
-              Věnuji se tvorbě moderních a funkčních webů, grafice, stříhání videí a vzdělávání dalších tvůrců.
+              Věnuji se tvorbě moderních a funkčních webů, grafice,
+              stříhání videí a vzdělávání dalších tvůrců.
             </p>
             <div className="flex gap-4 mt-4 justify-center lg:justify-start">
               <a
-                href="#"
+                href="/sluzby"
                 className="px-5 py-2 sm:px-6 sm:py-3 bg-orange-500 text-white font-medium rounded-full hover:bg-orange-600 transition"
               >
                 Chci svůj web!
+              </a>
+              <a
+                href="/kontakt"
+                className="px-5 py-2 sm:px-6 sm:py-3 bg-orange-500 text-white font-medium rounded-full hover:bg-orange-600 transition"
+              >
+                Kontakt
               </a>
               
             </div>
@@ -56,34 +63,43 @@ export const HeroSection = () => {
 
           {/* Pravá strana: Animace/Ikona */}
           <div className="relative flex justify-center items-center w-full lg:w-1/2">
-            {/* Glow Animace - skryto na tabletech a menších */}
+            {/* Glow Animace - nejdřív fade in, pak pulzuje */}
             <motion.div
               className="absolute w-[250px] h-[250px] lg:w-[300px] lg:h-[300px] xl:w-[350px] xl:h-[350px] bg-orange-500 rounded-full blur-3xl hidden lg:block"
+              initial={{ opacity: 0 }} // Start invisible
               animate={{
                 scale: [1, 1.5, 1],
                 opacity: [0.7, 1, 0.7],
               }}
               transition={{
-                duration: 4,
+                // We'll use separate "opacity" fade in:
+                opacity: { duration: 0.8 },
+                // And the scale+opacity cycle repeats infinitely:
+                scale: {
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                },
+                // By default, it merges them:
                 repeat: Infinity,
-                ease: "easeInOut",
               }}
             />
 
-            {/* Rotující kruh - skryto na tabletech a menších */}
+            {/* Rotující kruh - fade in, pak infinite rotation */}
             <motion.div
               className="absolute w-[400px] h-[400px] lg:w-[500px] lg:h-[500px] xl:w-[600px] xl:h-[600px] rounded-full hidden lg:block"
-              animate={{ rotate: 360 }}
+              initial={{ opacity: 0, rotate: 0 }}
+              animate={{ opacity: 1, rotate: 360 }}
               transition={{
-                repeat: Infinity,
-                duration: 12,
-                ease: "linear",
+                // Fade in over 0.8s, but keep rotating forever
+                opacity: { duration: 0.8 },
+                rotate: { duration: 12, repeat: Infinity, ease: "linear" },
               }}
             >
               <div className="absolute inset-0 border-[6px] border-transparent border-t-orange-500 border-dotted rounded-full"></div>
             </motion.div>
 
-            {/* Obrázek - skryto na tabletech a menších */}
+            {/* Obrázek */}
             <motion.img
               src="/imgs/banner3.png"
               alt="Tvoje fotka"

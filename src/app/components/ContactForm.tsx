@@ -24,7 +24,7 @@ const ContactForm: React.FC = () => {
       ></motion.div>
       */}
 
-      <div className="max-w-2xl w-full px-6 lg:px-8">
+      <div className="max-w-2xl w-full px-6 lg:px-8 mt-12">
         {/* Nadpis sekce */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
