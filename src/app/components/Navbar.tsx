@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [status, setStatus] = useState(true); // Online/Offline status
-  // Language state - not fully functional yet, just a visual toggle for now
   const [language, setLanguage] = useState("CZ");
 
   // Track scroll position
@@ -16,111 +16,70 @@ const Navbar = () => {
       setIsScrolled(window.scrollY > 10);
     };
     window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   // Prevent scrolling when menu is open
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    document.body.style.overflow = isOpen ? "hidden" : "";
   }, [isOpen]);
 
-  // Framer Motion variants for mobile menu animations
   const menuVariants = {
-    hidden: {
-      y: "-100%",
-      opacity: 0,
-    },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 80,
-        damping: 12,
-      },
-    },
-    exit: {
-      y: "-100%",
-      opacity: 0,
-      transition: {
-        type: "spring",
-        stiffness: 80,
-        damping: 12,
-      },
-    },
+    hidden: { y: "-100%", opacity: 0 },
+    visible: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 80, damping: 12 } },
+    exit: { y: "-100%", opacity: 0, transition: { type: "spring", stiffness: 80, damping: 12 } },
   };
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full transition-all duration-300 z-40  ${
+      className={`fixed top-0 left-0 w-full transition-all duration-300 z-40 ${
         isScrolled ? "bg-black/70 backdrop-blur-md shadow-md" : "bg-transparent"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 flex justify-between items-center py-4">
-        {/* Logo */}
-        <a
+        {/* Logo using Next.js Link */}
+        <Link
           href="/"
           className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-yellow-500 text-transparent bg-clip-text px-3 py-1"
         >
           Le Artist
-        </a>
+        </Link>
 
         {/* Desktop Menu */}
         <ul className="hidden lg:flex items-center gap-8">
           <li>
-            <a
-              href="/sluzby"
-              className="relative group text-white transition duration-300"
-            >
+            <Link href="/sluzby" className="relative group text-white transition duration-300">
               Služby a ceník
               <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-orange-500 transition-all duration-300 group-hover:w-full"></span>
-            </a>
+            </Link>
           </li>
-          
           <li>
-            <a
-              href="/portfolio"
-              className="relative group text-white transition duration-300"
-            >
+            <Link href="/portfolio" className="relative group text-white transition duration-300">
               Portfolio
               <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-orange-500 transition-all duration-300 group-hover:w-full"></span>
-            </a>
+            </Link>
           </li>
-          <a
-              href="/postup"
-              className="relative group text-white transition duration-300"
-            >
+          <li>
+            <Link href="/postup" className="relative group text-white transition duration-300">
               Postup tvorby webu
               <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-orange-500 transition-all duration-300 group-hover:w-full"></span>
-            </a>
+            </Link>
+          </li>
           <li>
-            <a
-              href="/lektor"
-              className="relative group text-white transition duration-300"
-            >
+            <Link href="/lektor" className="relative group text-white transition duration-300">
               Online kurzy
               <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-orange-500 transition-all duration-300 group-hover:w-full"></span>
-            </a>
+            </Link>
           </li>
-          
         </ul>
 
-        
-
         {/* Desktop Contact Button */}
-        <a
+        <Link
           href="/kontakt"
           className="hidden lg:block px-4 py-2 bg-orange-500 text-white rounded-full font-medium hover:bg-orange-600 transition"
         >
           Kontaktujte mě
-        </a>
+        </Link>
 
         {/* Mobile Menu Button (Hamburger → X) */}
         <motion.button
@@ -151,8 +110,6 @@ const Navbar = () => {
             animate="visible"
             exit="exit"
           >
-           
-
             {/* Navigation Links */}
             <motion.ul
               className="flex flex-col items-center justify-center flex-grow space-y-6 text-xl font-medium mt-6 overflow-y-auto px-4"
@@ -161,60 +118,36 @@ const Navbar = () => {
               transition={{ duration: 0.6 }}
             >
               <li>
-                <a
-                  href="/sluzby"
-                  onClick={() => setIsOpen(false)}
-                  className="hover:text-black transition"
-                >
+                <Link href="/sluzby" onClick={() => setIsOpen(false)} className="hover:text-black transition">
                   Služby a ceník
-                </a>
+                </Link>
               </li>
-              
               <li>
-                <a
-                  href="/portfolio"
-                  onClick={() => setIsOpen(false)}
-                  className="hover:text-black transition"
-                >
+                <Link href="/portfolio" onClick={() => setIsOpen(false)} className="hover:text-black transition">
                   Portfolio
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="/postup"
-                  onClick={() => setIsOpen(false)}
-                  className="hover:text-black transition"
-                >
+                <Link href="/postup" onClick={() => setIsOpen(false)} className="hover:text-black transition">
                   Postup tvorby webu
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="/lektor"
-                  onClick={() => setIsOpen(false)}
-                  className="hover:text-black transition"
-                >
+                <Link href="/lektor" onClick={() => setIsOpen(false)} className="hover:text-black transition">
                   Online kurzy
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="/kontakt"
-                  onClick={() => setIsOpen(false)}
-                  className="hover:text-black transition"
-                >
+                <Link href="/kontakt" onClick={() => setIsOpen(false)} className="hover:text-black transition">
                   Kontakt
-                </a>
+                </Link>
               </li>
-              
             </motion.ul>
 
             {/* Contact Info */}
             <div className="bg-orange-600 py-6 text-center text-white">
               <p className="text-lg font-medium">Neváhejte se ozvat!</p>
-              <p className="text-sm">
-                Webovky, grafika a videa k vaším službám!
-              </p>
+              <p className="text-sm">Webovky, grafika a videa k vaším službám!</p>
               <p className="mt-4">📞 +420 605 707 036</p>
               <p className="mt-1">✉️ dotazy.le.artist@gmail.com</p>
               <p className="mt-1">Marek Frňka</p>

@@ -1,18 +1,17 @@
-"use client"
+"use client";
 
-import React, { useState } from "react"
-import Slider from "react-slick"
-import { motion } from "framer-motion"
-import "slick-carousel/slick/slick.css"
-import "slick-carousel/slick/slick-theme.css"
+import React, { useState } from "react";
+import Slider from "react-slick";
+import { motion } from "framer-motion";
+import Image from "next/image";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 // Data pro bannery
 const banners = [
   { id: 1, image: "/imgs/kolagen.png", alt: "Banner 1" },
   { id: 2, image: "/imgs/malate.png", alt: "Banner 2" },
-]
-
-
+];
 
 // Data pro PlayStation Store grafiky
 const psStoreGraphics = [
@@ -24,7 +23,7 @@ const psStoreGraphics = [
   { id: 6, image: "/imgs/playstation-5.png", alt: "PS Graphic 6" },
   { id: 7, image: "/imgs/playstation-6.png", alt: "PS Graphic 7" },
   { id: 8, image: "/imgs/playstation-7.png", alt: "PS Graphic 8" },
-]
+];
 
 // Slider nastavení pro videa
 const videoSliderSettings = {
@@ -48,7 +47,7 @@ const videoSliderSettings = {
       },
     },
   ],
-}
+};
 
 // Slider nastavení pro PlayStation Store grafiky
 const psSliderSettings = {
@@ -73,26 +72,26 @@ const psSliderSettings = {
       },
     },
   ],
-}
+};
 
 const Portfolio2 = () => {
-  const [playingVideoId, setPlayingVideoId] = useState<number | null>(null)
+  const [playingVideoId, setPlayingVideoId] = useState<number | null>(null);
 
   const handlePlayPause = (id: number, videoRef: HTMLVideoElement | null) => {
     if (videoRef) {
       if (playingVideoId === id) {
         // Pokud je video již přehráváno, pozastavit
-        videoRef.pause()
-        setPlayingVideoId(null)
+        videoRef.pause();
+        setPlayingVideoId(null);
       } else {
         // Zastavit ostatní videa a spustit aktuální
-        const videos = document.querySelectorAll("video")
-        videos.forEach((v) => v.pause())
-        videoRef.play()
-        setPlayingVideoId(id)
+        const videos = document.querySelectorAll("video");
+        videos.forEach((v) => v.pause());
+        videoRef.play();
+        setPlayingVideoId(id);
       }
     }
-  }
+  };
 
   return (
     <section className="bg-[#0f172a] text-white py-16 px-8">
@@ -113,19 +112,18 @@ const Portfolio2 = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="rounded-lg overflow-hidden shadow-lg"
+              className="rounded-lg overflow-hidden shadow-lg relative w-full h-64"
             >
-              <img
+              <Image
                 src={banner.image}
                 alt={banner.alt}
-                className="w-full h-auto object-cover"
+                fill
+                className="object-cover"
               />
             </motion.div>
           ))}
         </div>
       </motion.div>
-
-      
 
       {/* PlayStation Store grafika */}
       <motion.div
@@ -142,13 +140,13 @@ const Portfolio2 = () => {
           {psStoreGraphics.map((graphic) => (
             <div key={graphic.id} className="px-4">
               <motion.div
-                className="rounded-lg overflow-hidden shadow-lg"
-                // Odstraněn hover efekt
+                className="rounded-lg overflow-hidden shadow-lg relative w-full h-64"
               >
-                <img
+                <Image
                   src={graphic.image}
                   alt={graphic.alt}
-                  className="w-full h-auto object-cover"
+                  fill
+                  className="object-cover"
                 />
               </motion.div>
             </div>
@@ -156,7 +154,7 @@ const Portfolio2 = () => {
         </Slider>
       </motion.div>
     </section>
-  )
-}
+  );
+};
 
-export default Portfolio2
+export default Portfolio2;
