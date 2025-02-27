@@ -148,7 +148,7 @@ const servicesData: Service[] = [
     id: "video",
     title: "Video Editing & Krátké Reklamy",
     description:
-      "Profesionální střih krátkých reklamních spotů a videí pro sociální sítě. Nabízím balíčky bez voiceoveru, s voiceoverem do 20 sekund nebo do 60 sekund. Střih podcastů či delších videí je možný jako bonusová služba.",
+      "Profesionální střih krátkých reklamních spotů a videí pro sociální sítě. Nabízím balíčky bez voiceoveru, s voiceoverem do 30 sekund nebo do 60 sekund. Střih podcastů či delších videí je možný jako bonusová služba.",
     checkmarks: [
       "Kvalitní střih a efekty",
       "Pro sociální sítě",

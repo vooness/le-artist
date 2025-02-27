@@ -25,7 +25,7 @@ const psStoreGraphics = [
   { id: 8, image: "/imgs/playstation-7.png", alt: "PS Graphic 8" },
 ];
 
-// Slider nastavení pro videa
+// (Pokud budete mít videa, můžete využít i tohle nastavení slideru)
 const videoSliderSettings = {
   dots: true,
   infinite: true,
@@ -112,13 +112,15 @@ const Portfolio2 = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="rounded-lg overflow-hidden shadow-lg relative w-full h-64"
+              className="rounded-lg overflow-hidden shadow-lg"
             >
+              {/* Explicitní width/height zachovají poměr stran originálního obrázku */}
               <Image
                 src={banner.image}
                 alt={banner.alt}
-                fill
-                className="object-cover"
+                width={1200}  // Upravte dle skutečných rozměrů
+                height={600}  // Upravte dle skutečných rozměrů
+                className="object-cover w-full h-auto"
               />
             </motion.div>
           ))}
@@ -139,15 +141,16 @@ const Portfolio2 = () => {
         <Slider {...psSliderSettings}>
           {psStoreGraphics.map((graphic) => (
             <div key={graphic.id} className="px-4">
-              <motion.div
-                className="rounded-lg overflow-hidden shadow-lg relative w-full h-64"
-              >
-                <Image
-                  src={graphic.image}
-                  alt={graphic.alt}
-                  fill
-                  className="object-cover"
-                />
+              <motion.div className="rounded-lg overflow-hidden shadow-lg">
+                {/* Čtvercový poměr stran (pokud je cílem čtverec) */}
+                <div className="relative w-full aspect-square">
+                  <Image
+                    src={graphic.image}
+                    alt={graphic.alt}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
               </motion.div>
             </div>
           ))}
