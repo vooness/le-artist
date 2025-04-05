@@ -207,7 +207,7 @@ const EnhancedTimeline = () => {
         >
            <div className="flex gap-4 mt-4 justify-center ">
               <a
-                href="#"
+                href="/kontakt"
                 className="px-5 py-2 sm:px-6 sm:py-3 bg-orange-500 text-white font-medium rounded-full hover:bg-orange-600 transition"
               >
                 Chci svůj web!

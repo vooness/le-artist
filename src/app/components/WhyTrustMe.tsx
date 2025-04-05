@@ -3,6 +3,7 @@
 import React from "react"
 import { motion } from "framer-motion"
 import { FaStar, FaClock, FaThumbsUp, FaHandshake } from "react-icons/fa"
+import Link from "next/link"
 
 const reasons = [
   {
@@ -23,7 +24,6 @@ const reasons = [
     description:
       "Snažím se vždy udržovat profesionální a přátelský vztah s klienty, což vede k dlouhodobé spolupráci.",
   },
-  
 ]
 
 const WhyTrustMe = () => {
@@ -133,9 +133,11 @@ const WhyTrustMe = () => {
           <h3 className="text-2xl font-bold mb-4">
             Pojďme spolupracovat na vašem projektu!
           </h3>
-          <button className="px-8 py-3 bg-orange-500 text-white font-bold text-lg rounded-lg shadow-lg hover:bg-orange-600 transition-all duration-300">
-            Kontaktujte Mě
-          </button>
+          <Link href="/kontakt">
+            <button className="px-8 py-3 bg-orange-500 text-white font-bold text-lg rounded-full shadow-lg hover:bg-orange-600 transition-all duration-300">
+              Kontaktujte Mě
+            </button>
+          </Link>
         </motion.div>
       </div>
     </section>
