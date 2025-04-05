@@ -22,7 +22,7 @@ type Skill = {
 
 // Data o dovednostech
 const skills: Skill[] = [
-  { name: "HTML & CSS", value: 90, icon: <FaHtml5 /> },
+  { name: "Shoptet", value: 90, icon: <FaHtml5 /> },
   { name: "React.js", value: 85, icon: <FaReact /> },
   { name: "JavaScript", value: 80, icon: <FaJsSquare /> },
   { name: "Next.js", value: 75, icon: <SiNextdotjs /> },
@@ -42,7 +42,7 @@ const SkillCard: React.FC<{ skill: Skill }> = ({ skill }) => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.8, delay: 0.2 }}
-      className="flex flex-col items-center space-y-4 p-4 bg-gray-800 bg-opacity-50 rounded-lg shadow-lg mb-8"
+      className="flex flex-col items-center space-y-4 p-4 bg-gray-800 bg-opacity-50 rounded-lg shadow-lg mb-8 -mt-[2px]"
     >
       {/* Ikona */}
       <div className="text-4xl text-orange-500">{skill.icon}</div>
@@ -72,7 +72,7 @@ const AboutMeSection = () => {
   const shouldReduceMotion = useReducedMotion();
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center px-6 py-16 bg-[#0f172a] overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center px-6 py-16 bg-[#0f172a] overflow-hidden -mt-[2px]">
       {/* Odstraněné Video na pozadí */}
       {/* Video na pozadí bylo odstraněno */}
       
@@ -122,12 +122,12 @@ const AboutMeSection = () => {
             className="flex-shrink-0"
           >
             <Image
-              src="/imgs/circleme1.png" // Nahraď cestou k tvé fotce
+              src="/imgs/logo4.svg" // Nahraď cestou k tvé fotce
               alt="Můj profil"
               width={400} // Nastavte šířku podle potřeby
               height={400} // Nastavte výšku podle potřeby
               sizes="(max-width: 640px) 16rem, (max-width: 768px) 20rem, 25rem"
-              className="w-80 h-80 sm:w-80 sm:h-80 lg:w-[400px] lg:h-[400px] rounded-full object-cover"
+              className="w-80 h-80 sm:w-80 sm:h-80 lg:w-[400px] lg:h-[400px]  "
               loading="lazy"
             />
           </motion.div>

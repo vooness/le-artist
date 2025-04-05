@@ -3,6 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { FaPaperPlane } from "react-icons/fa";
+import Image from "next/image";
 
 const ContactForm: React.FC = () => {
   return (
@@ -10,21 +11,7 @@ const ContactForm: React.FC = () => {
       id="kontakt"
       className="relative py-24 bg-[#0F172A] text-white flex items-center justify-center overflow-hidden"
     >
-      {/* Odstraněný Dekorativní Animovaný Gradient */}
-      {/* 
-      <motion.div
-        className="absolute bottom-0 right-1/3 w-72 h-72 bg-gradient-to-br from-blue-500 to-purple-500 opacity-20 rounded-full filter blur-2xl"
-        animate={{ x: [100, -100], y: [0, -50] }}
-        transition={{
-          duration: 15,
-          repeat: Infinity,
-          repeatType: "mirror",
-          ease: "easeInOut",
-        }}
-      ></motion.div>
-      */}
-
-      <div className="max-w-2xl w-full px-6 lg:px-8 mt-12">
+      <div className="max-w-4xl w-full px-6 lg:px-8 mt-12">
         {/* Nadpis sekce */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -39,9 +26,39 @@ const ContactForm: React.FC = () => {
           <p className="text-gray-400 text-lg mt-4">
             Máte nápad na projekt? Spojme se a vytvořme něco úžasného společně.
           </p>
+
+          {/* Obrázek pod nadpisem */}
+          <div className="mt-8 flex justify-center">
+            <Image
+              src="/imgs/kontakt.svg" // cesta k obrázku
+              alt="Ilustrace kontaktu"
+              width={400}
+              height={300}
+              className="rounded-lg object-contain"
+            />
+          </div>
         </motion.div>
 
-        {/* Kontaktní formulář */}
+        {/* Kontaktní informace */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1, delay: 0.3 }}
+          className="bg-gray-800 rounded-lg p-8 shadow-lg mb-8"
+        >
+          <h3 className="text-2xl font-bold text-white mb-4">
+            Kontaktní informace
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <p className="text-gray-400">Email: vooness@stream.cz</p>
+            <p className="text-gray-400">Telefon: +420 605 707 036</p>
+            <p className="text-gray-400">IČO: 11834153</p>
+            <p className="text-gray-400">Jméno: Marek Frňka</p>
+          </div>
+        </motion.div>
+
+        {/* Formulář */}
         <motion.form
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -51,7 +68,6 @@ const ContactForm: React.FC = () => {
           onSubmit={(e) => e.preventDefault()}
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Pole pro jméno */}
             <div>
               <label htmlFor="name" className="block text-gray-300 mb-2">
                 Jméno
@@ -64,7 +80,6 @@ const ContactForm: React.FC = () => {
                 required
               />
             </div>
-            {/* Pole pro email */}
             <div>
               <label htmlFor="email" className="block text-gray-300 mb-2">
                 E-mail
@@ -78,7 +93,7 @@ const ContactForm: React.FC = () => {
               />
             </div>
           </div>
-          {/* Pole pro předmět */}
+
           <div>
             <label htmlFor="subject" className="block text-gray-300 mb-2">
               Předmět
@@ -91,7 +106,6 @@ const ContactForm: React.FC = () => {
               required
             />
           </div>
-          {/* Pole pro zprávu */}
           <div>
             <label htmlFor="message" className="block text-gray-300 mb-2">
               Zpráva
@@ -103,7 +117,6 @@ const ContactForm: React.FC = () => {
               required
             ></textarea>
           </div>
-          {/* Tlačítko odeslání */}
           <div className="text-center">
             <motion.button
               whileHover={{ scale: 1.05 }}

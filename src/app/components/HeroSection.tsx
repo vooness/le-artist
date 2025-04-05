@@ -18,8 +18,8 @@ export const HeroSection = () => {
             transition={{ duration: 0.8 }}
             className="flex flex-col gap-4 sm:gap-6 text-center lg:text-left flex-1"
           >
-            <p className="text-base sm:text-lg text-gray-300 mb-6">
-              Web Developer • Grafik • Lektor • Střihač
+            <p className="text-base sm:text-lg text-gray-300 mb-2">
+              Web Developer • Grafik • Lektor • Střihač • Fotograf
             </p>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight relative">
               Vytvořím vám{" "}
@@ -41,8 +41,8 @@ export const HeroSection = () => {
               </span>
             </h1>
             <p className="text-sm sm:text-base lg:text-lg text-gray-400 max-w-md sm:max-w-lg mx-auto lg:mx-0 mt-4">
-              Věnuji se tvorbě moderních a funkčních webů, grafice,
-              stříhání videí a vzdělávání dalších tvůrců.
+              Věnuji se tvorbě moderních a funkčních webů, grafice, stříhání videí, 
+              focení a vzdělávání dalších tvůrců.
             </p>
             <div className="flex gap-4 mt-4 justify-center lg:justify-start">
               <a
@@ -57,7 +57,6 @@ export const HeroSection = () => {
               >
                 Kontakt
               </a>
-              
             </div>
           </motion.div>
 
@@ -72,15 +71,12 @@ export const HeroSection = () => {
                 opacity: [0.7, 1, 0.7],
               }}
               transition={{
-                // We'll use separate "opacity" fade in:
                 opacity: { duration: 0.8 },
-                // And the scale+opacity cycle repeats infinitely:
                 scale: {
                   duration: 4,
                   repeat: Infinity,
                   ease: "easeInOut",
                 },
-                // By default, it merges them:
                 repeat: Infinity,
               }}
             />
@@ -91,7 +87,6 @@ export const HeroSection = () => {
               initial={{ opacity: 0, rotate: 0 }}
               animate={{ opacity: 1, rotate: 360 }}
               transition={{
-                // Fade in over 0.8s, but keep rotating forever
                 opacity: { duration: 0.8 },
                 rotate: { duration: 12, repeat: Infinity, ease: "linear" },
               }}
@@ -101,7 +96,7 @@ export const HeroSection = () => {
 
             {/* Obrázek */}
             <motion.img
-              src="/imgs/banner3.png"
+              src="/imgs/banner5.svg"
               alt="Tvoje fotka"
               className="relative z-20 w-[200px] h-[200px] lg:w-[300px] lg:h-[300px] xl:w-[500px] xl:h-[500px] object-cover rounded-full hidden lg:block"
               initial={{ opacity: 0 }}
@@ -116,7 +111,7 @@ export const HeroSection = () => {
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.5 }}
-          className="grid grid-cols-2 gap-6 text-center mt-24 lg:mt-36 xl:grid-cols-4 w-full max-w-5xl"
+          className="grid grid-cols-2 gap-6 text-center mt-12 lg:mt-36 xl:grid-cols-4 w-full max-w-5xl"
         >
           <div className="flex flex-col items-center">
             <h3 className="text-3xl sm:text-4xl font-bold text-orange-500">

@@ -93,7 +93,7 @@ const servicesData: Service[] = [
       "Vytvořím pro vás moderní grafiku, kompletní firemní identitu i brand manuál. Vaše značka bude působit profesionálně a jednotně napříč všemi kanály – od loga přes tiskoviny až po sociální sítě.",
     checkmarks: [
       "Logo již od 3000 Kč",
-      "Kompletní identita",
+      "Design obalů",
       "Banery a tiskoviny",
       "Omezený počet úprav",
       "Důraz na originalitu",

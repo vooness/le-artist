@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
 
 const projectsData = [
   {
@@ -62,7 +61,7 @@ const ProjectsSection: React.FC = () => {
       id="portfolio"
       className="relative overflow-hidden bg-[#0F172A] py-24 px-8 text-orange-600"
     >
-      {/* Tmavé rozmazané gradientové pozadí */}
+      {/* Dark blurred gradient background */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 opacity-70 blur-lg"></div>
         <div className="absolute top-0 left-1/4 w-1/2 h-full bg-gradient-to-t from-transparent via-gray-700 to-transparent opacity-50 blur-xl"></div>
@@ -70,58 +69,40 @@ const ProjectsSection: React.FC = () => {
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10 mt-12">
-        {/* Hlavička sekce */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="text-center mb-20"
-        >
+        {/* Section Header */}
+        <div className="text-center mb-20">
           <h2 className="text-4xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-white relative inline-block">
             Moje Projekty
-            <motion.div
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}
-              className="absolute left-0 bottom-[-10px] h-[6px] bg-orange-500 w-full rounded-full origin-left"
-            ></motion.div>
+            <div className="absolute left-0 bottom-[-10px] h-[6px] bg-orange-500 w-full rounded-full origin-left"></div>
           </h2>
           <p className="text-gray-400 text-xl max-w-2xl mx-auto leading-loose mt-10">
-            Vybrané ukázky práce, v nichž kombinuji webdesign, moderní technologie a uživatelskou přívětivost. Můžete mít svůj projekt také!
+            Vybrané ukázky práce, v nichž kombinuji webdesign, moderní technologie a
+            uživatelskou přívětivost. Můžete mít svůj projekt také!
           </p>
-        </motion.div>
+        </div>
 
-        {/* Výpis projektů */}
+        {/* Projects List */}
         <div className="space-y-40">
-          {projectsData.map((project, index) => (
-            <motion.div
+          {projectsData.map((project) => (
+            <div
               key={project.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.2 }}
-              viewport={{ once: true }}
               className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"
             >
               {!project.invertLayout ? (
                 <>
-                  {/* Obrázek vlevo */}
+                  {/* Image on the left */}
                   <div className="relative">
-                    {/* Projektové číslo */}
-                    {/* ZMĚNA ZDE: zvysuji z-index a nechavam 'absolute', aby bylo cislo nad obrazkem */}
+                    {/* Project number */}
                     <div className="absolute top-4 left-4 bg-orange-500 bg-opacity-75 text-white text-sm font-bold px-3 py-1 rounded-full z-20">
                       #{project.id}
                     </div>
-                    {/* Obrázek */}
-                    {/* ZMĚNA ZDE: odebrán 'shadow-lg' a 'z-10' */}
-                    <motion.img
+                    <img
                       src={project.image}
                       alt={project.title}
-                      className="w-full h-auto object-cover rounded-lg lg:max-h-[800px] pointer-events-none relative"
-                      whileHover={{ scale: 1.02 }}
+                      className="w-full h-auto object-cover rounded-lg lg:max-h-[800px] pointer-events-none relative hover:scale-105 transition-transform duration-300"
                     />
                   </div>
-                  {/* Text vpravo */}
+                  {/* Text on the right */}
                   <div className="space-y-8">
                     <h3 className="text-4xl font-extrabold">{project.title}</h3>
                     <p className="text-gray-300 leading-relaxed">
@@ -142,7 +123,7 @@ const ProjectsSection: React.FC = () => {
                 </>
               ) : (
                 <>
-                  {/* Text vlevo */}
+                  {/* Text on the left */}
                   <div className="order-2 lg:order-1 space-y-8">
                     <h3 className="text-4xl font-extrabold">{project.title}</h3>
                     <p className="text-gray-300 leading-relaxed">
@@ -160,23 +141,21 @@ const ProjectsSection: React.FC = () => {
                       Mrknout na web
                     </a>
                   </div>
-                  {/* Obrázek vpravo */}
+                  {/* Image on the right */}
                   <div className="order-1 lg:order-2 relative">
-                    {/* Projektové číslo */}
+                    {/* Project number */}
                     <div className="absolute top-4 left-4 bg-orange-500 bg-opacity-75 text-white text-sm font-bold px-3 py-1 rounded-full z-20">
                       #{project.id}
                     </div>
-                    {/* Obrázek */}
-                    <motion.img
+                    <img
                       src={project.image}
                       alt={project.title}
-                      className="w-full h-auto object-cover rounded-lg lg:max-h-[800px] pointer-events-none relative" // ZMĚNA ZDE: odebrán 'shadow-lg' a 'z-10'
-                      whileHover={{ scale: 1.02 }}
+                      className="w-full h-auto object-cover rounded-lg lg:max-h-[800px] pointer-events-none relative hover:scale-105 transition-transform duration-300"
                     />
                   </div>
                 </>
               )}
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

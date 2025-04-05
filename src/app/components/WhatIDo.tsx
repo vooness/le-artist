@@ -2,20 +2,77 @@
 
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Monitor, Edit, Video, Clock, Package, Info, CheckCircle2 } from "lucide-react";
+import { Monitor, Edit, Video, CheckCircle2, Info } from "lucide-react";
 
 const services = [
   {
+    title: "Webovky",
+    description:
+      "Moderní, rychlé a responzivní webové stránky pro lepší prezentaci. Web, který prodává a roste s vámi.",
+    icon: <Monitor className="w-8 h-8" />,
+    checkmarks: [
+      "Základní web již od 10000 Kč",
+      "React nebo .Net core řešení",
+      "SEO optimalizace v ceně",
+      "Responzivní design",
+      "Úprava Shoptetu",
+    ],
+    packages: [
+      {
+        name: "Basic",
+        price: "od 10000 Kč",
+        features: [
+          "Do 5 podstránek",
+          "Responzivní design",
+          "Kontaktní formulář",
+          "Základní SEO",
+          "Doba dodání 14-21 dní",
+        ],
+      },
+      {
+        name: "Business",
+        price: "od 18000 Kč",
+        features: [
+          "Do 10 podstránek",
+          "Pokročilé funkce",
+          "Blog systém",
+          "Napojení na sociální sítě",
+          "Doba dodání 21-30 dní",
+        ],
+      },
+      {
+        name: "E-shop",
+        price: "od 25000 Kč",
+        features: [
+          "Shoptet",
+          "Produktový katalog",
+          "Platební brány",
+          "Marketingové nástroje",
+          "Doba dodání 30-45 dní",
+        ],
+      },
+    ],
+    process: [
+      "1. Analýza požadavků",
+      "2. Návrh struktury webu",
+      "3. Grafický design",
+      "4. Kódování a testování",
+      "5. Spuštění a zaškolení",
+    ],
+    extraInfo:
+      "Nabízím i správu webů (od 500 Kč/měsíc), napojení na externí systémy, nebo tvorbu na míru podle vašich potřeb.",
+  },
+  {
     title: "Grafika",
     description:
-      "Od loga po kompletní firemní identitu. Vytvářím moderní grafiku, která zaujme vaše zákazníky a posílí vaši značku na trhu.",
+      "Od loga po kompletní firemní identitu. Jsem schopný navrhnout cokoliv – včetně designu obalů a marketingových materiálů. Mohu také zajistit focení, abychom měli vše pro vaši značku na jednom místě.",
     icon: <Edit className="w-8 h-8" />,
     checkmarks: [
       "Logo design již od 3000 Kč",
       "Vizitky a firemní tiskoviny",
       "Sociální sítě a online grafika",
-      "Průměrná doba 5-7 pracovních dní",
-      "3 úpravy návrhu",
+      "Loga a maskoti",
+      "Design obalů a reklam",
     ],
     packages: [
       {
@@ -59,7 +116,7 @@ const services = [
       "5. Finální soubory a podklady",
     ],
     extraInfo:
-      "Nabízím i tvorbu bannerů (od 500 Kč) nebo kompletní firemní identitu (individuální kalkulace)",
+      "Nabízím i tvorbu bannerů (od 500 Kč) nebo kompletní firemní identitu (individuální kalkulace).",
   },
   {
     title: "Střih Videa",
@@ -114,64 +171,8 @@ const services = [
       "4. Revize",
       "5. Export",
     ],
-    extraInfo: "Pro pravidelné klienty nabízím zvýhodněné balíčky na měsíční spolupráci.",
-  },
-  {
-    title: "Webovky",
-    description:
-      "Moderní, rychlé a responzivní webové stránky pro lepší prezentaci. Web, který prodává a roste s vámi.",
-    icon: <Monitor className="w-8 h-8" />,
-    checkmarks: [
-      "Základní web již od 10000 Kč",
-      "React nebo .Net core řešení",
-      "SEO optimalizace v ceně",
-      "Responzivní design",
-      "Naprogramuju na míru",
-    ],
-    packages: [
-      {
-        name: "Basic",
-        price: "od 10000 Kč",
-        features: [
-          "Do 5 podstránek",
-          "Responzivní design",
-          "Kontaktní formulář",
-          "Základní SEO",
-          "Doba dodání 14-21 dní",
-        ],
-      },
-      {
-        name: "Business",
-        price: "od 18000 Kč",
-        features: [
-          "Do 10 podstránek",
-          "Pokročilé funkce",
-          "Blog systém",
-          "Napojení na sociální sítě",
-          "Doba dodání 21-30 dní",
-        ],
-      },
-      {
-        name: "E-shop",
-        price: "od 25000 Kč",
-        features: [
-          "Shoptet",
-          "Produktový katalog",
-          "Platební brány",
-          "Marketingové nástroje",
-          "Doba dodání 30-45 dní",
-        ],
-      },
-    ],
-    process: [
-      "1. Analýza požadavků",
-      "2. Návrh struktury webu",
-      "3. Grafický design",
-      "4. Kódování a testování",
-      "5. Spuštění a zaškolení",
-    ],
     extraInfo:
-      "Nabízím i správu webů (od 500 Kč/měsíc), napojení na externí systémy, nebo tvorbu na míru podle vašich potřeb.",
+      "Pro pravidelné klienty nabízím zvýhodněné balíčky na měsíční spolupráci.",
   },
 ];
 
@@ -189,12 +190,12 @@ const cardAnimation = {
 };
 
 const WhatIDo = () => {
-  const router = useRouter(); // Přidáme hook pro navigaci
+  const router = useRouter();
 
   return (
     <section
       id="services"
-      className="relative py-24 px-6 sm:px-12 bg-[#0f172a] text-white overflow-hidden"
+      className="relative py-20 px-6 sm:px-12 bg-[#0f172a] text-white overflow-hidden -mt-[2px]"
     >
       <div className="max-w-7xl mx-auto mt-12">
         <motion.div
@@ -204,8 +205,9 @@ const WhatIDo = () => {
           transition={{ duration: 1, ease: "easeOut" }}
           className="text-center"
         >
-          <h2 className="text-4xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight relative inline-block">
-            Moje služby
+          {/* Desktop Heading */}
+          <h2 className="hidden md:inline-block text-4xl lg:text-5xl font-extrabold tracking-tight relative">
+            S čím vám můžu pomoct?
             <motion.div
               initial={{ scaleX: 0, opacity: 0 }}
               whileInView={{ scaleX: 1, opacity: 1 }}
@@ -214,12 +216,32 @@ const WhatIDo = () => {
               className="absolute left-1/3 -translate-x-1/3 bottom-[-10px] h-[5px] w-2/3 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full origin-center"
             />
           </h2>
-          
+          {/* Mobile Heading */}
+          <h2 className="md:hidden text-4xl font-extrabold tracking-tight relative inline-block">
+            S čím vám můžu pomoct?
+            <motion.div
+              initial={{ scaleX: 0, opacity: 0 }}
+              whileInView={{ scaleX: 1, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}
+              className="absolute left-1/4 -translate-x-1/3 bottom-[-8px] h-[3px] w-1/2 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full origin-center"
+            />
+          </h2>
+          {/* Image below the heading */}
+          <div className="mt-6 flex justify-center">
+            <img
+              src="/imgs/logo5.svg"
+              alt="Podnadpis obrázek"
+              className="w-full max-w-md object-cover"
+            />
+          </div>
           <p className="mt-12 text-gray-400 text-lg max-w-3xl mx-auto">
-            Pomáhám firmám a podnikatelům růst pomocí kvalitního designu a webu. Každý projekt je jedinečný a zaslouží si individuální přístup.
+            Pomáhám firmám a podnikatelům růst pomocí kvalitního designu a webu.
+            Každý projekt je jedinečný a zaslouží si individuální přístup.
           </p>
           <p className="mt-4 text-gray-400 text-lg max-w-3xl mx-auto">
-            Nabízím férové ceny a transparentní podmínky. Vždy se snažím najít řešení, které sedí vašemu rozpočtu i potřebám.
+            Nabízím férové ceny a transparentní podmínky. Vždy se snažím najít řešení,
+            které sedí vašemu rozpočtu i potřebám.
           </p>
         </motion.div>
 
@@ -234,16 +256,18 @@ const WhatIDo = () => {
               key={i}
               custom={i}
               variants={cardAnimation}
-              className="relative bg-gray-800/80  rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500"
+              className="relative group bg-[#20262f] backdrop-blur-lg rounded-xl shadow-lg hover:shadow-[0_0_20px_4px_rgba(249,115,22,0.7)] transition-all duration-500"
             >
               <div className="p-8">
                 <div className="flex justify-center items-center mb-6">
                   <div className="text-orange-500 mr-4">{service.icon}</div>
-                  <h3 className="text-3xl font-bold text-orange-500">{service.title}</h3>
+                  <h3 className="text-3xl font-bold text-orange-500">
+                    {service.title}
+                  </h3>
                 </div>
-
-                <p className="text-gray-300 leading-relaxed mb-6">{service.description}</p>
-
+                <p className="text-gray-300 leading-relaxed mb-6">
+                  {service.description}
+                </p>
                 <ul className="space-y-3">
                   {service.checkmarks.map((check, idx) => (
                     <li key={idx} className="flex items-start text-gray-300">
@@ -252,7 +276,6 @@ const WhatIDo = () => {
                     </li>
                   ))}
                 </ul>
-
                 <div className="mt-6 pt-6 border-t border-gray-700">
                   <button
                     onClick={() => router.push("/sluzby")}

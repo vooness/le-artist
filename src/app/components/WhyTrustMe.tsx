@@ -13,7 +13,7 @@ const reasons = [
   },
   {
     icon: <FaThumbsUp />,
-    title: "Zaměření na spokojenost klienta",
+    title: "Zaměření na spokojenost",
     description:
       "Vaše spokojenost je pro mě prioritou. Pracuji tvrdě, abych zajistil, že výsledky překročí vaše očekávání.",
   },
@@ -28,7 +28,7 @@ const reasons = [
 
 const WhyTrustMe = () => {
   return (
-    <section className="relative bg-[#0f172a] text-white py-20 px-6 sm:px-12 overflow-hidden">
+    <section className="relative bg-[#0f172a] text-white py-20 px-6 sm:px-12 overflow-hidden -mt-[2px]">
       {/* Dekorativní prvky – vlnky a linie */}
       <div className="absolute inset-0 pointer-events-none z-0">
         {/* Levé vlnky */}
@@ -76,7 +76,7 @@ const WhyTrustMe = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto relative z-10">
+      <div className="max-w-7xl mx-auto relative z-10 ">
         {/* Hlavička sekce */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -85,7 +85,7 @@ const WhyTrustMe = () => {
           transition={{ duration: 1, ease: "easeOut" }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight relative inline-block">
+          <h2 className="text-4xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight relative inline-block ">
             Proč Mi Důvěřovat?
             <motion.div
               initial={{ scaleX: 0, opacity: 0 }}

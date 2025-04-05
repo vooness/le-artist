@@ -99,7 +99,7 @@ const OnlineCourses = () => {
             className="flex justify-center mt-12"
           >
             <Image
-              src="/imgs/shibabg.png" // Upravte cestu k obrázku
+              src="/imgs/lektor.svg" // Upravte cestu k obrázku
               alt="Ilustrace lektorování"
               width={600} // Nastavte šířku podle potřeby
               height={600} // Nastavte výšku podle potřeby

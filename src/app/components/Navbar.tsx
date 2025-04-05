@@ -3,14 +3,14 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
+import { FaPaw } from "react-icons/fa";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [status, setStatus] = useState(true); // Online/Offline status
-  const [language, setLanguage] = useState("CZ");
 
-  // Track scroll position
+  // Monitor scroll to change navbar background on desktop
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
@@ -19,15 +19,30 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Prevent scrolling when menu is open
+  // Disable page scroll when menu is open
   useEffect(() => {
-    document.body.style.overflow = isOpen ? "hidden" : "";
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+    }
   }, [isOpen]);
 
+  // Animation variants for mobile menu
   const menuVariants = {
-    hidden: { y: "-100%", opacity: 0 },
-    visible: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 80, damping: 12 } },
-    exit: { y: "-100%", opacity: 0, transition: { type: "spring", stiffness: 80, damping: 12 } },
+    hidden: { x: "-100%", opacity: 0 },
+    visible: {
+      x: "0%",
+      opacity: 1,
+      transition: { type: "spring", stiffness: 80, damping: 12 },
+    },
+    exit: {
+      x: "100%",
+      opacity: 0,
+      transition: { type: "tween", duration: 0.7 },
+    },
   };
 
   return (
@@ -37,36 +52,51 @@ const Navbar = () => {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 flex justify-between items-center py-4">
-        {/* Logo using Next.js Link */}
-        <Link
-          href="/"
-          className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-yellow-500 text-transparent bg-clip-text px-3 py-1"
-        >
-          Le Artist
+        {/* Logo replaced with SVG logo */}
+        <Link href="/" className="flex items-center">
+          <Image
+            src="/imgs/logoone.png"
+            alt="Logo"
+            width={220}
+            height={80}
+            className="object-contain"
+          />
         </Link>
 
         {/* Desktop Menu */}
         <ul className="hidden lg:flex items-center gap-8">
           <li>
-            <Link href="/sluzby" className="relative group text-white transition duration-300">
+            <Link
+              href="/sluzby"
+              className="relative group text-white transition duration-300"
+            >
               Služby a ceník
               <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-orange-500 transition-all duration-300 group-hover:w-full"></span>
             </Link>
           </li>
           <li>
-            <Link href="/portfolio" className="relative group text-white transition duration-300">
+            <Link
+              href="/portfolio"
+              className="relative group text-white transition duration-300"
+            >
               Portfolio
               <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-orange-500 transition-all duration-300 group-hover:w-full"></span>
             </Link>
           </li>
           <li>
-            <Link href="/postup" className="relative group text-white transition duration-300">
+            <Link
+              href="/postup"
+              className="relative group text-white transition duration-300"
+            >
               Postup tvorby webu
               <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-orange-500 transition-all duration-300 group-hover:w-full"></span>
             </Link>
           </li>
           <li>
-            <Link href="/lektor" className="relative group text-white transition duration-300">
+            <Link
+              href="/lektor"
+              className="relative group text-white transition duration-300"
+            >
               Online kurzy
               <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-orange-500 transition-all duration-300 group-hover:w-full"></span>
             </Link>
@@ -81,21 +111,15 @@ const Navbar = () => {
           Kontaktujte mě
         </Link>
 
-        {/* Mobile Menu Button (Hamburger → X) */}
+        {/* Mobile Menu Button (paw icon with "Menu" label) */}
         <motion.button
-          className="lg:hidden focus:outline-none"
-          onClick={() => setIsOpen(!isOpen)}
-          aria-label="Toggle menu"
+          className="lg:hidden focus:outline-none flex flex-col items-center"
+          onClick={() => setIsOpen(true)}
+          aria-label="Open menu"
           whileTap={{ scale: 1.5 }}
         >
-          <motion.div
-            className="text-orange-500 text-4xl"
-            initial={{ rotate: 0 }}
-            animate={{ rotate: isOpen ? 90 : 0 }}
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}
-          >
-            {isOpen ? "×" : "☰"}
-          </motion.div>
+          <FaPaw className="text-white text-4xl" />
+          <span className="text-white text-sm mt-1">Menu</span>
         </motion.button>
       </div>
 
@@ -104,41 +128,71 @@ const Navbar = () => {
         {isOpen && (
           <motion.div
             key="mobileMenu"
-            className="left-0 w-full h-full z-[99999] bg-orange-600 text-white flex flex-col"
+            className="fixed top-0 left-0 w-screen h-screen z-[99999] bg-orange-600 text-white flex flex-col"
             variants={menuVariants}
             initial="hidden"
             animate="visible"
             exit="exit"
           >
+            {/* Close Button */}
+            <motion.button
+              className="absolute top-4 right-4 text-white text-4xl focus:outline-none"
+              onClick={() => setIsOpen(false)}
+              aria-label="Close menu"
+              whileTap={{ scale: 1.1 }}
+            >
+              &times;
+            </motion.button>
+
             {/* Navigation Links */}
             <motion.ul
-              className="flex flex-col items-center justify-center flex-grow space-y-6 text-xl font-medium mt-6 overflow-y-auto px-4"
+              className="flex flex-col items-center justify-center flex-grow space-y-6 text-xl font-medium mt-6 px-4"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6 }}
             >
               <li>
-                <Link href="/sluzby" onClick={() => setIsOpen(false)} className="hover:text-black transition">
+                <Link
+                  href="/sluzby"
+                  onClick={() => setIsOpen(false)}
+                  className="hover:text-black transition"
+                >
                   Služby a ceník
                 </Link>
               </li>
               <li>
-                <Link href="/portfolio" onClick={() => setIsOpen(false)} className="hover:text-black transition">
+                <Link
+                  href="/portfolio"
+                  onClick={() => setIsOpen(false)}
+                  className="hover:text-black transition"
+                >
                   Portfolio
                 </Link>
               </li>
               <li>
-                <Link href="/postup" onClick={() => setIsOpen(false)} className="hover:text-black transition">
+                <Link
+                  href="/postup"
+                  onClick={() => setIsOpen(false)}
+                  className="hover:text-black transition"
+                >
                   Postup tvorby webu
                 </Link>
               </li>
               <li>
-                <Link href="/lektor" onClick={() => setIsOpen(false)} className="hover:text-black transition">
+                <Link
+                  href="/lektor"
+                  onClick={() => setIsOpen(false)}
+                  className="hover:text-black transition"
+                >
                   Online kurzy
                 </Link>
               </li>
               <li>
-                <Link href="/kontakt" onClick={() => setIsOpen(false)} className="hover:text-black transition">
+                <Link
+                  href="/kontakt"
+                  onClick={() => setIsOpen(false)}
+                  className="hover:text-black transition"
+                >
                   Kontakt
                 </Link>
               </li>
@@ -153,7 +207,7 @@ const Navbar = () => {
               <p className="mt-1">Marek Frňka</p>
             </div>
 
-            {/* Close Button at Bottom */}
+            {/* Close Menu Button with Arrow Animation */}
             <div className="pb-6 flex justify-center">
               <motion.button
                 onClick={() => setIsOpen(false)}
@@ -163,15 +217,15 @@ const Navbar = () => {
                 Zavřít menu
                 <motion.div
                   className="w-4 h-4 text-white rounded-full flex items-center justify-center"
-                  initial={{ x: 5 }}
-                  animate={{ x: -5 }}
+                  initial={{ x: -5 }}
+                  animate={{ x: 5 }}
                   transition={{
                     duration: 0.6,
                     repeat: Infinity,
                     repeatType: "reverse",
                   }}
                 >
-                  ←
+                  →
                 </motion.div>
               </motion.button>
             </div>
