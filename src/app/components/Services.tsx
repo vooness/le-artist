@@ -1,8 +1,17 @@
+// src/app/components/Services.tsx
 "use client";
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { CheckCircle2 } from "lucide-react";
+import {
+  Globe,
+  ShoppingCart,
+  PenTool,
+  Video,
+  ActivitySquare,
+  BookOpen,
+  CheckCircle2,
+} from "lucide-react";
 
 interface Service {
   id: string;
@@ -20,10 +29,10 @@ interface Service {
 
 const servicesData: Service[] = [
   {
-    id: "web",
-    title: "Webové Služby",
+    id: "websites",
+    title: "Webové stránky",
     description:
-      "Moderní, responzivní a přehledné webové stránky navržené na míru. Specializuji se na tvorbu webů, e-shopů a integraci moderních technologií, které pomáhají vašemu podnikání růst.",
+      "Moderní, responzivní a přehledné webové stránky navržené na míru.",
     checkmarks: [
       "Responzivní design",
       "SEO optimalizace",
@@ -35,301 +44,379 @@ const servicesData: Service[] = [
     packages: [
       {
         name: "Basic",
-        price: "od 10 000 Kč",
+        price: "od 15 000 Kč",
         features: [
-          "Do 5 stránek",
+          "Do 5 stránek",
           "Responzivní design",
-          "Základní SEO",
           "Kontaktní formulář",
-          "Dodání 14-21 dní",
+          "Základní SEO",
         ],
       },
       {
         name: "Business",
-        price: "od 18 000 Kč",
+        price: "od 25 000 Kč",
         features: [
-          "Až 10 stránek",
-          "Pokročilé funkce",
+          "Až 10 stránek",
           "Blog systém",
-          "Napojení na sociální sítě",
-          "Dodání 21-30 dní",
-        ],
-      },
-      {
-        name: "Eshop",
-        price: "od 25 000 Kč",
-        features: [
-          "Shoptet Eshop",
-          "Produktový katalog",
-          "Platební brány",
-          "Marketingové nástroje",
-          "Dodání 30-45 dní",
-        ],
-      },
-      {
-        name: "Expres",
-        price: "5 000 Kč",
-        features: [
-            "Expresní příplatek",
-          "Okamžité zahájení práce",
-          "Web do 7 dnů",
-          "Nejvyšší priorita",
+          "Napojení na sociální sítě",
+          "Pokročilé funkce",
         ],
       },
     ],
-    process: [
-      "1. Konzultace a analýza potřeb",
-      "2. Návrh designu a struktury",
-      "3. Vývoj a testování",
-      "4. Spuštění a podpora",
+    process: ["Konzultace", "Návrh designu", "Vývoj & testování", "Spuštění webu"],
+    extraInfo: "Možnost další podpory a údržby po spuštění.",
+  },
+  {
+    id: "shoptet",
+    title: "Shoptet e‑shop",
+    description:
+      "Kompletní řešení e-shopu na platformě Shoptet, včetně úprav šablon na míru.",
+    checkmarks: [
+      "Nastavení produktů",
+      "Šablony vzhledu",
+      "Platební brány",
+      "Marketingové moduly",
+      "Napojení na ERP",
+      "Školení k obsluze",
     ],
-    extraInfo:
-      "Možnost správy webu po spuštění a další integrace dle vašich potřeb.",
+    packages: [
+      {
+        name: "Basic",
+        price: "od 20 000 Kč",
+        features: ["Až 50 produktů", "Základní šablona", "Platební brány"],
+      },
+      {
+        name: "Business",
+        price: "od 30 000 Kč",
+        features: ["Neomezeně produktů", "Vlastní design", "Pokročilé moduly"],
+      },
+      {
+        name: "Premium",
+        price: "od 40 000 Kč",
+        features: ["Kompletní branding", "5 revizí", "Podpora 3 měsíce"],
+      },
+    ],
+    process: ["Analýza potřeb", "Implementace e-shopu", "Testování", "Spuštění & školení"],
+    extraInfo: "Možnost rozšíření modulů a údržby.",
   },
   {
     id: "graphics",
-    title: "Grafika & Branding",
-    description:
-      "Vytvořím pro vás moderní grafiku, kompletní firemní identitu i brand manuál. Vaše značka bude působit profesionálně a jednotně napříč všemi kanály – od loga přes tiskoviny až po sociální sítě.",
+    title: "Grafický design",
+    description: "Tvorba log, tiskovin a kompletní vizuální identity.",
     checkmarks: [
-      "Logo již od 3000 Kč",
-      "Design obalů",
-      "Banery a tiskoviny",
-      "Omezený počet úprav",
-      "Důraz na originalitu",
+      "Logo od 3000 Kč",
+      "2‑3 koncepty",
       "Brand manuál",
+      "Tiskoviny",
+      "Bannerové kampaně",
+      "Webová grafika",
     ],
     packages: [
       {
         name: "Basic",
-        price: "od 3000 Kč",
-        features: [
-          "Logo",
-          "2-3 návrhy",
-          "2 revize",
-          "Dodání 5-7 dní",
-        ],
+        price: "od 3000 Kč",
+        features: ["Logo (2 návrhy)", "2 revize", "Dodání 5‑7 dní"],
       },
       {
         name: "Standard",
-        price: "od 5000 Kč",
-        features: [
-          "Kompletní branding",
-          "3 koncepty",
-          "5 revizí",
-          
-          "Dodání 15 dní",
-        ],
+        price: "od 6000 Kč",
+        features: ["Kompletní branding", "5 revizí", "Dodání 10‑14 dní"],
       },
       {
         name: "Premium",
-        price: "od 8000 Kč",
-        features: [
-          "Plná identita s brand manuálem",
-          "6+ konceptů",
-          "Expresní dodání",
-          "Vizitka zdarma",
-          "5 revizí",
-          "Detailní návrh materiálů",
-          "Dodání 7-10 dní",
-        ],
+        price: "od 10 000 Kč",
+        features: ["Brand manuál", "Tiskoviny & bannery", "Vizitka zdarma"],
       },
     ],
     process: [
-      "1. Konzultace a sběr informací",
-      "2. Návrh konceptů",
-      "3. Revize a úpravy",
-      "4. Finální dodání ve všech formátech",
+      "Brief & koncepty",
+      "Revize & finalizace",
+      "Příprava pro tisk",
+      "Uvedení do provozu",
     ],
-    extraInfo:
-      "Možnost tvorby jednotlivých prvků (banery, tiskoviny, sociální sítě) i kompletního brandu.",
+    extraInfo: "Grafika pro online i tisk dle Vašich potřeb.",
   },
   {
     id: "video",
-    title: "Video Editing & Krátké Reklamy",
-    description:
-      "Profesionální střih krátkých reklamních spotů a videí pro sociální sítě. Nabízím balíčky bez voiceoveru, s voiceoverem do 30 sekund nebo do 60 sekund. Střih podcastů či delších videí je možný jako bonusová služba.",
+    title: "Video tvorba",
+    description: "Střih spotů, reklam a videí pro sociální sítě.",
     checkmarks: [
-      "Kvalitní střih a efekty",
-      "Pro sociální sítě",
-      "Krátká reklamy",
+      "Krátké reklamy",
+      "Voiceover",
+      "Efekty & korekce",
+      "Formáty pro sociální sítě",
       "Rychlé dodání",
-      
-      "Střih podcastů (bonus)",
-      "Voiceover (dle dohody)",
+      "Podcasty",
     ],
     packages: [
       {
         name: "Basic",
-        price: "od 2000 Kč",
-        features: [
-          "Střih videa do 20 sec",
-          "Bez voiceoveru",
-          "Základní efekty",
-          "Dodání do 48 hodin",
-        ],
+        price: "od 2000 Kč",
+        features: ["Video do 20s", "Základní střih", "Bez voiceoveru"],
       },
       {
         name: "Standard",
-        price: "od 3000 Kč",
-        features: [
-          "Střih videa do 30 sec",
-          "Voiceover do 30 sec",
-          "Pokročilé efekty",
-          "Dodání do 72 hodin",
-        ],
+        price: "od 3500 Kč",
+        features: ["Video do 30s", "Pokročilé efekty", "Voiceover do 30s"],
       },
       {
         name: "Premium",
-        price: "od 4000 Kč",
-        features: [
-          "Střih videa do 60 sec",
-          "Voiceover do 60 sec",
-          "Profesionální postprodukce",
-          "Dodání do 96 hodin",
-        ],
+        price: "od 5000 Kč",
+        features: ["Video do 60s", "Prof. postprodukce", "Voiceover do 60s"],
+      },
+    ],
+    process: ["Sběr materiálů", "Střih & editace", "Revize", "Export & dodání"],
+    extraInfo: "Delší formáty a podcasty na individuální kalkulaci.",
+  },
+  {
+    id: "interactive",
+    title: "Interaktivní cvičení",
+    description:
+      "E‑learningové moduly pro ZŠ a SŠ: kvízy, úlohy a SCORM export.",
+    checkmarks: [
+      "HTML5",
+      "Responsivní UI",
+      "Kvízy & testy",
+      "SCORM export",
+      "Analytika",
+      "Offline režim",
+    ],
+    packages: [
+      {
+        name: "Basic",
+        price: "od 5000 Kč",
+        features: ["5 modulů", "Základní kvízy", "Mobilní verze"],
+      },
+      {
+        name: "Standard",
+        price: "od 10 000 Kč",
+        features: ["10 modulů", "Pokročilé úlohy", "LMS integrace"],
+      },
+      {
+        name: "Premium",
+        price: "od 15 000 Kč",
+        features: ["Neomezeně modulů", "Custom úlohy", "Detailní analytika"],
       },
     ],
     process: [
-      "1. Konzultace a sběr materiálů",
-      "2. Návrh a střih videa",
-      "3. Revize a finalizace",
-      "4. Dodání finálního produktu",
+      "Scénář & storyboard",
+      "Vývoj modulu",
+      "Testování",
+      "Implementace do LMS",
     ],
-    extraInfo:
-      "Podcasty a delší videa jsou k dispozici na individuální kalkulaci.",
+    extraInfo: "Údržba a aktualizace obsahu dle požadavků.",
+  },
+  {
+    id: "online",
+    title: "Online kurzy",
+    description:
+      "Interaktivní online kurzy pro rozvoj vašich dovedností v webdesignu, programování a grafice.",
+    // -- zachováno původní obecné benefity kurzu --
+    checkmarks: [
+      "Video lekce",
+      "Kvízy & testy",
+      "Certifikát po dokončení",
+      "Offline přístup",
+      "Podpora tutora",
+      "Aktualizace obsahu",
+    ],
+    // -- nová čtyřka specializovaných kurzů místo Basic/Standard/Premium --
+    packages: [
+      {
+        name: "Grafický kurz",
+        price: "od 3 000 Kč",
+        features: [
+          "Základy kompozice a barev",
+          "Práce s Adobe Photoshop & Illustrator",
+          "Tvorba loga a vizuálních prvků",
+          "Branding a styleguide",
+        ],
+      },
+      {
+        name: "Web design s AI",
+        price: "od 3 500 Kč",
+        features: [
+          "UX/UI principy",
+          "Generování wireframů pomocí AI",
+          "Responzivní layout v HTML/CSS",
+          "Základy SEO pro weby",
+        ],
+      },
+      {
+        name: "Video editing",
+        price: "od 2 800 Kč",
+        features: [
+          "Střih v Premiere Pro",
+          "Motion graphics v After Effects",
+          "Barevná korekce",
+          "Export pro sociální sítě",
+        ],
+      },
+      {
+        name: "Shoptet e‑shop",
+        price: "od 3 200 Kč",
+        features: [
+          "Nastavení a správa produktů",
+          "Custom šablony na míru",
+          "Integrace platebních bran",
+          "Marketingové moduly a analytika",
+        ],
+      },
+    ],
+    process: ["Registrace", "Studium lekcí", "Vypracování úkolů", "Závěrečný test"],
+    extraInfo: "Možnost firemních školení a týmového přístupu.",
   },
 ];
 
-// Animace pro karty ceníku
-const cardAnimation = {
-  hidden: { opacity: 0, y: 50 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.3, duration: 0.8, ease: "easeOut" },
-  }),
+const iconsMap: Record<string, React.ElementType> = {
+  websites: Globe,
+  shoptet: ShoppingCart,
+  graphics: PenTool,
+  video: Video,
+  interactive: ActivitySquare,
+  online: BookOpen,
 };
 
 export default function ServicesPage() {
-  const [activeTabs, setActiveTabs] = useState<{ [key: string]: string }>({});
+  const [selected, setSelected] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<"packages" | "process">("packages");
+  const service = servicesData.find((s) => s.id === selected!);
 
-  const setActiveTab = (id: string, tab: string) => {
-    setActiveTabs((prev) => ({ ...prev, [id]: tab }));
-  };
+  const cardBase =
+    "group relative flex flex-col items-center text-center p-8 bg-white/10 backdrop-blur-sm rounded-2xl shadow-xl border-2 border-orange-500 transition-all duration-300";
+  const cardHover = "hover:shadow-[0_0_15px_rgba(249,115,22,0.7)]";
 
+  // Overview grid: 3 columns x 2 rows on md+, 2 columns on sm, 1 column on mobile
+  if (!selected) {
+    return (
+      <section className="min-h-screen flex flex-col items-center justify-center py-24 px-6 bg-[#0f172a] text-white">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl sm:text-3xl md:text-4xl lg:text-5xl text-white font-extrabold tracking-tight relative inline-block mb-8 mt-12">
+            Služby a ceník
+            <motion.div
+              initial={{ scaleX: 0, opacity: 0 }}
+              whileInView={{ scaleX: 1, opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+              className="absolute left-1/2 -translate-x-1/2 bottom-[-10px] h-[5px] w-2/3 bg-gradient-to-r from-[#F97316] to-yellow-500 rounded-full origin-center"
+            />
+          </h2>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-6xl w-full mx-auto">
+          {servicesData.map((s) => {
+            const Icon = iconsMap[s.id];
+            return (
+              <motion.button
+                key={s.id}
+                onClick={() => setSelected(s.id)}
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 250 }}
+                className={`${cardBase} ${cardHover}`}
+              >
+                <motion.div whileHover={{ rotate: 15 }} className="p-4 bg-white/20 rounded-full mb-4">
+                  <Icon className="w-10 h-10 text-orange-500" />
+                </motion.div>
+                <h3 className="text-xl font-semibold mb-2">{s.title}</h3>
+                <p className="text-gray-300 text-sm line-clamp-3 mb-6">{s.description}</p>
+                <span className="absolute bottom-4 text-xs text-orange-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                  Klikněte pro víc
+                </span>
+              </motion.button>
+            );
+          })}
+        </div>
+      </section>
+    );
+  }
+
+  // Detailed view
   return (
-    <section className="py-24 px-6 sm:px-12 bg-[#0f172a] text-white overflow-hidden">
-      {servicesData.map((service) => {
-        const activeTab = activeTabs[service.id] || "packages";
-        return (
-          <div key={service.id} className="max-w-3xl mx-auto mb-16 mt-16">
-            {/* Nadpis a popis */}
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, ease: "easeOut" }}
-              className="text-center"
-            >
-              <h2 className="text-4xl font-extrabold tracking-tight text-orange-500 mb-2">
-                {service.title}
-              </h2>
-              <p className="text-gray-400 text-lg mb-8 mt-8">
-                {service.description}
-              </p>
-
-              {/* Checkmarky: 1 sloupec pro mobil/tablet, 3 sloupce × 2 řádky pro desktop */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 lg:grid-rows-2 gap-4 text-gray-300">
-                {service.checkmarks.map((check, idx) => (
-                  <div key={idx} className="flex items-center space-x-2">
-                    <CheckCircle2 className="w-5 h-5 text-green-500" />
-                    <span>{check}</span>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* Přepínač mezi "Ceník" a "Postup" */}
-            <motion.div
-              className="mt-12"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, ease: "easeOut", delay: 0.3 }}
-            >
-              <div className="flex justify-center space-x-4 border-b border-gray-700 mb-6">
-                <button
-                  className={`pb-2 px-4 ${
-                    activeTab === "packages"
-                      ? "text-orange-500 border-b-2 border-orange-500"
-                      : "text-gray-400"
-                  }`}
-                  onClick={() => setActiveTab(service.id, "packages")}
-                >
-                  Ceník
-                </button>
-                <button
-                  className={`pb-2 px-4 ${
-                    activeTab === "process"
-                      ? "text-orange-500 border-b-2 border-orange-500"
-                      : "text-gray-400"
-                  }`}
-                  onClick={() => setActiveTab(service.id, "process")}
-                >
-                  Postup
-                </button>
-              </div>
-
-              {/* Obsah podle aktivní záložky */}
-              {activeTab === "packages" && (
-                <div className="space-y-8">
-                  {service.packages.map((pkg, idx) => (
-                    <motion.div
-                      key={idx}
-                      custom={idx}
-                      variants={cardAnimation}
-                      initial="hidden"
-                      whileInView="visible"
-                      viewport={{ once: true }}
-                      className="p-6 bg-gray-800/80 rounded-xl shadow-lg"
-                    >
-                      <div className="flex justify-between items-center mb-4">
-                        <h3 className="text-2xl font-semibold text-orange-500">
-                          {pkg.name}
-                        </h3>
-                        <span className="bg-orange-500 text-white px-3 py-1 rounded-full text-lg font-semibold">
-                           {pkg.price}
-                        </span>
-                      </div>
-                      <ul className="space-y-2 text-gray-300">
-                        {pkg.features.map((feature, i2) => (
-                          <li key={i2} className="flex items-center">
-                            <CheckCircle2 className="w-4 h-4 text-green-500 mr-2" />
-                            <span>{feature}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </motion.div>
-                  ))}
-                  <p className="text-sm italic text-gray-400 mt-4">
-                    {service.extraInfo}
-                  </p>
+    <section className="py-24 px-6 bg-[#0f172a] text-white">
+      <div className="max-w-3xl mx-auto">
+        <button
+          onClick={() => setSelected(null)}
+          className="mb-6 text-sm text-gray-400 hover:text-white"
+        >
+          &larr; Zpět na seznam kategorií
+        </button>
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-8"
+        >
+          <h2 className="text-4xl font-extrabold text-orange-500 mb-2">{service!.title}</h2>
+          <p className="text-gray-400 mt-4">{service!.description}</p>
+        </motion.div>
+        <div className="rounded-xl p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-gray-300 mb-8">
+          {service!.checkmarks.map((txt, i) => (
+            <div key={i} className="flex items-center space-x-2">
+              <CheckCircle2 className="w-5 h-5 text-green-500" />
+              <span>{txt}</span>
+            </div>
+          ))}
+        </div>
+        <div className="flex justify-center space-x-4 border-b border-gray-700 mb-6">
+          <button
+            className={`pb-2 px-4 ${
+              activeTab === "packages"
+                ? "text-orange-500 border-b-2 border-orange-500"
+                : "text-gray-400"
+            }`}
+            onClick={() => setActiveTab("packages")}
+          >
+            Ceník
+          </button>
+          <button
+            className={`pb-2 px-4 ${
+              activeTab === "process"
+                ? "text-orange-500 border-b-2 border-orange-500"
+                : "text-gray-400"
+            }`}
+            onClick={() => setActiveTab("process")}
+          >
+            Postup
+          </button>
+        </div>
+        {activeTab === "packages" && (
+          <div className="flex flex-col gap-6">
+            {service!.packages.map((pkg, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.2 }}
+                className="p-6 bg-gray-800 rounded-xl shadow-lg border-2 border-orange-500"
+              >
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-2xl font-semibold text-orange-500">{pkg.name}</h3>
+                  <span className="bg-orange-500 text-white px-3 py-1 rounded-full text-lg font-semibold">
+                    {pkg.price}
+                  </span>
                 </div>
-              )}
-
-              {activeTab === "process" && (
-                <div className="space-y-4 text-gray-300">
-                  {service.process.map((step, idx) => (
-                    <div key={idx} className="flex items-start">
-                      <span className="text-orange-500 mr-2">→</span>
-                      <span>{step}</span>
-                    </div>
+                <ul className="space-y-2 text-gray-300">
+                  {pkg.features.map((f, i) => (
+                    <li key={i} className="flex items-center">
+                      <CheckCircle2 className="w-5 h-5 text-green-500 mr-2" />
+                      <span>{f}</span>
+                    </li>
                   ))}
-                </div>
-              )}
-            </motion.div>
+                </ul>
+              </motion.div>
+            ))}
+            <p className="text-sm italic text-gray-400 mt-4">{service!.extraInfo}</p>
           </div>
-        );
-      })}
+        )}
+        {activeTab === "process" && (
+          <div className="space-y-4 text-gray-300">
+            {service!.process.map((step, i) => (
+              <div key={i} className="flex items-start">
+                <span className="text-orange-500 mr-2">→</span>
+                <span>{step}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </section>
   );
 }

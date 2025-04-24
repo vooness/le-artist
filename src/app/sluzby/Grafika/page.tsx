@@ -1,6 +1,6 @@
-import Navbar from "../components/Navbar";
-import ServiceCategoriesSection from "../components/sluzby";
-import Footer from "../components/Footer";
+import Navbar from "../../components/Navbar";
+ import  GraphicDesignPage  from "../../components/grafik";
+ import Footer from "../../components/Footer";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -83,7 +83,7 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <ServiceCategoriesSection />
+      <GraphicDesignPage />
       <Footer />
     </>
   );

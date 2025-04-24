@@ -1,312 +1,604 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
-import { Monitor, Edit, Video, CheckCircle2, Info } from "lucide-react";
+import { useState, useEffect, useRef } from 'react';
+import { motion, useScroll, useTransform, useMotionValue } from 'framer-motion';
+import Link from 'next/link';
+import ParticlesBackground from "./ParticlesBakckground";
 
-const services = [
-  {
-    title: "Webovky",
-    description:
-      "Moderní, rychlé a responzivní webové stránky pro lepší prezentaci. Web, který prodává a roste s vámi.",
-    icon: <Monitor className="w-8 h-8" />,
-    checkmarks: [
-      "Základní web již od 10000 Kč",
-      "React nebo .Net core řešení",
-      "SEO optimalizace v ceně",
-      "Responzivní design",
-      "Úprava Shoptetu",
-    ],
-    packages: [
-      {
-        name: "Basic",
-        price: "od 10000 Kč",
-        features: [
-          "Do 5 podstránek",
-          "Responzivní design",
-          "Kontaktní formulář",
-          "Základní SEO",
-          "Doba dodání 14-21 dní",
-        ],
-      },
-      {
-        name: "Business",
-        price: "od 18000 Kč",
-        features: [
-          "Do 10 podstránek",
-          "Pokročilé funkce",
-          "Blog systém",
-          "Napojení na sociální sítě",
-          "Doba dodání 21-30 dní",
-        ],
-      },
-      {
-        name: "E-shop",
-        price: "od 25000 Kč",
-        features: [
-          "Shoptet",
-          "Produktový katalog",
-          "Platební brány",
-          "Marketingové nástroje",
-          "Doba dodání 30-45 dní",
-        ],
-      },
-    ],
-    process: [
-      "1. Analýza požadavků",
-      "2. Návrh struktury webu",
-      "3. Grafický design",
-      "4. Kódování a testování",
-      "5. Spuštění a zaškolení",
-    ],
-    extraInfo:
-      "Nabízím i správu webů (od 500 Kč/měsíc), napojení na externí systémy, nebo tvorbu na míru podle vašich potřeb.",
-  },
-  {
-    title: "Grafika",
-    description:
-      "Od loga po kompletní firemní identitu. Jsem schopný navrhnout cokoliv – včetně designu obalů a marketingových materiálů. Mohu také zajistit focení, abychom měli vše pro vaši značku na jednom místě.",
-    icon: <Edit className="w-8 h-8" />,
-    checkmarks: [
-      "Logo design již od 3000 Kč",
-      "Vizitky a firemní tiskoviny",
-      "Sociální sítě a online grafika",
-      "Loga a maskoti",
-      "Design obalů a reklam",
-    ],
-    packages: [
-      {
-        name: "Basic",
-        price: "od 3000 Kč",
-        features: [
-          "2-3 návrhy loga",
-          "2 revize finálního návrhu",
-          "Základní formáty (PNG, JPG, Vektor)",
-          "Doba dodání 5-7 dní",
-        ],
-      },
-      {
-        name: "Standard",
-        price: "od 5000 Kč",
-        features: [
-          "4-5 návrhů loga",
-          "Neomezené revize",
-          "Všechny potřebné formáty",
-          "Vizitka zdarma",
-          "Doba dodání 7-10 dní",
-        ],
-      },
-      {
-        name: "Premium",
-        price: "od 8000 Kč",
-        features: [
-          "6+ návrhů loga",
-          "Kompletní brand manuál",
-          "Sociální média kit",
-          "Expresní dodání možné",
-          "Doba dodání 10-14 dní",
-        ],
-      },
-    ],
-    process: [
-      "1. Konzultace a pochopení vašich potřeb",
-      "2. Analýza trhu a konkurence",
-      "3. Návrh konceptů",
-      "4. Revize a úpravy",
-      "5. Finální soubory a podklady",
-    ],
-    extraInfo:
-      "Nabízím i tvorbu bannerů (od 500 Kč) nebo kompletní firemní identitu (individuální kalkulace).",
-  },
-  {
-    title: "Střih Videa",
-    description:
-      "Profesionální střih videí pro sociální sítě, YouTube nebo firemní prezentace. Moderní efekty, titulky a zvuk v ceně.",
-    icon: <Video className="w-8 h-8" />,
-    checkmarks: [
-      "Střih videa od 2000 Kč",
-      "Rychlé dodání do 48 hodin",
-      "Motion grafika v ceně",
-      "Vlastní hudba a efekty",
-      "Formáty pro všechny platformy",
-    ],
-    packages: [
-      {
-        name: "Basic",
-        price: "od 2000 Kč",
-        features: [
-          "Střih do 2 minut",
-          "Základní titulky",
-          "Hudba z knihovny",
-          "2 revize",
-        ],
-      },
-      {
-        name: "Standard",
-        price: "od 4000 Kč",
-        features: [
-          "Střih do 5 minut",
-          "Pokročilé titulky a přechody",
-          "Vlastní výběr hudby",
-          "Neomezené revize",
-          "Motion grafika",
-        ],
-      },
-      {
-        name: "Premium",
-        price: "od 7000 Kč",
-        features: [
-          "Střih do 10 minut",
-          "Profesionální efekty",
-          "Voice-over",
-          "Expresní dodání",
-          "Komplexní postprodukce",
-        ],
-      },
-    ],
-    process: [
-      "1. Konzultace a scénář",
-      "2. Prvotní střih",
-      "3. Zvuk a efekty",
-      "4. Revize",
-      "5. Export",
-    ],
-    extraInfo:
-      "Pro pravidelné klienty nabízím zvýhodněné balíčky na měsíční spolupráci.",
-  },
-];
+const IntroSection = () => {
+  const sectionRef = useRef(null);
+  const imageRef = useRef(null);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const [hoveredServiceId, setHoveredServiceId] = useState<number | null>(null);
+  
+  // State pro sledování velikosti obrazovky
+  const [isMobileOrTablet, setIsMobileOrTablet] = useState(false);
+  
+  // Detekce mobilního zařízení nebo tabletu
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobileOrTablet(window.innerWidth < 1024); // Méně než 1024px považujeme za mobilní nebo tablet
+    };
+    
+    // Kontrola při načtení
+    checkScreenSize();
+    
+    // Přidání event listeneru pro změnu velikosti
+    window.addEventListener('resize', checkScreenSize);
+    
+    // Cleanup
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
+  
+  // Sledování pohybu myši pro interaktivní efekty
+  useEffect(() => {
+    const handleMouseMove = (e: { clientX: number; clientY: number; }) => {
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
+    };
+    
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, [mouseX, mouseY]);
 
-const cardAnimation = {
-  hidden: { opacity: 0, y: 50 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay: i * 0.3,
-      duration: 0.8,
-      ease: "easeOut",
+  // Animace při scrollování
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"]
+  });
+  
+  // Paralaxové efekty
+  const imageY = useTransform(scrollYProgress, [0, 1], ['-5%', '5%']);
+  const textY = useTransform(scrollYProgress, [0, 1], ['5%', '-5%']);
+  
+  // Efekty pro pozadí - zjednodušené
+  const renderBackgroundEffects = () => (
+    <>
+      {[...Array(3)].map((_, i) => (
+        <div 
+          key={`h-line-${i}`}
+          className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-orange-500/10 to-transparent"
+          style={{ top: `${25 + (i * 25)}%`, opacity: 0.1 + (i * 0.05) }}
+        />
+      ))}
+      <div className="absolute inset-0 opacity-[0.07]" style={{
+        backgroundImage: `linear-gradient(to right, rgba(148, 163, 184, 0.1) 1px, transparent 1px),
+                          linear-gradient(to bottom, rgba(148, 163, 184, 0.1) 1px, transparent 1px)`,
+        backgroundSize: '50px 50px'
+      }} />
+    </>
+  );
+
+  // Definice služeb s ikonami a odkazy
+  const services = [
+    {
+      id: 1,
+      name: "Grafický Design",
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+        </svg>
+      ),
+      link: "/sluzby/graficky-design"
     },
-  }),
-};
+    {
+      id: 2,
+      name: "Tvorba videí",
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+        </svg>
+      ),
+      link: "/sluzby/tvorba-videi"
+    },
+    {
+      id: 3,
+      name: "Webové stránky",
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
+        </svg>
+      ),
+      link: "/sluzby/webove-stranky"
+    },
+    {
+      id: 4,
+      name: "Shoptet eshop",
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+        </svg>
+      ),
+      link: "/sluzby/shoptet-eshop"
+    },
+    {
+      id: 5,
+      name: "Online kurzy",
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+        </svg>
+      ),
+      link: "/sluzby/online-kurzy"
+    },
+    {
+      id: 6,
+      name: "Interaktivní cvičení",
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+      ),
+      link: "/sluzby/interaktivni-cviceni"
+    }
+  ];
 
-const WhatIDo = () => {
-  const router = useRouter();
+  // Animační varianty pro komponenty
+  const imageContainerVariants = {
+    hidden: { opacity: 0, x: -40 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.7, ease: "easeOut" } },
+  };
+
+  const pulseAnimation = {
+    hidden: { opacity: 0.3, scale: 0.9 },
+    visible: {
+      opacity: [0.3, 0.6, 0.3],
+      scale: [0.9, 1.05, 0.9],
+      transition: { duration: 6, repeat: Infinity, ease: "easeInOut" }
+    }
+  };
+
+  const shadowPulseAnimation = {
+    hidden: { boxShadow: "0 0 10px rgba(249, 115, 22, 0.3)" },
+    visible: {
+      boxShadow: ["0 0 10px rgba(249, 115, 22, 0.3)", "0 0 20px rgba(249, 115, 22, 0.5)", "0 0 10px rgba(249, 115, 22, 0.3)"],
+      transition: { duration: 3, repeat: Infinity, ease: "easeInOut" }
+    }
+  };
+
+  const scanLineAnimation = {
+    hidden: { top: "0%" },
+    visible: {
+      top: ["0%", "100%", "0%"],
+      transition: { duration: 8, repeat: Infinity, ease: "easeInOut", repeatDelay: 2 }
+    }
+  };
 
   return (
-    <section
-      id="services"
-      className="relative py-20 px-6 sm:px-12 bg-[#0f172a] text-white overflow-hidden -mt-[2px]"
+    <section 
+      ref={sectionRef}
+      className="relative py-24 bg-[#0f172a] text-white overflow-hidden"
     >
-      <div className="max-w-7xl mx-auto mt-12">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1, ease: "easeOut" }}
-          className="text-center"
-        >
-          {/* Desktop Heading */}
-          <h2 className="hidden md:inline-block text-4xl lg:text-5xl font-extrabold tracking-tight relative">
-            S čím vám můžu pomoct?
-            <motion.div
-              initial={{ scaleX: 0, opacity: 0 }}
-              whileInView={{ scaleX: 1, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}
-              className="absolute left-1/3 -translate-x-1/3 bottom-[-10px] h-[5px] w-2/3 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full origin-center"
-            />
-          </h2>
-          {/* Mobile Heading */}
-          <h2 className="md:hidden text-4xl font-extrabold tracking-tight relative inline-block">
-            S čím vám můžu pomoct?
-            <motion.div
-              initial={{ scaleX: 0, opacity: 0 }}
-              whileInView={{ scaleX: 1, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}
-              className="absolute left-1/4 -translate-x-1/3 bottom-[-8px] h-[3px] w-1/2 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full origin-center"
-            />
-          </h2>
-          {/* Image below the heading */}
-          <div className="mt-6 flex justify-center">
-            <img
-              src="/imgs/logo5.svg"
-              alt="Podnadpis obrázek"
-              className="w-full max-w-md object-cover"
-            />
-          </div>
-          <p className="mt-12 text-gray-400 text-lg max-w-3xl mx-auto">
-            Pomáhám firmám a podnikatelům růst pomocí kvalitního designu a webu.
-            Každý projekt je jedinečný a zaslouží si individuální přístup.
-          </p>
-          <p className="mt-4 text-gray-400 text-lg max-w-3xl mx-auto">
-            Nabízím férové ceny a transparentní podmínky. Vždy se snažím najít řešení,
-            které sedí vašemu rozpočtu i potřebám.
-          </p>
-        </motion.div>
-
-        <motion.div
-          className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-16 relative"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-        >
-          {services.map((service, i) => (
-            <motion.div
-              key={i}
-              custom={i}
-              variants={cardAnimation}
-              className="relative group bg-[#20262f] backdrop-blur-lg rounded-xl shadow-lg hover:shadow-[0_0_20px_4px_rgba(249,115,22,0.7)] transition-all duration-500"
-            >
-              <div className="p-8">
-                <div className="flex justify-center items-center mb-6">
-                  <div className="text-orange-500 mr-4">{service.icon}</div>
-                  <h3 className="text-3xl font-bold text-orange-500">
-                    {service.title}
-                  </h3>
-                </div>
-                <p className="text-gray-300 leading-relaxed mb-6">
-                  {service.description}
-                </p>
-                <ul className="space-y-3">
-                  {service.checkmarks.map((check, idx) => (
-                    <li key={idx} className="flex items-start text-gray-300">
-                      <CheckCircle2 className="w-5 h-5 text-green-500 mr-2 mt-1 flex-shrink-0" />
-                      <span>{check}</span>
-                    </li>
-                  ))}
-                </ul>
-                <div className="mt-6 pt-6 border-t border-gray-700">
-                  <button
-                    onClick={() => router.push("/sluzby")}
-                    className="flex items-center text-orange-500 hover:text-orange-400 transition-colors"
+       <ParticlesBackground />
+      {/* Dynamické pozadí */}
+      <div className="absolute inset-0 overflow-hidden">
+        {renderBackgroundEffects()}
+        
+        {/* Interaktivní spotlight efekt sledující myš */}
+        <motion.div 
+          className="absolute w-[600px] h-[600px] rounded-full opacity-[0.07] pointer-events-none"
+          style={{
+            background: 'radial-gradient(circle, rgba(249, 115, 22, 0.5) 0%, rgba(15, 23, 42, 0) 70%)',
+            x: useTransform(mouseX, value => value - 300),
+            y: useTransform(mouseY, value => value - 300),
+          }}
+        />
+      </div>
+      
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16">
+          {/* Levá strana - VYLEPŠENÝ FUTURISTICKÝ DESIGN */}
+          <motion.div 
+            ref={imageRef}
+            className="w-full lg:w-5/12" 
+            style={{ y: imageY }}
+            variants={imageContainerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            {/* FUTURISTICKÝ RÁMEČEK PRO OBRÁZEK */}
+            <div className="relative mx-auto w-full max-w-md">
+              {/* Polygonální rámeček */}
+              <div className="absolute w-full h-full"
+                style={{ 
+                  clipPath: "polygon(0% 15%, 15% 0%, 85% 0%, 100% 15%, 100% 85%, 85% 100%, 15% 100%, 0% 85%)", 
+                  width: "110%", 
+                  height: "110%", 
+                  top: "-5%", 
+                  left: "-5%" 
+                }}>
+                <div className="absolute inset-0 bg-gradient-to-br from-orange-500/30 via-orange-500/10 to-blue-500/20 rounded-lg"></div>
+              </div>
+              
+              {/* Pulzující vnitřní rámeček */}
+              <motion.div 
+                className="absolute inset-0 border-2 border-orange-500/30 rounded-lg"
+                style={{ 
+                  clipPath: "polygon(0% 15%, 15% 0%, 85% 0%, 100% 15%, 100% 85%, 85% 100%, 15% 100%, 0% 85%)", 
+                  width: "105%", 
+                  height: "105%", 
+                  top: "-2.5%", 
+                  left: "-2.5%" 
+                }}
+                variants={shadowPulseAnimation}
+                initial="hidden"
+                animate="visible"
+              ></motion.div>
+              
+              {/* Pulzující záře */}
+              <motion.div 
+                className="absolute"
+                style={{
+                  width: "120%",
+                  height: "120%",
+                  top: "-10%",
+                  left: "-10%",
+                  background: "radial-gradient(circle, rgba(249, 115, 22, 0.3) 0%, rgba(15, 23, 42, 0) 70%)",
+                  filter: "blur(20px)"
+                }}
+                variants={pulseAnimation}
+                initial="hidden"
+                animate="visible"
+              ></motion.div>
+              
+              {/* Rotující kruhy - zjednodušeno */}
+              <motion.div
+                className="absolute rounded-full border border-orange-500/20"
+                style={{
+                  width: "115%",
+                  height: "115%",
+                  top: "-7.5%",
+                  left: "-7.5%",
+                  borderWidth: 1,
+                }}
+                animate={{ rotate: 360 }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              />
+              
+              {/* Technologické detaily */}
+              <div className="absolute inset-0">
+                {/* Horní levý roh */}
+                <motion.div 
+                  className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-orange-500/60"
+                  animate={{ opacity: [0.6, 1, 0.6] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                ></motion.div>
+                
+                {/* Dolní pravý roh */}
+                <motion.div 
+                  className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-orange-500/60"
+                  animate={{ opacity: [0.6, 1, 0.6] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+                ></motion.div>
+                
+                {/* Orbiting particles - zjednodušeno */}
+                {[...Array(4)].map((_, i) => {
+                  const angle = (i / 4) * Math.PI * 2;
+                  const radius = 45; // % of container
+                  const centerX = 50; // %
+                  const centerY = 50; // %
+                  
+                  return (
+                    <motion.div
+                      key={`orbit-particle-${i}`}
+                      className="absolute rounded-full bg-orange-500"
+                      style={{
+                        width: 3 + (i % 2),
+                        height: 3 + (i % 2),
+                        left: `${centerX + Math.cos(angle) * radius}%`,
+                        top: `${centerY + Math.sin(angle) * radius}%`,
+                        opacity: 0.7
+                      }}
+                      animate={{
+                        left: `${centerX + Math.cos(angle + Math.PI * 2) * radius}%`,
+                        top: `${centerY + Math.sin(angle + Math.PI * 2) * radius}%`,
+                      }}
+                      transition={{
+                        duration: 8 + i,
+                        repeat: Infinity,
+                        ease: "linear",
+                      }}
+                    />
+                  );
+                })}
+              </div>
+              
+              {/* Obrázek s prosvětlením */}
+              <div className="relative p-6 flex items-center justify-center">
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-br from-orange-500/5 via-transparent to-blue-500/5 rounded-lg"
+                  animate={{ opacity: [0.3, 0.7, 0.3] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                ></motion.div>
+                
+                <img 
+                  src="/imgs/logo5.svg" 
+                  alt="Tři veselí psi" 
+                  className="relative z-10 max-w-full h-auto transform scale-110" 
+                />
+                
+                {/* Interaktivní highlight kolem obrázku */}
+                <motion.div
+                  className="absolute inset-0 rounded-lg"
+                  style={{
+                    background: "radial-gradient(circle at center, rgba(249, 115, 22, 0.2) 0%, rgba(15, 23, 42, 0) 70%)",
+                    x: useTransform(mouseX, value => (value - (window.innerWidth/2)) / 20),
+                    y: useTransform(mouseY, value => (value - (window.innerHeight/2)) / 20),
+                  }}
+                ></motion.div>
+              </div>
+              
+              {/* Futuristický štítek dole */}
+              <motion.div
+                className="absolute bottom-[-15px] left-1/2 transform -translate-x-1/2 py-1 px-4 bg-[#0f172a] border border-orange-500/30 rounded-full z-20"
+                variants={shadowPulseAnimation}
+                initial="hidden"
+                animate="visible"
+              >
+                <div className="text-xs font-mono text-orange-400 flex items-center">
+                  <span className="mr-1">v</span>
+                  <motion.span
+                    animate={{ opacity: [1, 0.7, 1] }}
+                    transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
                   >
-                    <Info className="w-5 h-5 mr-2" />
-                    Zobrazit ceník a více informací
-                  </button>
+                    3.0
+                  </motion.span>
                 </div>
+              </motion.div>
+              
+              {/* Skenující efekt */}
+              <div className="absolute inset-0 overflow-hidden"
+                style={{
+                  clipPath: "polygon(0% 15%, 15% 0%, 85% 0%, 100% 15%, 100% 85%, 85% 100%, 15% 100%, 0% 85%)", 
+                  width: "100%", 
+                  height: "100%"
+                }}>
+                <motion.div
+                  className="absolute left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-orange-500/80 to-transparent"
+                  variants={scanLineAnimation}
+                  initial="hidden"
+                  animate="visible"
+                ></motion.div>
+              </div>
+            </div>
+          </motion.div>
+          
+          {/* Pravá strana - zachována beze změn */}
+          <motion.div 
+            className="w-full lg:w-7/12"
+            style={{ y: textY }}
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7, ease: "easeOut", delay: 0.1 }}
+          >
+            {/* Nadpis s animovanými tečkami */}
+            <div className="mb-8 flex items-center">
+              <div className="flex space-x-1.5 mr-4">
+                {[...Array(3)].map((_, i) => (
+                  <motion.div
+                    key={`header-dot-${i}`}
+                    className="w-2 h-2 rounded-full bg-orange-500"
+                    animate={{ 
+                      opacity: [0.6, 1, 0.6],
+                      scale: [1, 1.2, 1]
+                    }}
+                    transition={{ 
+                      duration: 2,
+                      delay: i * 0.3,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  />
+                ))}
+              </div>
+              <h2 className="text-4xl md:text-5xl font-bold text-white relative">
+                Krátký úvod
+                <motion.div 
+                  className="absolute left-0 bottom-[-8px] h-1 bg-gradient-to-r from-orange-500 to-orange-400 rounded-full"
+                  initial={{ width: 0 }}
+                  animate={{ width: '100%' }}
+                  transition={{ duration: 0.8, ease: "easeOut", delay: 0.4 }}
+                />
+              </h2>
+            </div>
+            
+            {/* BOX S PŘESVĚDČIVÝM TEXTEM */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="relative"
+            >
+              <div className="p-6 rounded-lg bg-slate-800/60 backdrop-blur-sm border border-orange-500/20 shadow-lg relative overflow-hidden">
+                {/* Horní akcent */}
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-600 via-orange-500 to-orange-600" />
+                
+                {/* Obsah */}
+                <div className="space-y-6 relative z-10">
+                  <p className="text-lg text-slate-100">
+                    <span className="font-semibold text-orange-400">Přetvářím vaše vize v digitální realitu</span> pomocí 
+                    moderního designu a funkčních webů, které přitahují pozornost a zvyšují konverze. Váš projekt 
+                    dostane nadstandardní péči, kterou si zaslouží.
+                  </p>
+                  
+                  <div className="w-16 h-px bg-orange-500/30 mx-auto" />
+                  
+                  <p className="text-lg text-slate-100">
+                    Každý projekt začíná <span className="font-semibold text-orange-400">bezplatnou konzultací</span> a transparentní cenovou nabídkou. 
+                    Mé řešení vždy respektuje váš rozpočet i časové možnosti. <span className="font-semibold text-white">Získáte web, který pracuje pro vás 24/7.</span>
+                  </p>
+                </div>
+                
+                {/* Vizuální akcenty */}
+                <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-orange-500/10 to-transparent" />
+                <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-orange-500/10 to-transparent" />
+              </div>
+              
+              {/* Rohové prvky */}
+              <div className="absolute -top-1 -left-1 w-3 h-3 border-t-2 border-l-2 border-orange-500/50" />
+              <div className="absolute -top-1 -right-1 w-3 h-3 border-t-2 border-r-2 border-orange-500/50" />
+              <div className="absolute -bottom-1 -left-1 w-3 h-3 border-b-2 border-l-2 border-orange-500/50" />
+              <div className="absolute -bottom-1 -right-1 w-3 h-3 border-b-2 border-r-2 border-orange-500/50" />
+            </motion.div>
+            
+            {/* SEKCE PRO IKONKY SLUŽEB - VYLEPŠENÁ S ODKAZY A HOVER EFEKTY */}
+            <motion.div
+              className="mt-8"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.7 }}
+            >
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {services.map((service, index) => (
+                  <Link href={service.link} key={service.id}>
+                    <motion.div
+                      className="p-4 bg-slate-800/40 border border-orange-500/20 rounded-lg transition-all duration-300 group relative overflow-hidden cursor-pointer"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, delay: 0.7 + index * 0.1 }}
+                      onHoverStart={() => !isMobileOrTablet && setHoveredServiceId(service.id)}
+                      onHoverEnd={() => !isMobileOrTablet && setHoveredServiceId(null)}
+                      whileHover={!isMobileOrTablet ? { 
+                        backgroundColor: "rgba(30, 41, 59, 0.6)", 
+                        borderColor: "rgba(249, 115, 22, 0.3)",
+                        scale: 1.02,
+                      } : {}}
+                    >
+                      {/* Futuristické efekty při hoveru - pouze na desktopu */}
+                      {!isMobileOrTablet && hoveredServiceId === service.id && (
+                        <>
+                          {/* Skenující linie */}
+                          <motion.div 
+                            className="absolute left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-orange-500/80 to-transparent"
+                            initial={{ top: "-10%" }}
+                            animate={{ top: "110%" }}
+                            transition={{ duration: 1.2, repeat: Infinity, repeatType: "loop" }}
+                          />
+                          
+                          {/* Rohové akcenty */}
+                          <motion.div 
+                            className="absolute top-0 left-0 w-6 h-[1px] bg-orange-500"
+                            initial={{ width: 0 }}
+                            animate={{ width: 24 }}
+                            transition={{ duration: 0.2 }}
+                          />
+                          <motion.div 
+                            className="absolute top-0 left-0 w-[1px] h-6 bg-orange-500"
+                            initial={{ height: 0 }}
+                            animate={{ height: 24 }}
+                            transition={{ duration: 0.2 }}
+                          />
+                          
+                          <motion.div 
+                            className="absolute bottom-0 right-0 w-6 h-[1px] bg-orange-500"
+                            initial={{ width: 0 }}
+                            animate={{ width: 24 }}
+                            transition={{ duration: 0.2 }}
+                          />
+                          <motion.div 
+                            className="absolute bottom-0 right-0 w-[1px] h-6 bg-orange-500"
+                            initial={{ height: 0 }}
+                            animate={{ height: 24 }}
+                            transition={{ duration: 0.2 }}
+                          />
+
+                          {/* Glowing background */}
+                          <motion.div 
+                            className="absolute inset-0 bg-gradient-to-br from-orange-500/10 to-blue-500/5"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.2 }}
+                          />
+                        </>
+                      )}
+                      
+                      <div className="flex flex-col items-center text-center relative z-10">
+                        <div className="p-3 bg-orange-500/10 rounded-full mb-3 text-orange-400 transition-colors duration-300 group-hover:text-orange-300 lg:group-hover:bg-orange-500/20">
+                          {service.icon}
+                        </div>
+                        <h3 className="text-sm font-medium text-white">{service.name}</h3>
+                        
+                        {/* Animovaný indikátor - pouze na desktopu */}
+                        {!isMobileOrTablet && (
+                          <motion.div 
+                            className="absolute -bottom-1 left-1/2 -translate-x-1/2 h-[2px] bg-gradient-to-r from-orange-600 to-orange-400"
+                            initial={{ width: "0%" }}
+                            animate={{ width: hoveredServiceId === service.id ? "80%" : "0%" }}
+                            transition={{ duration: 0.3 }}
+                          />
+                        )}
+                        
+                        {/* Text zobrazení služby - samostatný prostor - pouze na desktopu */}
+                        {!isMobileOrTablet && (
+                          <div className="h-5 mt-2 relative"> {/* Vyhrazený prostor pro "Zobrazit" text */}
+                            <motion.div
+                              className="absolute left-0 right-0 text-xs text-orange-400/80 flex items-center justify-center"
+                              initial={{ opacity: 0, y: 5 }}
+                              animate={{ 
+                                opacity: hoveredServiceId === service.id ? 1 : 0,
+                                y: hoveredServiceId === service.id ? 0 : 5
+                              }}
+                              transition={{ duration: 0.2 }}
+                            >
+                              <span className="mr-1">Zobrazit</span>
+                              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                              </svg>
+                            </motion.div>
+                          </div>
+                        )}
+                      </div>
+                    </motion.div>
+                  </Link>
+                ))}
               </div>
             </motion.div>
-          ))}
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: "easeOut", delay: 0.8 }}
-          className="mt-16 text-center"
-        >
-          <a
-            href="/portfolio"
-            className="px-8 py-4 bg-orange-600 text-white font-bold rounded-full shadow-lg hover:bg-orange-700 transition-all"
-          >
-            Prohlédnout portfolio
-          </a>
-        </motion.div>
+            
+            {/* Tlačítko portfolia */}
+            <motion.div
+              className="mt-10"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.9 }}
+            >
+              <a 
+                href="/portfolio" 
+                className="group relative inline-flex items-center px-8 py-4 bg-orange-600 text-white font-bold rounded-full overflow-hidden"
+              >
+                {/* Pozadí tlačítka */}
+                <span className="absolute inset-0 bg-gradient-to-r from-orange-600 to-orange-500 transition-all duration-300 
+                              group-hover:from-orange-500 group-hover:to-orange-600" />
+                
+                {/* Efekt světla při hoveru */}
+                <span className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                  <span className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000"></span>
+                </span>
+                
+                {/* Text tlačítka */}
+                <span className="relative flex items-center z-10">
+                  <span>Prohlédnout portfolio</span>
+                  <svg 
+                    className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
+                    <path 
+                      strokeLinecap="round" 
+                      strokeLinejoin="round" 
+                      strokeWidth="2" 
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </span>
+              </a>
+            </motion.div>
+          </motion.div>
+        </div>
       </div>
     </section>
   );
 };
 
-export default WhatIDo;
+export default IntroSection;

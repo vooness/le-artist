@@ -4,231 +4,371 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { FaPaw } from "react-icons/fa";
+import { FaPaw, FaEnvelope, FaCog, FaCode, FaRocket } from "react-icons/fa";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
-  // Monitor scroll to change navbar background on desktop
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Disable page scroll when menu is open
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-      document.documentElement.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-      document.documentElement.style.overflow = "";
-    }
+    document.body.style.overflow = isOpen ? "hidden" : "";
+    document.documentElement.style.overflow = isOpen ? "hidden" : "";
   }, [isOpen]);
 
-  // Animation variants for mobile menu
-  const menuVariants = {
-    hidden: { x: "-100%", opacity: 0 },
-    visible: {
-      x: "0%",
+  // Futuristické varianty pro menu
+  const menuBackgroundVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
       opacity: 1,
-      transition: { type: "spring", stiffness: 80, damping: 12 },
+      transition: { 
+        duration: 0.3,
+        when: "beforeChildren" 
+      } 
+    },
+    exit: { 
+      opacity: 0,
+      transition: { 
+        duration: 0.3, 
+        when: "afterChildren" 
+      } 
+    },
+  };
+
+  const menuContentVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.5,
+        staggerChildren: 0.1
+      }
     },
     exit: {
-      x: "100%",
       opacity: 0,
-      transition: { type: "tween", duration: 0.7 },
+      transition: {
+        duration: 0.3
+      }
+    }
+  };
+
+  const menuItemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: { 
+      y: 0, 
+      opacity: 1,
+      transition: { 
+        type: "spring", 
+        stiffness: 100,
+        damping: 15
+      } 
+    },
+    exit: { 
+      y: -20, 
+      opacity: 0,
+      transition: { 
+        duration: 0.2 
+      } 
     },
   };
 
   return (
-    <nav
-      className={`fixed top-0 left-0 w-full transition-all duration-300 z-40 ${
-        isScrolled ? "bg-black/70 backdrop-blur-md shadow-md" : "bg-transparent"
-      }`}
-    >
+    <nav className={`fixed top-0 left-0 w-full z-40 transition-all duration-300 ${
+      isScrolled ? "bg-[#0f172a]/90 backdrop-blur-md shadow-md" : "bg-transparent"
+    }`}>
       <div className="max-w-7xl mx-auto px-4 flex justify-between items-center py-4">
-        {/* Logo replaced with SVG logo */}
-        <Link href="/" className="flex items-center">
-          <Image
-            src="/imgs/logoone.png"
-            alt="Logo"
-            width={220}
-            height={80}
-            className="object-contain"
+        {/* Logo */}
+        <Link href="/" className="flex items-center relative">
+          <motion.div
+            className="absolute -inset-2  rounded-lg blur-sm"
+            animate={{
+              opacity: [0.3, 0.6, 0.3],
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
           />
+          <Image src="/imgs/logoone.png" alt="Logo" width={180} height={50} className="object-contain relative z-10" />
         </Link>
 
-        {/* Desktop Menu */}
+        {/* Desktop Menu - s ikonkami na hover */}
         <ul className="hidden lg:flex items-center gap-8">
-          <li>
-            <Link
-              href="/sluzby"
-              className="relative group text-white transition duration-300"
-            >
-              Služby a ceník
-              <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-orange-500 transition-all duration-300 group-hover:w-full"></span>
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/portfolio"
-              className="relative group text-white transition duration-300"
-            >
-              Portfolio
-              <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-orange-500 transition-all duration-300 group-hover:w-full"></span>
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/postup"
-              className="relative group text-white transition duration-300"
-            >
-              Postup tvorby webu
-              <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-orange-500 transition-all duration-300 group-hover:w-full"></span>
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/lektor"
-              className="relative group text-white transition duration-300"
-            >
-              Online kurzy
-              <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-orange-500 transition-all duration-300 group-hover:w-full"></span>
-            </Link>
-          </li>
+          {[
+            { title: "Služby a ceník", href: "/sluzby", icon: <FaCog className="text-orange-500" /> },
+            { title: "Portfolio", href: "/portfolio", icon: <FaCode className="text-orange-500" /> },
+            { title: "Postup tvorby webu", href: "/postup", icon: <FaRocket className="text-orange-500" /> },
+          ].map((item, index) => (
+            <li key={index}>
+              <Link
+                href={item.href}
+                className="group relative text-white font-medium hover:text-orange-400 transition flex items-center"
+              >
+                <span className="mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">{item.icon}</span>
+                {item.title}
+                <motion.span 
+                  className="absolute left-0 bottom-0 h-[2px] bg-gradient-to-r from-orange-500 to-transparent" 
+                  initial={{ width: 0 }}
+                  whileHover={{ width: "100%" }}
+                  transition={{ duration: 0.3 }}
+                />
+              </Link>
+            </li>
+          ))}
         </ul>
 
-        {/* Desktop Contact Button */}
+        {/* Kontaktní tlačítko */}
         <Link
           href="/kontakt"
-          className="hidden lg:block px-4 py-2 bg-orange-500 text-white rounded-full font-medium hover:bg-orange-600 transition"
+          className="hidden lg:flex items-center px-5 py-2 bg-gradient-to-r from-orange-600 to-orange-500 
+          text-white rounded-full font-medium relative overflow-hidden group"
         >
-          Kontaktujte mě
+          <span className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+            <span className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000"></span>
+          </span>
+          <FaEnvelope className="mr-2 relative z-10" />
+          <span className="relative z-10">Kontaktujte mě</span>
         </Link>
 
-        {/* Mobile Menu Button (paw icon with "Menu" label) */}
+        {/* Mobilní tlačítko - packa zachována */}
         <motion.button
-          className="lg:hidden focus:outline-none flex flex-col items-center"
+          className="lg:hidden flex flex-col items-center justify-center relative focus:outline-none"
           onClick={() => setIsOpen(true)}
           aria-label="Open menu"
-          whileTap={{ scale: 1.5 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
         >
-          <FaPaw className="text-white text-4xl" />
-          <span className="text-white text-sm mt-1">Menu</span>
+          <FaPaw className="text-orange-500 text-3xl relative z-10" />
+          <motion.span 
+            className="text-white text-xs mt-1 font-mono relative z-10"
+            animate={{ opacity: [0.7, 1, 0.7] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          >
+            Menu
+          </motion.span>
         </motion.button>
       </div>
 
-      {/* Mobile Fullscreen Menu */}
+      {/* Futuristické mobilní menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
             key="mobileMenu"
-            className="fixed top-0 left-0 w-screen h-screen z-[99999] bg-orange-600 text-white flex flex-col"
-            variants={menuVariants}
+            className="fixed inset-0 h-screen w-full z-[9999] bg-[#0f172a]/95 backdrop-blur-lg flex flex-col items-center justify-center overflow-hidden"
+            variants={menuBackgroundVariants}
             initial="hidden"
             animate="visible"
             exit="exit"
           >
-            {/* Close Button */}
+            {/* Futuristické animované pozadí */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+              {/* Digitální mřížka */}
+              <div className="absolute inset-0 opacity-[0.05]" style={{
+                backgroundImage: 
+                  `linear-gradient(to right, rgba(249, 115, 22, 0.1) 1px, transparent 1px),
+                   linear-gradient(to bottom, rgba(249, 115, 22, 0.1) 1px, transparent 1px)`,
+                backgroundSize: '30px 30px'
+              }} />
+              
+              {/* Dynamický efekt světelných bodů */}
+              {[...Array(25)].map((_, i) => (
+                <motion.div
+                  key={`dot-${i}`}
+                  className="absolute rounded-full bg-orange-500/40"
+                  style={{
+                    width: `${2 + Math.random() * 4}px`,
+                    height: `${2 + Math.random() * 4}px`,
+                    top: `${Math.random() * 100}%`,
+                    left: `${Math.random() * 100}%`,
+                    filter: 'blur(1px)',
+                  }}
+                  animate={{
+                    opacity: [0.1, 0.5, 0.1],
+                    scale: [1, 1.3, 1],
+                    y: [0, Math.random() * 10 - 5, 0],
+                  }}
+                  transition={{
+                    duration: 4 + Math.random() * 3,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: Math.random() * 2,
+                  }}
+                />
+              ))}
+              
+              {/* Futuristické diagonální linie */}
+              {[...Array(6)].map((_, i) => (
+                <motion.div 
+                  key={`line-${i}`}
+                  className="absolute h-[1px] w-[200%] bg-gradient-to-r from-transparent via-orange-500/15 to-transparent"
+                  style={{ 
+                    top: `${i * 20}%`, 
+                    left: '-50%',
+                    transform: `rotate(${15 + i * 6}deg)`,
+                  }}
+                  animate={{ 
+                    opacity: [0.1, 0.3, 0.1],
+                  }}
+                  transition={{
+                    duration: 5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: i * 0.4,
+                  }}
+                />
+              ))}
+              
+              {/* Animovaný efekt mlhoviny v pozadí */}
+              <motion.div 
+                className="absolute inset-0"
+                style={{
+                  background: 'radial-gradient(circle at 70% 30%, rgba(249, 115, 22, 0.03) 0%, transparent 60%)',
+                }}
+                animate={{
+                  opacity: [0.3, 0.5, 0.3],
+                }}
+                transition={{
+                  duration: 8,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
+              
+              <motion.div 
+                className="absolute inset-0"
+                style={{
+                  background: 'radial-gradient(circle at 30% 70%, rgba(249, 115, 22, 0.03) 0%, transparent 60%)',
+                }}
+                animate={{
+                  opacity: [0.5, 0.3, 0.5],
+                }}
+                transition={{
+                  duration: 8,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
+            </div>
+            
+            {/* Zavírací tlačítko v pravém horním rohu */}
             <motion.button
-              className="absolute top-4 right-4 text-white text-4xl focus:outline-none"
+              className="absolute top-6 right-6 w-12 h-12 flex items-center justify-center focus:outline-none z-50"
               onClick={() => setIsOpen(false)}
               aria-label="Close menu"
-              whileTap={{ scale: 1.1 }}
-            >
-              &times;
-            </motion.button>
-
-            {/* Navigation Links */}
-            <motion.ul
-              className="flex flex-col items-center justify-center flex-grow space-y-6 text-xl font-medium mt-6 px-4"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.6 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
             >
-              <li>
-                <Link
-                  href="/sluzby"
-                  onClick={() => setIsOpen(false)}
-                  className="hover:text-black transition"
-                >
-                  Služby a ceník
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/portfolio"
-                  onClick={() => setIsOpen(false)}
-                  className="hover:text-black transition"
-                >
-                  Portfolio
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/postup"
-                  onClick={() => setIsOpen(false)}
-                  className="hover:text-black transition"
-                >
-                  Postup tvorby webu
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/lektor"
-                  onClick={() => setIsOpen(false)}
-                  className="hover:text-black transition"
-                >
-                  Online kurzy
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/kontakt"
-                  onClick={() => setIsOpen(false)}
-                  className="hover:text-black transition"
-                >
-                  Kontakt
-                </Link>
-              </li>
+              <div className="relative w-8 h-8 flex items-center justify-center">
+                <div className="absolute w-8 h-0.5 bg-orange-500 rotate-45"></div>
+                <div className="absolute w-8 h-0.5 bg-orange-500 -rotate-45"></div>
+              </div>
+            </motion.button>
+            
+            {/* Menu položky - čistší design bez ikon */}
+            <motion.ul 
+              className="flex flex-col items-center space-y-12 text-xl relative z-10 mt-8 mb-32"
+              variants={menuContentVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+            >
+              {[
+                { title: "Služby a ceník", href: "/sluzby" },
+                { title: "Portfolio", href: "/portfolio" },
+                { title: "Postup tvorby webu", href: "/postup" },
+                { title: "Kontakt", href: "/kontakt" },
+              ].map((item, index) => (
+                <motion.li key={index} variants={menuItemVariants}>
+                  <Link 
+                    href={item.href} 
+                    onClick={() => setIsOpen(false)} 
+                    className="relative group"
+                  >
+                    <span className="relative block text-center">
+                      <span className="text-white text-2xl font-medium tracking-wide group-hover:text-orange-400 transition-colors duration-300 relative z-10">{item.title}</span>
+                      <motion.span 
+                        className="absolute -bottom-2 left-0 right-0 h-[2px] mx-auto bg-gradient-to-r from-orange-600 via-orange-500 to-transparent opacity-0 group-hover:opacity-100"
+                        initial={{ width: "0%" }}
+                        whileHover={{ width: "100%" }}
+                        transition={{ duration: 0.3 }}
+                      />
+                      <motion.div
+                        className="absolute -inset-4 rounded-lg opacity-0 group-hover:opacity-100 bg-orange-500/5"
+                        transition={{ duration: 0.3 }}
+                      />
+                    </span>
+                  </Link>
+                </motion.li>
+              ))}
             </motion.ul>
 
-            {/* Contact Info */}
-            <div className="bg-orange-600 py-6 text-center text-white">
-              <p className="text-lg font-medium">Neváhejte se ozvat!</p>
-              <p className="text-sm">Webovky, grafika a videa k vaším službám!</p>
-              <p className="mt-4">📞 +420 605 707 036</p>
-              <p className="mt-1">✉️ dotazy.le.artist@gmail.com</p>
-              <p className="mt-1">Marek Frňka</p>
-            </div>
-
-            {/* Close Menu Button with Arrow Animation */}
-            <div className="pb-6 flex justify-center">
-              <motion.button
-                onClick={() => setIsOpen(false)}
-                className="px-6 py-2 bg-gray-900 text-white rounded-full font-medium hover:bg-gray-800 transition mt-6 flex items-center gap-2"
-                whileTap={{ scale: 0.95 }}
-              >
-                Zavřít menu
-                <motion.div
-                  className="w-4 h-4 text-white rounded-full flex items-center justify-center"
-                  initial={{ x: -5 }}
-                  animate={{ x: 5 }}
-                  transition={{
-                    duration: 0.6,
-                    repeat: Infinity,
-                    repeatType: "reverse",
-                  }}
+            {/* Vylepšený spodní kontaktní panel */}
+            <motion.div 
+              className="absolute bottom-0 left-0 right-0 pt-8 pb-4 w-full bg-gradient-to-t from-[#0f172a] to-transparent"
+              variants={menuItemVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+            >
+              {/* Dekorativní linie */}
+              <motion.div 
+                className="absolute top-0 left-0 w-full h-[1px]"
+                style={{
+                  background: "linear-gradient(to right, transparent, rgba(249, 115, 22, 0.3), transparent)"
+                }}
+                animate={{
+                  opacity: [0.3, 0.7, 0.3]
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              />
+              
+              {/* Hlavní text */}
+              <div className="text-center mb-5">
+                <h3 className="text-white text-lg font-medium">Neváhejte se ozvat!</h3>
+                <p className="text-gray-300 text-sm">Webovky, grafika a videa k vašim službám!</p>
+              </div>
+              
+              {/* Kontaktní informace */}
+              <div className="flex flex-col items-center justify-center space-y-3">
+                {/* Telefon */}
+                <a 
+                  href="tel:+420605707036"
+                  className="flex items-center transition-transform hover:scale-105"
                 >
-                  →
-                </motion.div>
-              </motion.button>
-            </div>
+                  <div className="w-10 h-10 rounded-md bg-gradient-to-br from-orange-500/10 to-transparent flex items-center justify-center mr-3 border border-orange-500/30">
+                    <svg className="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    </svg>
+                  </div>
+                  <span className="text-white font-medium">+420 605 707 036</span>
+                </a>
+                
+                {/* Email */}
+                <a 
+                  href="mailto:dotazy.le.artist@gmail.com"
+                  className="flex items-center transition-transform hover:scale-105"
+                >
+                  <div className="w-10 h-10 rounded-md bg-gradient-to-br from-orange-500/10 to-transparent flex items-center justify-center mr-3 border border-orange-500/30">
+                    <svg className="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                  <span className="text-white font-medium text-sm">dotazy.le.artist@gmail.com</span>
+                </a>
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
