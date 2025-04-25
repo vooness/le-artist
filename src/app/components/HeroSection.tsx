@@ -9,9 +9,9 @@ export const HeroSection: React.FC = () => {
   return (
     <section className="relative bg-[#0f172a] text-white py-12 sm:py-20 lg:py-28 flex flex-col items-center justify-center overflow-hidden px-6 sm:px-8 lg:px-20 min-h-screen">
        <ParticlesBackground />
-      {/* Futuristické pozadí */}
+     
       <div className="absolute inset-0 z-0">
-        {/* Jemná grid mřížka viditelná jen velmi úzce ve středu */}
+        
         <div
           className="pointer-events-none absolute inset-0 flex justify-center"
           style={{
@@ -26,7 +26,7 @@ export const HeroSection: React.FC = () => {
           }}
         />
         
-        {/* Animované tečky v pozadí */}
+        
         <div className="absolute inset-0 overflow-hidden">
           {[...Array(30)].map((_, i) => (
             <motion.div
@@ -51,7 +51,7 @@ export const HeroSection: React.FC = () => {
           ))}
         </div>
         
-        {/* Futuristické horizontální linie */}
+        
         {[...Array(3)].map((_, i) => (
           <motion.div 
             key={`h-line-${i}`}
@@ -76,7 +76,7 @@ export const HeroSection: React.FC = () => {
           />
         ))}
         
-        {/* Skenující linie */}
+        
         <motion.div
           className="absolute left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-orange-500/40 to-transparent"
           initial={{ top: "-10%" }}
@@ -90,9 +90,9 @@ export const HeroSection: React.FC = () => {
         />
       </div>
 
-      {/* Hlavní obsah */}
+      
       <div className="relative flex flex-col items-center w-full max-w-7xl mt-12 z-10">
-        {/* Creative Developer lišta */}
+       
         <motion.div 
           className="flex items-center justify-center space-x-2 text-xs font-mono text-orange-500/70 mb-4"
           initial={{ opacity: 0 }}
@@ -122,7 +122,7 @@ export const HeroSection: React.FC = () => {
           <span>//</span>
         </motion.div>
         
-        {/* Textová část */}
+        
         <div className="flex flex-col lg:flex-row items-center justify-center w-full flex-wrap">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -130,7 +130,7 @@ export const HeroSection: React.FC = () => {
             transition={{ duration: 0.8 }}
             className="flex flex-col gap-4 sm:gap-6 text-center lg:text-left flex-1"
           >
-            {/* Role a označení */}
+            
             <p className="text-base sm:text-lg text-gray-300 mb-2 mt-4">
               <motion.span
                 initial={{ opacity: 0 }}
@@ -162,7 +162,7 @@ export const HeroSection: React.FC = () => {
               </motion.span>
             </p>
             
-            {/* Hlavní nadpis */}
+          
             <div className="relative">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight">
                 Vytvořím vám{' '}
@@ -179,7 +179,7 @@ export const HeroSection: React.FC = () => {
                 </div>
               </h1>
               
-              {/* Technické prvky kolem nadpisu - pouze na větších obrazovkách */}
+              
               <motion.div 
                 className="absolute -top-4 -left-4 w-8 h-8 border-t-2 border-l-2 border-orange-500/30 hidden lg:block"
                 initial={{ opacity: 0 }}
@@ -194,7 +194,7 @@ export const HeroSection: React.FC = () => {
               />
             </div>
             
-            {/* Popis */}
+            
             <motion.p 
               className="text-sm sm:text-base lg:text-lg text-gray-400 max-w-md sm:max-w-lg mx-auto lg:mx-0 mt-6"
               initial={{ opacity: 0, y: 20 }}
@@ -204,21 +204,21 @@ export const HeroSection: React.FC = () => {
               Věnuji se tvorbě moderních a funkčních webů, grafice, stříhání videí, focení a vzdělávání dalších tvůrců.
             </motion.p>
             
-            {/* Tlačítka s animacemi */}
+          
             <motion.div 
               className="flex gap-4 mt-6 justify-center lg:justify-start"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 1 }}
             >
-              {/* Futuristické tlačítko 1 */}
+              
               <motion.a 
                 href="/sluzby" 
                 className="relative group px-6 py-3 bg-orange-500 text-white font-medium rounded-full overflow-hidden"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
               >
-                {/* Světelný efekt při hover */}
+               
                 <span className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                   <span className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000"></span>
                 </span>
@@ -239,7 +239,7 @@ export const HeroSection: React.FC = () => {
                 </span>
               </motion.a>
               
-              {/* Futuristické tlačítko 2 */}
+              
               <motion.a 
                 href="/kontakt" 
                 className="relative group px-6 py-3 bg-transparent text-white font-medium rounded-full overflow-hidden border border-orange-500/50"
@@ -256,7 +256,7 @@ export const HeroSection: React.FC = () => {
           </motion.div>
 
           <div className="relative flex justify-center items-center w-full lg:w-1/2 mt-10 lg:mt-0">
-            {/* Glow efekt z původního kódu */}
+            
             <motion.div
               className="absolute w-[250px] h-[250px] lg:w-[300px] lg:h-[300px] xl:w-[350px] xl:h-[350px] bg-orange-500 rounded-full blur-3xl hidden lg:block"
               initial={{ opacity: 0 }}
@@ -264,7 +264,7 @@ export const HeroSection: React.FC = () => {
               transition={{ opacity: { duration: 0.8 }, scale: { duration: 4, repeat: Infinity, ease: 'easeInOut' }, repeat: Infinity }}
             />
             
-            {/* Rotující kruh z původního kódu */}
+            
             <motion.div
               className="absolute w-[400px] h-[400px] lg:w-[500px] lg:h-[500px] xl:w-[600px] xl:h-[600px] rounded-full hidden lg:block"
               initial={{ opacity: 0, rotate: 0 }}
@@ -274,7 +274,7 @@ export const HeroSection: React.FC = () => {
               <div className="absolute inset-0 border-[6px] border-transparent border-t-orange-500 border-dotted rounded-full" />
             </motion.div>
             
-            {/* Původní obrázek */}
+           
             <motion.img
               src="/imgs/banner5.svg"
               alt="Tvoje fotka"
@@ -284,7 +284,7 @@ export const HeroSection: React.FC = () => {
               transition={{ duration: 0.8 }}
             />
             
-            {/* Přidaná tečkovaná čára pod obrázkem podobně jako na referenčním obrázku */}
+           
             <motion.div
               className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[300px] h-[50px] hidden lg:block"
               initial={{ opacity: 0 }}
@@ -309,7 +309,7 @@ export const HeroSection: React.FC = () => {
               </svg>
             </motion.div>
             
-            {/* Animované orbitující body */}
+            
             {[...Array(6)].map((_, i) => {
               const angle = (i / 6) * Math.PI * 2;
               const radius = 220;
@@ -361,7 +361,7 @@ export const HeroSection: React.FC = () => {
                 transition={{ duration: 0.3 }}
               />
               
-              {/* Digitální akcenty */}
+             
               <div className="absolute top-0 right-0 w-3 h-3 border-t-[1px] border-r-[1px] border-white/20 rounded-tr-lg"></div>
               <div className="absolute bottom-0 left-0 w-3 h-3 border-b-[1px] border-l-[1px] border-white/20 rounded-bl-lg"></div>
               
@@ -393,7 +393,7 @@ export const HeroSection: React.FC = () => {
                 </motion.p>
               </div>
               
-              {/* Futuristický svítící efekt při hoveru */}
+              
               <motion.div 
                 className="absolute inset-0 opacity-0 group-hover:opacity-100 -z-10"
                 transition={{ duration: 0.3 }}
