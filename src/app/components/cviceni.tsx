@@ -875,52 +875,9 @@ const InteractiveServicesPage: React.FC = () => {
           </div>
         </div>
   
-        {/* Reference */}
-        <div className="max-w-5xl mx-auto mt-20 relative z-10">
-          <h2 className="text-3xl font-bold text-white text-center mb-10">
-            Reference klientů
-          </h2>
+        
   
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Testimoniál 1 */}
-            <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-6 relative">
-              <div className="text-indigo-500 text-5xl absolute -top-5 -left-2 opacity-20">"</div>
-              <p className="text-gray-300 mb-4 relative z-10">
-                Spolupráce na interaktivních cvičeních pro naši školu byla skvělá. Studenti si 
-                chválí zábavnou formu učení a učitelé oceňují možnost sledovat pokrok a výsledky. 
-                Cvičení skvěle doplňují výuku a pomáhají lépe pochopit probíranou látku.
-              </p>
-              <div className="flex items-center">
-                <div className="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-500 font-bold mr-3">
-                  JM
-                </div>
-                <div>
-                  <div className="text-white font-medium">Jana Malá</div>
-                  <div className="text-gray-400 text-sm">Ředitelka, ZŠ Duha</div>
-                </div>
-              </div>
-            </div>
-  
-            {/* Testimoniál 2 */}
-            <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-6 relative">
-              <div className="text-indigo-500 text-5xl absolute -top-5 -left-2 opacity-20">"</div>
-              <p className="text-gray-300 mb-4 relative z-10">
-                Interaktivní cvičení vytvořená pomocí Articulate Storyline 360 předčila naše očekávání. 
-                Komplexní výukové moduly s propracovanými simulacemi a scénáři pomáhají našim studentům 
-                lépe se připravit na reálné situace v praxi.
-              </p>
-              <div className="flex items-center">
-                <div className="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-500 font-bold mr-3">
-                  TK
-                </div>
-                <div>
-                  <div className="text-white font-medium">Tomáš Král</div>
-                  <div className="text-gray-400 text-sm">Metodik vzdělávání, Střední zdravotnická škola</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+          
   
         {/* Závěrečná CTA */}
         <div className="max-w-4xl mx-auto mt-20 mb-10 relative z-10">
