@@ -723,74 +723,9 @@ const ShoptetServicesPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Reference */}
-      <div className="max-w-5xl mx-auto mt-20 relative z-10">
-        <h2 className="text-3xl font-bold text-white text-center mb-10">
-          Reference klientů
-        </h2>
+      
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Testimoniál 1 */}
-          <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-6 relative">
-            <div className="text-orange-500 text-5xl absolute -top-5 -left-2 opacity-20">"</div>
-            <p className="text-gray-300 mb-4 relative z-10">
-              Díky profesionálnímu přístupu a perfektní znalosti Shoptetu jsme mohli spustit náš e-shop
-              mnohem rychleji, než jsme očekávali. Oceňuji především důraz na detail a ochotu řešit
-              všechny naše požadavky.
-            </p>
-            <div className="flex items-center">
-              <div className="w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-500 font-bold mr-3">
-                JN
-              </div>
-              <div>
-                <div className="text-white font-medium">Jan Novák</div>
-                <div className="text-gray-400 text-sm">ElektroMax.cz</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Testimoniál 2 */}
-          <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-6 relative">
-            <div className="text-orange-500 text-5xl absolute -top-5 -left-2 opacity-20">"</div>
-            <p className="text-gray-300 mb-4 relative z-10">
-              Přechod na nový e-shop byl pro nás velkou výzvou, ale díky skvělé spolupráci
-              proběhlo vše hladce. Oceňujeme precizní práci, dodržení termínů a především 
-              výsledný produkt, který předčil naše očekávání.
-            </p>
-            <div className="flex items-center">
-              <div className="w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-500 font-bold mr-3">
-                MK
-              </div>
-              <div>
-                <div className="text-white font-medium">Markéta Králová</div>
-                <div className="text-gray-400 text-sm">BeautyWorld.cz</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Závěrečná CTA */}
-      <div className="max-w-4xl mx-auto mt-20 mb-10 relative z-10">
-        <div className="bg-gradient-to-r from-orange-500/20 to-orange-600/20 rounded-xl p-8 border border-orange-500/30">
-          <h2 className="text-2xl md:text-3xl font-bold text-white text-center mb-6">
-            Připraveni spustit váš online byznys?
-          </h2>
-          <p className="text-gray-200 text-center mb-8 max-w-3xl mx-auto">
-            Kontaktujte mě pro nezávaznou konzultaci. Společně vytvoříme e-shop, 
-            který bude přesně odpovídat vašim potřebám a pomůže vám dosáhnout vašich obchodních cílů.
-          </p>
-          <div className="flex justify-center">
-            <Link 
-              href="/kontakt" 
-              className="inline-flex items-center px-8 py-4 rounded-lg bg-orange-500 text-white font-medium hover:bg-orange-600 transition-colors"
-            >
-              <span>Vytvořme váš e-shop</span>
-              <ChevronRight className="ml-2 w-5 h-5" />
-            </Link>
-          </div>
-        </div>
-      </div>
+      
     </section>
   );
 };

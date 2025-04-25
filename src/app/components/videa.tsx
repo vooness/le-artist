@@ -776,52 +776,7 @@ const VideoServicesPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Reference */}
-      <div className="max-w-5xl mx-auto mt-20 relative z-10">
-        <h2 className="text-3xl font-bold text-white text-center mb-10">
-          Co říkají klienti
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Testimoniál 1 */}
-          <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-6 relative">
-            <div className="text-pink-500 text-5xl absolute -top-5 -left-2 opacity-20">"</div>
-            <p className="text-gray-300 mb-4 relative z-10">
-              Spolupráce na video reklamě pro náš produkt předčila naše očekávání. Od prvních 
-              návrhů až po finální střih jsme byli ohromeni profesionalitou a kreativním přístupem. 
-              Video pomohlo zvýšit naše konverze o 35 % během prvního měsíce.
-            </p>
-            <div className="flex items-center">
-              <div className="w-10 h-10 rounded-full bg-pink-500/20 flex items-center justify-center text-pink-500 font-bold mr-3">
-                PB
-              </div>
-              <div>
-                <div className="text-white font-medium">Petr Břenek</div>
-                <div className="text-gray-400 text-sm">Marketing Manager, Tech Solutions</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Testimoniál 2 */}
-          <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-6 relative">
-            <div className="text-pink-500 text-5xl absolute -top-5 -left-2 opacity-20">"</div>
-            <p className="text-gray-300 mb-4 relative z-10">
-              Sérii videí pro naše sociální sítě využíváme už půl roku a stále přináší skvělé 
-              výsledky. Oceňuji hlavně jednotný vizuální styl, profesionální střih a schopnost 
-              zachytit podstatu našeho brandu v krátkém formátu.
-            </p>
-            <div className="flex items-center">
-              <div className="w-10 h-10 rounded-full bg-pink-500/20 flex items-center justify-center text-pink-500 font-bold mr-3">
-                KN
-              </div>
-              <div>
-                <div className="text-white font-medium">Karolína Nováková</div>
-                <div className="text-gray-400 text-sm">CEO, Fashion Forward</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+     
 
       {/* Závěrečná CTA */}
       <div className="max-w-4xl mx-auto mt-20 mb-10 relative z-10">

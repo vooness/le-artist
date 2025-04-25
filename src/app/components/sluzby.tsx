@@ -115,7 +115,7 @@ const beamSettings = [
 const FuturisticBackground: React.FC = () => {
   return (
     <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-      {/* Jemná mřížka na pozadí */}
+     
       <div className="absolute inset-0 opacity-[0.05]" 
         style={{
           backgroundImage: 
@@ -125,7 +125,7 @@ const FuturisticBackground: React.FC = () => {
         }} 
       />
       
-      {/* Výraznější pulsující kruhy v pozadí */}
+      
       <motion.div 
         className="absolute w-[800px] h-[800px] rounded-full opacity-10"
         style={{
@@ -146,7 +146,7 @@ const FuturisticBackground: React.FC = () => {
         }}
       />
       
-      {/* Rotující velký hexagon */}
+      
       <motion.div 
         className="absolute"
         style={{
@@ -193,7 +193,7 @@ const FuturisticBackground: React.FC = () => {
         }}
       />
       
-      {/* Výraznější létající částice - POUŽITÍ FIXNÍCH HODNOT */}
+      
       {particleSettings.map((particle, i) => (
         <motion.div
           key={`bright-particle-${i}`}
@@ -219,7 +219,7 @@ const FuturisticBackground: React.FC = () => {
         />
       ))}
       
-      {/* Pohyblivé světelné pruhy - POUŽITÍ FIXNÍCH HODNOT */}
+     
       {beamSettings.map((beam, i) => {
         const topPosition = 20 + i * 15;
         const delay = i * 2;
@@ -251,7 +251,7 @@ const FuturisticBackground: React.FC = () => {
         );
       })}
       
-      {/* Futuristické světelné kruhy - více viditelné */}
+      
       {[...Array(3)].map((_, i) => (
         <motion.div
           key={`light-circle-${i}`}
@@ -318,16 +318,16 @@ const ServiceCategoryCard: React.FC<ServiceCategoryCardProps> = ({ category, ind
             transition: 'box-shadow 0.3s ease'
           }}
         >
-          {/* Tenký border */}
+        
           <div className="absolute inset-0 border border-slate-700/30 rounded-lg z-10"></div>
           
-          {/* Tenké rohy v barvě kategorie */}
+          
           <div className="absolute top-0 left-0 w-3 h-3 border-t border-l rounded-tl-lg opacity-70" style={{ borderColor: category.color }}></div>
           <div className="absolute top-0 right-0 w-3 h-3 border-t border-r rounded-tr-lg opacity-70" style={{ borderColor: category.color }}></div>
           <div className="absolute bottom-0 left-0 w-3 h-3 border-b border-l rounded-bl-lg opacity-70" style={{ borderColor: category.color }}></div>
           <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r rounded-br-lg opacity-70" style={{ borderColor: category.color }}></div>
           
-          {/* Barevná linie na spodku karty - nahrazuje progress bar */}
+          
           <div 
             className="absolute bottom-0 left-0 right-0 h-1 z-10 opacity-70"
             style={{ 
@@ -335,11 +335,11 @@ const ServiceCategoryCard: React.FC<ServiceCategoryCardProps> = ({ category, ind
             }}
           ></div>
           
-          {/* Hlavní pozadí */}
+          
           <div 
             className="relative p-6 h-full flex flex-col rounded-lg z-0 bg-[#111827]/70 backdrop-blur-sm transition-all duration-300"
           >
-            {/* Barevný gradient na pozadí při hoveru */}
+            
             <motion.div 
               className="absolute inset-0 opacity-0 pointer-events-none rounded-lg"
               style={{ 
@@ -351,7 +351,7 @@ const ServiceCategoryCard: React.FC<ServiceCategoryCardProps> = ({ category, ind
               transition={{ duration: 0.3 }}
             />
             
-            {/* Ikona s podsvícením */}
+           
             <div className="flex justify-center mb-5">
               <motion.div 
                 className="relative p-3 rounded-full"
@@ -371,13 +371,13 @@ const ServiceCategoryCard: React.FC<ServiceCategoryCardProps> = ({ category, ind
               </motion.div>
             </div>
             
-            {/* Obsah karty */}
+           
             <div className="text-center mb-6">
               <h3 className="text-xl font-bold text-white mb-3">{category.title}</h3>
               <p className="text-sm text-gray-300 line-clamp-3">{category.description}</p>
             </div>
             
-            {/* CTA button - přímo pod textem */}
+            
             <div className="flex justify-center mt-auto">
               <motion.div 
                 className="flex items-center px-4 py-2 rounded text-sm font-medium transition-colors relative overflow-hidden"
@@ -422,11 +422,11 @@ const ServiceCategoryCard: React.FC<ServiceCategoryCardProps> = ({ category, ind
 const ServiceCategoriesSection: React.FC = () => {
   return (
     <section className="min-h-screen py-24 px-6 bg-[#0f172a] text-white relative overflow-hidden">
-      {/* Futuristické animované pozadí */}
+      
       <FuturisticBackground />
       
       <div className="max-w-7xl mx-auto relative z-10">
-        {/* Tlačítko zpět na hlavní stránku */}
+        
         <div className="mb-10">
           <Link 
             href="/" 
@@ -437,9 +437,9 @@ const ServiceCategoriesSection: React.FC = () => {
           </Link>
         </div>
         
-        {/* Hlavní nadpis */}
+      
         <div className="text-center relative mb-16">
-          {/* Dekorativní linie před a za nadpisem */}
+        
           <div className="flex items-center justify-center gap-4 mb-4">
             <div className="h-[1px] w-16 bg-gradient-to-r from-transparent to-orange-500/60"></div>
             <div className="text-orange-500 text-xl">[ ]</div>
@@ -456,7 +456,7 @@ const ServiceCategoriesSection: React.FC = () => {
             />
           </h2>
           
-          {/* Futuristické značky pod nadpisem */}
+          
           <div className="flex justify-center mt-4">
             <motion.div 
               className="flex items-center space-x-2 text-xs font-mono text-orange-500/80"
@@ -483,7 +483,7 @@ const ServiceCategoriesSection: React.FC = () => {
           </div>
         </div>
         
-        {/* Grid karet služeb - zajišťuje stejnou výšku */}
+        
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-fr">
           {serviceCategories.map((category, index) => (
             <ServiceCategoryCard 

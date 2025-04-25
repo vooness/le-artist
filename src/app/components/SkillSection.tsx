@@ -50,14 +50,14 @@ const SkillCard: React.FC<{ skill: Skill; index: number }> = ({ skill, index }) 
         boxShadow: isInView ? `0 10px 30px -15px ${skill.color}40` : undefined
       }}
     >
-      {/* Futuristické pozadí */}
+      
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-0 w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
         <div className="absolute bottom-0 w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
         <div className="absolute left-0 h-full w-px bg-gradient-to-b from-transparent via-white/20 to-transparent" />
         <div className="absolute right-0 h-full w-px bg-gradient-to-b from-transparent via-white/20 to-transparent" />
         
-        {/* Digitální vzor */}
+       
         {[...Array(5)].map((_, i) => (
           <div 
             key={`bit-${index}-${i}`} 
@@ -75,9 +75,9 @@ const SkillCard: React.FC<{ skill: Skill; index: number }> = ({ skill, index }) 
       </div>
 
       <div className="p-5 relative z-10">
-        {/* Záhlaví s ikonou a technickou grafikou */}
+        
         <div className="flex justify-between items-start mb-6">
-          {/* Ikona s futuristickým podsvícením */}
+          
           <div className="relative flex items-center justify-center">
             <motion.div
               animate={{ 
@@ -95,7 +95,7 @@ const SkillCard: React.FC<{ skill: Skill; index: number }> = ({ skill, index }) 
             <div className="relative z-10 text-4xl p-3" style={{ color: skill.color }}>{skill.icon}</div>
           </div>
 
-          {/* Futuristický štítek s procentem */}
+          
           <div className="relative">
             <div className="absolute -inset-1 rounded-lg opacity-30" style={{ background: `radial-gradient(circle, ${skill.color}40 0%, transparent 70%)` }} />
             <div className="relative bg-slate-800/80 px-3 py-1 rounded border border-white/10 backdrop-blur-sm">
@@ -113,12 +113,12 @@ const SkillCard: React.FC<{ skill: Skill; index: number }> = ({ skill, index }) 
           </div>
         </div>
 
-        {/* Název dovednosti */}
+        
         <h4 className="text-lg font-medium mb-3 text-white">{skill.name}</h4>
 
-        {/* Futuristický Progress Bar */}
+        
         <div className="relative">
-          {/* Technický vzor za barem */}
+         
           <div className="absolute inset-0 flex items-center">
             {[...Array(8)].map((_, i) => (
               <motion.div 
@@ -131,9 +131,9 @@ const SkillCard: React.FC<{ skill: Skill; index: number }> = ({ skill, index }) 
             ))}
           </div>
 
-          {/* Pozadí baru */}
+          
           <div className="h-3 w-full bg-slate-900/80 rounded-full overflow-hidden backdrop-blur-md border border-white/5">
-            {/* Svítící prvek pohybující se v baru */}
+           
             {isInView && (
               <motion.div
                 className="absolute h-full w-2 rounded-full"
@@ -152,7 +152,7 @@ const SkillCard: React.FC<{ skill: Skill; index: number }> = ({ skill, index }) 
               />
             )}
 
-            {/* Hlavní indikátor */}
+            
             <motion.div
               initial={{ width: 0 }}
               animate={isInView ? { width: `${skill.value}%` } : {}}
@@ -166,7 +166,7 @@ const SkillCard: React.FC<{ skill: Skill; index: number }> = ({ skill, index }) 
                 background: `linear-gradient(90deg, ${skill.color}80, ${skill.color})` 
               }}
             >
-              {/* Světelný efekt */}
+              
               <motion.div
                 className="absolute top-0 h-full w-20 bg-white/20"
                 animate={{ left: ["-20%", "120%"] }}
@@ -182,7 +182,7 @@ const SkillCard: React.FC<{ skill: Skill; index: number }> = ({ skill, index }) 
           </div>
         </div>
 
-        {/* Technické detaily v rozích */}
+        
         <div className="absolute top-1 left-1 w-2 h-2 border-t border-l" style={{ borderColor: `${skill.color}50` }} />
         <div className="absolute top-1 right-1 w-2 h-2 border-t border-r" style={{ borderColor: `${skill.color}50` }} />
         <div className="absolute bottom-1 left-1 w-2 h-2 border-b border-l" style={{ borderColor: `${skill.color}50` }} />
@@ -196,7 +196,7 @@ const SkillCard: React.FC<{ skill: Skill; index: number }> = ({ skill, index }) 
 const AnimatedDotPattern = () => {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {/* Animované tečky v mřížce */}
+     
       <div className="absolute inset-0">
         {[...Array(80)].map((_, i) => {
           const row = Math.floor(i / 10);
@@ -224,7 +224,7 @@ const AnimatedDotPattern = () => {
         })}
       </div>
       
-      {/* Futuristické linie */}
+      
       {[...Array(3)].map((_, i) => (
         <motion.div
           key={`h-line-${i}`}
@@ -242,7 +242,7 @@ const AnimatedDotPattern = () => {
         />
       ))}
       
-      {/* Vertikální linie */}
+     
       {[...Array(3)].map((_, i) => (
         <motion.div
           key={`v-line-${i}`}
@@ -260,7 +260,7 @@ const AnimatedDotPattern = () => {
         />
       ))}
       
-      {/* Scanline efekt */}
+      
       <motion.div
         className="absolute left-0 right-0 h-[10px] bg-gradient-to-b from-transparent via-orange-500/5 to-transparent"
         initial={{ top: "-5%" }}
@@ -291,10 +291,10 @@ const AboutMeSection: React.FC = () => {
       id="about-me"
       className="relative py-24 px-6 bg-[#0f172a] text-white overflow-hidden"
     >
-      {/* Animované pozadí */}
+      
       <AnimatedDotPattern />
       
-      {/* Jemné pozadí s mřížkou */}
+      
       <div 
         className="absolute inset-0 opacity-[0.04]" 
         style={{
@@ -305,14 +305,14 @@ const AboutMeSection: React.FC = () => {
         }} 
       />
       
-      {/* Barevné gradienty v pozadí */}
+      
       <div className="absolute top-0 left-0 w-full h-full">
         <div className="absolute -top-40 -left-40 w-80 h-80 bg-orange-600/5 rounded-full blur-3xl"></div>
         <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-blue-600/5 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 right-0 w-60 h-60 bg-orange-500/5 rounded-full blur-3xl"></div>
       </div>
 
-      {/* Futuristické spotlight efekty */}
+      
       <motion.div
         className="absolute top-[20%] left-[30%] w-[300px] h-[300px] rounded-full opacity-[0.03] pointer-events-none"
         style={{
@@ -347,7 +347,7 @@ const AboutMeSection: React.FC = () => {
       />
 
       <div className="container mx-auto max-w-7xl relative z-10">
-        {/* Nadpis s animovanými tečkami */}
+       
         <div className="flex items-center justify-center mb-12">
           <div className="flex space-x-1.5 mr-4">
             {[...Array(3)].map((_, i) => (
@@ -389,9 +389,9 @@ const AboutMeSection: React.FC = () => {
           </motion.div>
         </div>
 
-        {/* Sekce s obrázkem vlevo a textem vpravo */}
+        
         <div className="flex flex-col lg:flex-row items-center gap-16 mb-24">
-          {/* Obrázek nalevo - ZACHOVÁN PŮVODNÍ DESIGN */}
+          
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             animate={isBioInView ? { opacity: 1, x: 0 } : {}}
@@ -399,11 +399,11 @@ const AboutMeSection: React.FC = () => {
             className="w-full lg:w-5/12 relative"
           >
             <div className="relative">
-              {/* Dekorativní prvky kolem obrázku */}
+              
               <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 via-transparent to-slate-800/20 rounded-2xl transform rotate-3"></div>
               <div className="absolute -inset-4 border-2 border-dashed border-orange-500/20 rounded-2xl transform -rotate-2"></div>
               
-              {/* Samotný obrázek */}
+             
               <div className="relative z-10 bg-slate-800/30 backdrop-blur-sm p-6 rounded-xl border border-slate-700/50 shadow-xl">
                 <Image
                   src="/imgs/logo4.svg"
@@ -416,13 +416,13 @@ const AboutMeSection: React.FC = () => {
                 />
               </div>
               
-              {/* Dekorativní světelné body */}
+             
               <div className="absolute -top-6 -left-6 w-12 h-12 bg-orange-500/10 rounded-full blur-md"></div>
               <div className="absolute -bottom-4 right-10 w-16 h-16 bg-orange-500/10 rounded-full blur-md"></div>
             </div>
           </motion.div>
           
-          {/* Text napravo - NOVÝ DESIGN PODLE DRUHÉHO KÓDU */}
+          
           <motion.div
             ref={bioRef}
             initial={{ opacity: 0, x: 40 }}
@@ -437,10 +437,10 @@ const AboutMeSection: React.FC = () => {
               className="relative"
             >
               <div className="p-6 rounded-lg bg-slate-800/60 backdrop-blur-sm border border-orange-500/20 shadow-lg relative overflow-hidden">
-                {/* Horní akcent */}
+                
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-600 via-orange-500 to-orange-600" />
                 
-                {/* Vylepšený obsah */}
+               
                 <div className="space-y-6 relative z-10">
                   <p className="text-lg text-slate-100">
                     <span className="font-semibold text-orange-500">Přetvářím vaše vize v digitální realitu</span> pomocí 
@@ -462,12 +462,12 @@ const AboutMeSection: React.FC = () => {
                   </p>
                 </div>
                 
-                {/* Vizuální akcenty */}
+                
                 <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-orange-500/10 to-transparent" />
                 <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-orange-500/10 to-transparent" />
               </div>
               
-              {/* Rohové prvky */}
+              
               <div className="absolute -top-1 -left-1 w-3 h-3 border-t-2 border-l-2 border-orange-500/50" />
               <div className="absolute -top-1 -right-1 w-3 h-3 border-t-2 border-r-2 border-orange-500/50" />
               <div className="absolute -bottom-1 -left-1 w-3 h-3 border-b-2 border-l-2 border-orange-500/50" />
@@ -476,7 +476,7 @@ const AboutMeSection: React.FC = () => {
           </motion.div>
         </div>
 
-        {/* Nadpis pro dovednosti - FUTURISTICKÝ DESIGN */}
+        
         <motion.div
           ref={skillsHeadingRef}
           initial={{ opacity: 0 }}
@@ -484,11 +484,11 @@ const AboutMeSection: React.FC = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-14 relative"
         >
-          {/* Futuristické dekorativní prvky */}
+         
           <div className="absolute left-1/2 -translate-x-1/2 -top-8 w-32 h-px opacity-60 bg-gradient-to-r from-transparent via-orange-500/50 to-transparent"></div>
           
           <div className="relative inline-block">
-            {/* Technické značky */}
+            
             <div className="absolute -left-6 top-1/2 -translate-y-1/2 flex items-center space-x-1">
               <div className="w-5 h-px bg-orange-500/50"></div>
               <div className="text-orange-500/70 text-xs font-mono">[</div>
@@ -509,7 +509,7 @@ const AboutMeSection: React.FC = () => {
                   Moje Dovednosti
                 </motion.span>
                 
-                {/* Pulzující obrysy textu */}
+              
                 <motion.span 
                   className="absolute left-0 top-0 w-full text-transparent bg-clip-text"
                   style={{ 
@@ -542,7 +542,7 @@ const AboutMeSection: React.FC = () => {
             </h3>
           </div>
           
-          {/* Futuristické značky pod nadpisem */}
+          
           <div className="mt-4 flex justify-center items-center space-x-1 text-xs font-mono text-orange-500/60">
             <span>//</span>
             <motion.div 
@@ -557,7 +557,7 @@ const AboutMeSection: React.FC = () => {
               transition={{ delay: 0.8, duration: 0.4 }}
               className="tracking-wider"
             >
-              TECHNOLOGIE & EXPERTÍZA
+              TECHNOLOGIE &amp; EXPERTÍZA
             </motion.span>
             <motion.div 
               className="h-px w-10 bg-orange-500/40"
@@ -569,9 +569,9 @@ const AboutMeSection: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* Grid s vylepšenými futuristickými kartami dovedností */}
+       
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative">
-          {/* Dekorativní prvky mezi kartami */}
+         
           <div className="absolute inset-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pointer-events-none">
             {[...Array(6)].map((_, i) => (
               <motion.div
@@ -589,7 +589,7 @@ const AboutMeSection: React.FC = () => {
             ))}
           </div>
           
-          {/* Karty dovedností */}
+         
           {skills.map((skill, index) => (
             <SkillCard key={index} skill={skill} index={index} />
           ))}

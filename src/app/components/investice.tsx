@@ -65,7 +65,7 @@ const investmentPoints = [
 const InvestmentSection = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [activePoint, setActivePoint] = useState<number | null>(null);
-  const sectionRef = useRef(null);
+  const sectionRef = useRef<HTMLElement | null>(null);
 
   // Animation for section visibility
   useEffect(() => {
@@ -79,13 +79,14 @@ const InvestmentSection = () => {
       { threshold: 0.2 }
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+    const currentRef = sectionRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, []);
@@ -128,16 +129,14 @@ const InvestmentSection = () => {
         {/* Header */}
         <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <div className="flex items-center justify-center mb-2">
-            
-            
-            
+            {/* Empty flex container */}
           </div>
           <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-2 text-white">
             Investice do <span className="text-orange-500">budoucnosti</span>
           </h2>
           <div className="flex items-center justify-center mb-6">
             <div className="h-[1px] w-10 bg-orange-500/30"></div>
-            <div className="mx-4 text-orange-400 font-mono text-xs tracking-widest">//———— TECHNOLOGIE & EXPERTÍZA ————//</div>
+            <div className="mx-4 text-orange-400 font-mono text-xs tracking-widest">//———— TECHNOLOGIE &amp; EXPERTÍZA ————//</div>
             <div className="h-[1px] w-10 bg-orange-500/30"></div>
           </div>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
@@ -410,7 +409,7 @@ const InvestmentSection = () => {
       </div>
 
       {/* Global styles */}
-      <style jsx global>{`
+      <style jsx>{`
         .bg-grid-pattern {
           background-size: 40px 40px;
           background-image: 
