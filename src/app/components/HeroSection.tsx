@@ -99,7 +99,7 @@ export const HeroSection: React.FC = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8 }}
         >
-          <span>{'//'}</span>
+          <span></span>
           <motion.div 
             className="h-px w-12 bg-orange-500/40"
             initial={{ scaleX: 0 }}
@@ -119,7 +119,7 @@ export const HeroSection: React.FC = () => {
             animate={{ scaleX: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           />
-          <span>{'//'}</span>
+          <span></span>
         </motion.div>
         
         
