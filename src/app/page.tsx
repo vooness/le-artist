@@ -8,7 +8,7 @@ import WhyTrustMe from "./components/WhyTrustMe";
 import SkillsSection from "./components/SkillSection";
 import Footer from "./components/Footer";
 import ServicesGrid from "./components/ServiceGrid";
-import { ThreeDMarqueeDemo } from "./components/3d"
+
 import InvestmentSection from "./components/investice"
 
 export default function Home() {
