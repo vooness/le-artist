@@ -544,7 +544,7 @@ const AboutMeSection: React.FC = () => {
           
           
           <div className="mt-4 flex justify-center items-center space-x-1 text-xs font-mono text-orange-500/60">
-            <span>//</span>
+            <span>{'//'}</span>
             <motion.div 
               className="h-px w-10 bg-orange-500/40"
               initial={{ scaleX: 0 }}
@@ -565,7 +565,7 @@ const AboutMeSection: React.FC = () => {
               animate={isSkillsHeadingInView ? { scaleX: 1 } : {}}
               transition={{ delay: 0.6, duration: 0.4 }}
             />
-            <span>//</span>
+            <span>{'//'}</span>
           </div>
         </motion.div>
 

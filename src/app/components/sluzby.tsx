@@ -464,7 +464,7 @@ const ServiceCategoriesSection: React.FC = () => {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.8 }}
             >
-              <span>//</span>
+              <span>{'//'}</span>
               <motion.div 
                 className="h-px w-8 bg-orange-500/40"
                 initial={{ scaleX: 0 }}
@@ -478,7 +478,7 @@ const ServiceCategoriesSection: React.FC = () => {
                 animate={{ scaleX: 1 }}
                 transition={{ delay: 0.9, duration: 0.4 }}
               />
-              <span>//</span>
+              <span>{'//'}</span>
             </motion.div>
           </div>
         </div>

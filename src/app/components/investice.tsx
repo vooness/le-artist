@@ -136,7 +136,7 @@ const InvestmentSection = () => {
           </h2>
           <div className="flex items-center justify-center mb-6">
             <div className="h-[1px] w-10 bg-orange-500/30"></div>
-            <div className="mx-4 text-orange-400 font-mono text-xs tracking-widest">//———— TECHNOLOGIE &amp; EXPERTÍZA ————//</div>
+            <div className="mx-4 text-orange-400 font-mono text-xs tracking-widest">{'//'}———— TECHNOLOGIE &amp; EXPERTÍZA ————{'//'}</div>
             <div className="h-[1px] w-10 bg-orange-500/30"></div>
           </div>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">

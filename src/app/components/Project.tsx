@@ -108,9 +108,9 @@ const ProjectsSection = () => {
             
             {/* Spodní dekorační text */}
             <div className="mt-3 flex items-center">
-              <div className="text-orange-500 opacity-70">//</div>
+              <div className="text-orange-500 opacity-70">{'//'}</div>
               <div className="mx-3 text-gray-400 uppercase text-sm tracking-widest">REFERENCE A UKÁZKY</div>
-              <div className="text-orange-500 opacity-70">//</div>
+              <div className="text-orange-500 opacity-70">{'//'}</div>
             </div>
           </div>
         </div>
