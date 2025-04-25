@@ -93,12 +93,18 @@ interface CountUpAnimationProps {
   isVisible: boolean;
 }
 
+// Pomocná funkce pro kontrolu, zda je dostupný window objekt
+const isClient = () => {
+  return typeof window !== 'undefined';
+};
+
 // Komponenta pro animované počítadlo s TypeScript typováním
 const CountUpAnimation: React.FC<CountUpAnimationProps> = ({ value, duration = 2000, isVisible }) => {
   const [displayValue, setDisplayValue] = useState("0");
   
   useEffect(() => {
-    if (!isVisible) return;
+    // Předčasně ukončíme, pokud nejsme na klientovi nebo není komponenta viditelná
+    if (!isClient() || !isVisible) return;
     
     let start = 0;
     let end = parseInt(value.replace(/[^0-9]/g, ""), 10);
@@ -117,7 +123,10 @@ const CountUpAnimation: React.FC<CountUpAnimationProps> = ({ value, duration = 2
       }
     };
     
-    window.requestAnimationFrame(animateCount);
+    // Pouze zavolat requestAnimationFrame na klientovi
+    if (isClient()) {
+      window.requestAnimationFrame(animateCount);
+    }
     
     return () => setDisplayValue("0");
   }, [value, duration, isVisible]);
@@ -134,6 +143,9 @@ const WhyTrustMeSection: React.FC = () => {
   
   // Nastavíme prvky jako viditelné po montáži komponenty a sledování pro statistiky
   useEffect(() => {
+    // Kontrola, zda jsme na klientovi před použitím IntersectionObserver
+    if (!isClient()) return;
+    
     setIsVisible(true);
     
     const observer = new IntersectionObserver(
@@ -145,13 +157,16 @@ const WhyTrustMeSection: React.FC = () => {
       { threshold: 0.3 }
     );
     
-    if (statsRef.current) {
-      observer.observe(statsRef.current);
+    // Uložíme aktuální referenci do konstanty - oprava React hook warning
+    const currentStatsRef = statsRef.current;
+    
+    if (currentStatsRef) {
+      observer.observe(currentStatsRef);
     }
     
     return () => {
-      if (statsRef.current) {
-        observer.unobserve(statsRef.current);
+      if (currentStatsRef) {
+        observer.unobserve(currentStatsRef);
       }
     };
   }, []);

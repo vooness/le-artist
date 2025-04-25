@@ -5,6 +5,11 @@ import { motion, useScroll, useTransform, useMotionValue } from 'framer-motion';
 import Link from 'next/link';
 import ParticlesBackground from "./ParticlesBakckground";
 
+// Pomocná funkce pro kontrolu, zda jsme na klientovi
+const isClient = () => {
+  return typeof window !== 'undefined';
+};
+
 const IntroSection = () => {
   const sectionRef = useRef(null);
   const imageRef = useRef(null);
@@ -17,6 +22,8 @@ const IntroSection = () => {
   
   // Detekce mobilního zařízení nebo tabletu
   useEffect(() => {
+    if (!isClient()) return; // Předčasné ukončení, pokud nejsme na klientovi
+    
     const checkScreenSize = () => {
       setIsMobileOrTablet(window.innerWidth < 1024); // Méně než 1024px považujeme za mobilní nebo tablet
     };
@@ -33,6 +40,8 @@ const IntroSection = () => {
   
   // Sledování pohybu myši pro interaktivní efekty
   useEffect(() => {
+    if (!isClient()) return; // Předčasné ukončení, pokud nejsme na klientovi
+    
     const handleMouseMove = (e: { clientX: number; clientY: number; }) => {
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
@@ -323,8 +332,14 @@ const IntroSection = () => {
                   className="absolute inset-0 rounded-lg"
                   style={{
                     background: "radial-gradient(circle at center, rgba(249, 115, 22, 0.2) 0%, rgba(15, 23, 42, 0) 70%)",
-                    x: useTransform(mouseX, value => (value - (window.innerWidth/2)) / 20),
-                    y: useTransform(mouseY, value => (value - (window.innerHeight/2)) / 20),
+                    x: useTransform(mouseX, value => {
+                      if (!isClient()) return 0;
+                      return (value - (window.innerWidth/2)) / 20;
+                    }),
+                    y: useTransform(mouseY, value => {
+                      if (!isClient()) return 0;
+                      return (value - (window.innerHeight/2)) / 20;
+                    }),
                   }}
                 ></motion.div>
               </div>
