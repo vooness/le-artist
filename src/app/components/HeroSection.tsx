@@ -255,15 +255,14 @@ export const HeroSection: React.FC = () => {
             </motion.div>
           </motion.div>
 
-         {/* Pravá strana s původními animovanými efekty */}
-<div className="relative flex justify-center items-center w-full lg:w-1/2 mt-10 lg:mt-0">
-  {/* Glow efekt z původního kódu */}
-  <motion.div
-    className="absolute w-[250px] h-[250px] lg:w-[300px] lg:h-[300px] xl:w-[350px] xl:h-[350px] bg-orange-500 rounded-full blur-3xl hidden lg:block"
-    initial={{ opacity: 0 }}
-    animate={{ scale: [1, 1.5, 1], opacity: [0.7, 1, 0.7] }}
-    transition={{ opacity: { duration: 0.8 }, scale: { duration: 4, repeat: Infinity, ease: 'easeInOut' }, repeat: Infinity }}
-  />
+          <div className="relative flex justify-center items-center w-full lg:w-1/2 mt-10 lg:mt-0">
+            {/* Glow efekt z původního kódu */}
+            <motion.div
+              className="absolute w-[250px] h-[250px] lg:w-[300px] lg:h-[300px] xl:w-[350px] xl:h-[350px] bg-orange-500 rounded-full blur-3xl hidden lg:block"
+              initial={{ opacity: 0 }}
+              animate={{ scale: [1, 1.5, 1], opacity: [0.7, 1, 0.7] }}
+              transition={{ opacity: { duration: 0.8 }, scale: { duration: 4, repeat: Infinity, ease: 'easeInOut' }, repeat: Infinity }}
+            />
             
             {/* Rotující kruh z původního kódu */}
             <motion.div
@@ -338,18 +337,15 @@ export const HeroSection: React.FC = () => {
                 />
               );
             })}
-            
-            
           </div>
         </div>
 
-        {/* Statistika s futuristickým stylem */}
-<motion.div
-  initial={{ opacity: 0, y: 50 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.8, delay: 0.5 }}
-  className="grid grid-cols-2 gap-6 text-center mt-12 lg:mt-36 xl:grid-cols-4 w-full max-w-5xl"
->
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.5 }}
+          className="grid grid-cols-2 gap-6 text-center mt-12 lg:mt-36 xl:grid-cols-4 w-full max-w-5xl"
+        >
           {[
             { value: 12, label: "let praxe" },
             { value: 150, label: "Hotových projektů" },
