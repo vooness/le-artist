@@ -8,12 +8,16 @@ import WhyTrustMe from "./components/WhyTrustMe";
 import SkillsSection from "./components/SkillSection";
 import Footer from "./components/Footer";
 import ServicesGrid from "./components/ServiceGrid";
+import { SpeedInsights } from "@vercel/speed-insights/next"
+
 
 import InvestmentSection from "./components/investice"
 
 export default function Home() {
   return (
     <>
+      {/* Navbar */}
+      <SpeedInsights />
       {/* Navbar */}
       <Navbar />
 
