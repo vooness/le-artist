@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Monitor, Edit, Video, CheckCircle2, Info } from "lucide-react";
@@ -78,10 +78,11 @@ const cardAnimation = {
 interface ServiceCardProps {
   service: Service;
   index: number;
+  isMounted: boolean;
 }
 
 // ServiceCard component s futuristickým vzhledem
-const ServiceCard: React.FC<ServiceCardProps> = ({ service, index }) => {
+const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, isMounted }) => {
   const router = useRouter();
   
   return (
@@ -109,107 +110,95 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index }) => {
         <div className="absolute top-0 right-0 w-8 h-8 border-t-[1px] border-r-[1px] border-white/20 rounded-tr-xl"></div>
         <div className="absolute bottom-0 left-0 w-8 h-8 border-b-[1px] border-l-[1px] border-white/20 rounded-bl-xl"></div>
         
-        {/* Hexagonální podsvícení */}
-        <motion.div 
-          className="absolute"
-          style={{
-            background: `radial-gradient(circle, ${service.color}20 0%, transparent 70%)`, 
-            width: "120%",
-            height: "120%",
-            top: "-10%",
-            left: "-10%",
-            filter: "blur(30px)"
-          }}
-          animate={{
-            opacity: [0.3, 0.6, 0.3],
-            scale: [0.8, 1, 0.8]
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
+       
         
         {/* Digitální pattern */}
-        <div className="absolute inset-0 opacity-10">
-          {[...Array(8)].map((_, i) => (
-            <div
-              key={`digit-${index}-${i}`}
-              className="absolute text-xs font-mono"
-              style={{
-                top: `${Math.random() * 100}%`,
-                left: `${Math.random() * 100}%`,
-                opacity: Math.random() * 0.5 + 0.1,
-                color: service.color,
-                transform: `rotate(${Math.random() * 90 - 45}deg)`,
-              }}
-            >
-              {Math.round(Math.random())}
-            </div>
-          ))}
-        </div>
+        {isMounted && (
+          <div className="absolute inset-0 opacity-10">
+            {[...Array(8)].map((_, i) => (
+              <div
+                key={`digit-${index}-${i}`}
+                className="absolute text-xs font-mono"
+                style={{
+                  top: `${Math.random() * 100}%`,
+                  left: `${Math.random() * 100}%`,
+                  opacity: Math.random() * 0.5 + 0.1,
+                  color: service.color,
+                  transform: `rotate(${Math.random() * 90 - 45}deg)`,
+                }}
+              >
+                {Math.round(Math.random())}
+              </div>
+            ))}
+          </div>
+        )}
         
         {/* Obsah */}
         <div className="p-8 relative z-10">
           {/* Ikona a nadpis */}
           <div className="flex justify-center items-center mb-8">
             {/* Ikona s futuristickým podsvícením */}
-            <motion.div 
-              className="relative mr-4"
-              animate={{
-                filter: ["drop-shadow(0 0 3px rgba(249, 115, 22, 0.3))", "drop-shadow(0 0 8px rgba(249, 115, 22, 0.6))", "drop-shadow(0 0 3px rgba(249, 115, 22, 0.3))"]
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-            >
-              <div style={{ color: service.color }} className="text-orange-500">
-                {service.icon}
-              </div>
-            </motion.div>
+            {isMounted && (
+              <motion.div 
+                className="relative mr-4"
+                animate={{
+                  filter: ["drop-shadow(0 0 3px rgba(249, 115, 22, 0.3))", "drop-shadow(0 0 8px rgba(249, 115, 22, 0.6))", "drop-shadow(0 0 3px rgba(249, 115, 22, 0.3))"]
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              >
+                <div style={{ color: service.color }} className="text-orange-500">
+                  {service.icon}
+                </div>
+              </motion.div>
+            )}
             
             {/* Stylizovaný nadpis */}
             <h3 className="text-3xl font-bold relative">
               <span className="relative z-10" style={{ color: service.color }}>{service.title}</span>
               
               {/* Pulzující obrys textu pro futuristický efekt */}
-              <motion.span 
-                className="absolute left-0 top-0 w-full text-transparent"
-                style={{ 
-                  WebkitTextStroke: `1px ${service.color}40`,
-                  filter: "blur(4px)"
-                }}
-                animate={{ 
-                  opacity: [0.2, 0.6, 0.2] 
-                }}
-                transition={{ 
-                  duration: 3, 
-                  repeat: Infinity, 
-                  ease: "easeInOut" 
-                }}
-              >
-                {service.title}
-              </motion.span>
+              {isMounted && (
+                <motion.span 
+                  className="absolute left-0 top-0 w-full text-transparent"
+                  style={{ 
+                    WebkitTextStroke: `1px ${service.color}40`,
+                    filter: "blur(4px)"
+                  }}
+                  animate={{ 
+                    opacity: [0.2, 0.6, 0.2] 
+                  }}
+                  transition={{ 
+                    duration: 3, 
+                    repeat: Infinity, 
+                    ease: "easeInOut" 
+                  }}
+                >
+                  {service.title}
+                </motion.span>
+              )}
             </h3>
           </div>
           
           {/* Popis s technickým podtržením */}
           <div className="mb-8 relative">
             <p className="text-gray-300 text-sm leading-relaxed">{service.description}</p>
-            <motion.div 
-              className="absolute -bottom-4 left-0 h-px w-full"
-              style={{ background: `linear-gradient(to right, transparent, ${service.color}40, transparent)` }}
-              initial={{ scaleX: 0, opacity: 0 }}
-              whileInView={{ scaleX: 1, opacity: 1 }}
-              transition={{ duration: 1, delay: 0.5 }}
-              viewport={{ once: true }}
-            />
+            {isMounted && (
+              <motion.div 
+                className="absolute -bottom-4 left-0 h-px w-full"
+                style={{ background: `linear-gradient(to right, transparent, ${service.color}40, transparent)` }}
+                initial={{ scaleX: 0, opacity: 0 }}
+                whileInView={{ scaleX: 1, opacity: 1 }}
+                transition={{ duration: 1, delay: 0.5 }}
+                viewport={{ once: true }}
+              />
+            )}
           </div>
           
-          {/* Checklisty s futuristickým stylem */}
+          {/* Checklisty s futuristickým stylem - OPRAVENO: obsahuje blikající kruhy */}
           <ul className="space-y-4 mt-6">
             {service.checkmarks.map((check: string, idx: number) => (
               <motion.li 
@@ -220,14 +209,17 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index }) => {
                 transition={{ delay: 0.5 + idx * 0.1 }}
                 viewport={{ once: true }}
               >
-                <div className="relative flex-shrink-0 mr-3">
+                <div className="relative flex-shrink-0 mr-3 overflow-hidden">
                   <CheckCircle2 className="w-5 h-5 text-green-500 relative z-10" />
-                  <motion.div 
-                    className="absolute -inset-1 rounded-full"
-                    style={{ background: `radial-gradient(circle, ${service.color}30 0%, transparent 70%)` }}
-                    animate={{ scale: [1, 1.3, 1], opacity: [0.5, 0.8, 0.5] }}
-                    transition={{ duration: 2, repeat: Infinity, delay: idx * 0.3 }}
-                  />
+                  {/* OPRAVENO: Odstraněno blikání kruhu nebo omezeno pomocí overflow-hidden */}
+                  {isMounted && (
+                    <motion.div 
+                      className="absolute inset-0 rounded-full" // místo -inset-1 použijeme inset-0
+                      style={{ background: `radial-gradient(circle, ${service.color}30 0%, transparent 70%)` }}
+                      animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.7, 0.5] }} // zmenšeno scale
+                      transition={{ duration: 2, repeat: Infinity, delay: idx * 0.3 }}
+                    />
+                  )}
                 </div>
                 <span>{check}</span>
               </motion.li>
@@ -271,25 +263,31 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index }) => {
         </div>
       </div>
       
-      {/* Plovoucí tech detaily pro futuristický vzhled */}
-      <motion.div 
-        className="absolute -bottom-2 -right-2 w-5 h-5 border-b-2 border-r-2 rounded-br-lg opacity-70"
-        style={{ borderColor: service.color }}
-        animate={{ opacity: [0.3, 0.7, 0.3] }}
-        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div 
-        className="absolute -top-2 -left-2 w-5 h-5 border-t-2 border-l-2 rounded-tl-lg opacity-70"
-        style={{ borderColor: service.color }}
-        animate={{ opacity: [0.3, 0.7, 0.3] }}
-        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-      />
+      {/* Plovoucí tech detaily pro futuristický vzhled - OPRAVENO: Odstraněny nebo omezeny blikající rohy */}
+      {isMounted && (
+        <>
+          <motion.div 
+            className="absolute -bottom-2 -right-2 w-5 h-5 border-b-2 border-r-2 rounded-br-lg opacity-70"
+            style={{ borderColor: service.color }}
+            animate={{ opacity: [0.3, 0.7, 0.3] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div 
+            className="absolute -top-2 -left-2 w-5 h-5 border-t-2 border-l-2 rounded-tl-lg opacity-70"
+            style={{ borderColor: service.color }}
+            animate={{ opacity: [0.3, 0.7, 0.3] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          />
+        </>
+      )}
     </motion.div>
   );
 };
 
 // Komponenta pro animované pozadí
-const AnimatedBackground: React.FC = () => {
+const AnimatedBackground: React.FC<{ isMounted: boolean }> = ({ isMounted }) => {
+  if (!isMounted) return null;
+  
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       {/* Animované tečky */}
@@ -355,67 +353,23 @@ const AnimatedBackground: React.FC = () => {
           }}
         />
       ))}
-      
-      {/* Futuristický Scanline efekt */}
-      <motion.div
-        className="absolute left-0 right-0 h-[10px] bg-gradient-to-b from-transparent via-orange-500/5 to-transparent"
-        initial={{ top: "-5%" }}
-        animate={{ top: ["0%", "100%", "0%"] }}
-        transition={{ 
-          duration: 15, 
-          repeat: Infinity, 
-          ease: "linear",
-          repeatDelay: 1
-        }}
-      />
-      
-      {/* Animované světelné spoty */}
-      <motion.div
-        className="absolute w-[300px] h-[300px] rounded-full opacity-[0.03] pointer-events-none"
-        style={{
-          top: '20%',
-          left: '60%',
-          background: 'radial-gradient(circle, rgba(249, 115, 22, 0.4) 0%, rgba(15, 23, 42, 0) 70%)',
-        }}
-        animate={{
-          opacity: [0.03, 0.06, 0.03],
-          scale: [1, 1.1, 1]
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-      />
-      
-      <motion.div
-        className="absolute w-[250px] h-[250px] rounded-full opacity-[0.02] pointer-events-none"
-        style={{
-          top: '70%',
-          left: '30%',
-          background: 'radial-gradient(circle, rgba(59, 130, 246, 0.4) 0%, rgba(15, 23, 42, 0) 70%)',
-        }}
-        animate={{
-          opacity: [0.02, 0.05, 0.02],
-          scale: [1, 1.2, 1]
-        }}
-        transition={{
-          duration: 10,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 2
-        }}
-      />
     </div>
   );
 };
 
 // Grid of service cards with heading
 const ServicesGrid: React.FC = () => {
+  // OPRAVENO: Přidán state pro řešení hydratačních problémů
+  const [isMounted, setIsMounted] = useState(false);
+  
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  
   return (
     <div className="max-w-7xl mx-auto px-4 mt-16 relative py-20">
       {/* Animované futuristické pozadí */}
-      <AnimatedBackground />
+      <AnimatedBackground isMounted={isMounted} />
       
       {/* Jemná mřížka na pozadí */}
       <div className="absolute inset-0 opacity-[0.04]" 
@@ -429,41 +383,45 @@ const ServicesGrid: React.FC = () => {
       
       <h2 className="text-4xl sm:text-3xl md:text-4xl lg:text-5xl text-center text-white font-extrabold tracking-tight relative inline-block mb-16">
         Rychlý přehled 
-        <motion.div
-          initial={{ scaleX: 0, opacity: 0 }}
-          whileInView={{ scaleX: 1, opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-          className="absolute left-1/3 -translate-x-1/2 bottom-[-10px] h-[5px] w-2/3 bg-gradient-to-r from-[#F97316] to-yellow-500 rounded-full origin-center"
-        />
+        {isMounted && (
+          <motion.div
+            initial={{ scaleX: 0, opacity: 0 }}
+            whileInView={{ scaleX: 1, opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+            className="absolute left-1/3 -translate-x-1/2 bottom-[-10px] h-[5px] w-2/3 bg-gradient-to-r from-[#F97316] to-yellow-500 rounded-full origin-center"
+          />
+        )}
       </h2>
       
       {/* Futuristické značky pod nadpisem */}
       <div className="flex justify-center mb-16">
-        <motion.div 
-          className="flex items-center space-x-2 text-xs font-mono text-orange-500/60"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          viewport={{ once: true }}
-        >
-          <span>{'//'}</span>
+        {isMounted && (
           <motion.div 
-            className="h-px w-8 bg-orange-500/40"
-            initial={{ scaleX: 0 }}
-            whileInView={{ scaleX: 1 }}
-            transition={{ delay: 0.9, duration: 0.4 }}
+            className="flex items-center space-x-2 text-xs font-mono text-orange-500/60"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
             viewport={{ once: true }}
-          />
-          <span className="tracking-wider">SLUŽBY & MOŽNOSTI</span>
-          <motion.div 
-            className="h-px w-8 bg-orange-500/40"
-            initial={{ scaleX: 0 }}
-            whileInView={{ scaleX: 1 }}
-            transition={{ delay: 0.9, duration: 0.4 }}
-            viewport={{ once: true }}
-          />
-          <span>{'//'}</span>
-        </motion.div>
+          >
+            <span>{'//'}</span>
+            <motion.div 
+              className="h-px w-8 bg-orange-500/40"
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              transition={{ delay: 0.9, duration: 0.4 }}
+              viewport={{ once: true }}
+            />
+            <span className="tracking-wider">SLUŽBY & MOŽNOSTI</span>
+            <motion.div 
+              className="h-px w-8 bg-orange-500/40"
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              transition={{ delay: 0.9, duration: 0.4 }}
+              viewport={{ once: true }}
+            />
+            <span>{'//'}</span>
+          </motion.div>
+        )}
       </div>
       
       <motion.div
@@ -473,21 +431,28 @@ const ServicesGrid: React.FC = () => {
         viewport={{ once: true }}
       >
         {services.map((service, i) => (
-          <ServiceCard key={i} service={service} index={i} />
+          <ServiceCard 
+            key={i} 
+            service={service} 
+            index={i} 
+            isMounted={isMounted} // Předáváme stav na klientovi do karet
+          />
         ))}
       </motion.div>
       
       {/* Futuristické doplňkové značky na konci sekce */}
       <div className="flex justify-center mt-16">
-        <motion.div 
-          className="flex items-center space-x-2"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 1.2 }}
-          viewport={{ once: true }}
-        >
-          <div className="w-32 h-px bg-gradient-to-r from-transparent via-orange-500/20 to-transparent" />
-        </motion.div>
+        {isMounted && (
+          <motion.div 
+            className="flex items-center space-x-2"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 1.2 }}
+            viewport={{ once: true }}
+          >
+            <div className="w-32 h-px bg-gradient-to-r from-transparent via-orange-500/20 to-transparent" />
+          </motion.div>
+        )}
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 // Předem definované hodnoty pro částice
@@ -52,6 +52,76 @@ const beamSettings = [
 
 // Komponenta pro animované částice
 const ParticlesBackground = () => {
+  const [mounted, setMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
+    
+    // Detekce mobilního zařízení
+    const checkMobile = () => {
+      const ua = navigator.userAgent || '';
+      return /Mobi|Android|iPhone|iPad|iPod/i.test(ua);
+    };
+    
+    // Kontrola šířky obrazovky
+    const checkScreenSize = () => {
+      return window.innerWidth <= 768;
+    };
+    
+    setIsMobile(checkMobile() || checkScreenSize());
+    
+    // Event listener pro změnu velikosti okna
+    const handleResize = () => {
+      setIsMobile(checkMobile() || checkScreenSize());
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Pokud nejsme na klientovi, nerendruj nic aby nedošlo k hydratačním chybám
+  if (!mounted) return null;
+  
+  // Na mobilech použijeme zjednodušenou verzi s menším počtem částic
+  // a bez složitých animací pro lepší výkon
+  if (isMobile) {
+    // Jen několik statických částic a jeden světelný pruh pro mobilní zařízení
+    return (
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        {/* Pouze 4 částice místo 15 */}
+        {particlePositions.slice(0, 4).map((particle, i) => (
+          <div
+            key={`static-particle-${i}`}
+            className="absolute w-1 h-1 rounded-full z-10"
+            style={{
+              backgroundColor: particle.color,
+              boxShadow: `0 0 3px ${particle.color}`,
+              left: particle.left,
+              top: `${20 + i * 15}%`,
+              opacity: 0.4
+            }}
+          />
+        ))}
+        
+        {/* Pouze jeden statický světelný pruh */}
+        <div
+          className="absolute"
+          style={{
+            width: beamSettings[0].width,
+            height: beamSettings[0].height,
+            left: '10%',
+            top: "40%",
+            background: `linear-gradient(90deg, transparent, ${beamSettings[0].color}30, transparent)`,
+            opacity: 0.1,
+            filter: 'blur(1px)'
+          }}
+        />
+      </div>
+    );
+  }
+
+  // Plná verze pro desktopy - zde necháme originální efekty
   return (
     <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
       {/* Výraznější létající částice */}
@@ -111,8 +181,6 @@ const ParticlesBackground = () => {
           />
         );
       })}
-      
-      
     </div>
   );
 };
