@@ -77,17 +77,7 @@ export const HeroSection: React.FC = () => {
         ))}
         
         
-        <motion.div
-          className="absolute left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-orange-500/40 to-transparent"
-          initial={{ top: "-10%" }}
-          animate={{ top: ["0%", "100%", "0%"] }}
-          transition={{ 
-            duration: 12, 
-            repeat: Infinity, 
-            ease: "linear",
-            repeatDelay: 1
-          }}
-        />
+        
       </div>
 
       
@@ -240,18 +230,7 @@ export const HeroSection: React.FC = () => {
               </motion.a>
               
               
-              <motion.a 
-                href="/kontakt" 
-                className="relative group px-6 py-3 bg-transparent text-white font-medium rounded-full overflow-hidden border border-orange-500/50"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-orange-600/10 to-orange-500/10"></div>
-                <span className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                  <span className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000"></span>
-                </span>
-                <span className="relative z-10">Kontakt</span>
-              </motion.a>
+              
             </motion.div>
           </motion.div>
 
@@ -285,29 +264,7 @@ export const HeroSection: React.FC = () => {
             />
             
            
-            <motion.div
-              className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[300px] h-[50px] hidden lg:block"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 1 }}
-            >
-              <svg width="100%" height="100%" viewBox="0 0 300 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path 
-                  d="M10,25 Q75,-10 150,25 Q225,60 290,25" 
-                  stroke="url(#grad)" 
-                  strokeWidth="2" 
-                  strokeDasharray="1 8" 
-                  strokeLinecap="round"
-                />
-                <defs>
-                  <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#F97316" stopOpacity="0.2" />
-                    <stop offset="50%" stopColor="#F97316" stopOpacity="1" />
-                    <stop offset="100%" stopColor="#F97316" stopOpacity="0.2" />
-                  </linearGradient>
-                </defs>
-              </svg>
-            </motion.div>
+          
             
             
             {[...Array(6)].map((_, i) => {
