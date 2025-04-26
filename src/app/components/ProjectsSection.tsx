@@ -1,8 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
-import ParticlesBackground from "./ParticlesBakckground"; // Importujte vaši komponentu s částicemi
+import ParticlesBackground from "./ParticlesBakckground";
 
 // Definice typů
 interface Project {
@@ -13,6 +13,8 @@ interface Project {
   image: string;
   link: string;
   invertLayout: boolean;
+  achievements?: string[]; // Přidány úspěchy projektu
+  stats?: { value: string; label: string }[]; // Přidány statistiky projektu
 }
 
 interface FuturisticSectionTitleProps {
@@ -22,11 +24,6 @@ interface FuturisticSectionTitleProps {
 interface TechBadgeProps {
   tech: string;
   index: number;
-}
-
-interface FuturisticButtonProps {
-  href: string;
-  children: React.ReactNode;
 }
 
 interface ProjectCardProps {
@@ -44,6 +41,16 @@ const projectsData: Project[] = [
     image: "/imgs/veterina.png",
     link: "https://veterinagottwaldova.cz",
     invertLayout: false,
+    achievements: [
+      "Zvýšení online rezervací o 45%",
+      "Automatizace správy pacientů",
+      "Jednoduchý systém notifikací pro klienty"
+    ],
+    stats: [
+      { value: "45%", label: "Nárůst rezervací" },
+      { value: "98%", label: "Spokojenost klientů" },
+      { value: "32%", label: "Úspora času personálu" }
+    ]
   },
   {
     id: 2,
@@ -54,6 +61,16 @@ const projectsData: Project[] = [
     image: "/imgs/ai-andrt.png",
     link: "https://www.ai-andrt.cz",
     invertLayout: true,
+    achievements: [
+      "Intuitivní prezentace AI projektů",
+      "Interaktivní 3D vizualizace",
+      "Komplexní integrované API pro správu obsahu"
+    ],
+    stats: [
+      { value: "3D", label: "Vizualizace projektů" },
+      { value: "85%", label: "Konverzní míra" },
+      { value: "<2s", label: "Čas načtení" }
+    ]
   },
   {
     id: 3,
@@ -64,6 +81,16 @@ const projectsData: Project[] = [
     image: "/imgs/movie.png",
     link: "https://movieapp-mu-gilt.vercel.app",
     invertLayout: false,
+    achievements: [
+      "Integrace s The Movie Database API",
+      "Pokročilé filtry a vyhledávání",
+      "Responsivní design pro všechna zařízení"
+    ],
+    stats: [
+      { value: "10k+", label: "Filmů v databázi" },
+      { value: "4ms", label: "Odezva vyhledávání" },
+      { value: "99%", label: "Přesnost výsledků" }
+    ]
   },
   {
     id: 4,
@@ -74,6 +101,16 @@ const projectsData: Project[] = [
     image: "/imgs/last-message.png",
     link: "https://last-message-liard.vercel.app",
     invertLayout: true,
+    achievements: [
+      "Šifrování end-to-end pro maximální soukromí",
+      "Časově řízený systém doručování zpráv",
+      "Multimédia a uchování digitálního odkazu"
+    ],
+    stats: [
+      { value: "E2E", label: "Šifrování" },
+      { value: "∞", label: "Dlouhodobá archivace" },
+      { value: "100%", label: "Soukromí" }
+    ]
   },
   {
     id: 5,
@@ -84,6 +121,16 @@ const projectsData: Project[] = [
     image: "/imgs/kz.png",
     link: "https://www.kralostvizdravi.cz",
     invertLayout: false,
+    achievements: [
+      "Komplexní optimalizace UX designu",
+      "Automatizace procesů objednávek",
+      "Návrh a implementace mobilního rozhraní"
+    ],
+    stats: [
+      { value: "120%", label: "Nárůst konverzí" },
+      { value: "18k+", label: "Aktivních uživatelů" },
+      { value: "-35%", label: "Snížení míry opuštění" }
+    ]
   },
 ];
 
@@ -95,22 +142,22 @@ const FuturisticSectionTitle: React.FC<FuturisticSectionTitleProps> = ({ childre
         className="absolute -top-4 -left-8 w-6 h-6 border-t-2 border-l-2 border-orange-500 opacity-70"
         initial={{ opacity: 0 }}
         animate={{ opacity: 0.7 }}
-        transition={{ duration: 0.8, delay: 0.2 }}
+        transition={{ duration: 0.4 }}
       />
       <motion.div 
         className="absolute -bottom-4 -right-8 w-6 h-6 border-b-2 border-r-2 border-orange-500 opacity-70"
         initial={{ opacity: 0 }}
         animate={{ opacity: 0.7 }}
-        transition={{ duration: 0.8, delay: 0.4 }}
+        transition={{ duration: 0.4 }}
       />
       
       <h2 className="text-4xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-white relative inline-block">
         {children}
         <motion.div 
-          className="absolute left-0 bottom-[-10px] h-[6px] bg-orange-500 w-full rounded-full"
+          className="absolute left-0 bottom-[-10px] h-[6px] bg-gradient-to-r from-orange-500 to-orange-400/40 rounded-full"
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
-          transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
         />
       </h2>
       
@@ -118,7 +165,7 @@ const FuturisticSectionTitle: React.FC<FuturisticSectionTitleProps> = ({ childre
         className="mt-2 flex items-center justify-center"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.8 }}
+        transition={{ duration: 0.4 }}
       >
         <div className="h-px w-8 bg-orange-500/40"></div>
         <div className="mx-2 text-xs text-orange-500/70 font-mono">PORTFOLIO</div>
@@ -142,79 +189,54 @@ const TechBadge: React.FC<TechBadgeProps> = ({ tech, index }) => {
   );
 };
 
-// Komponenta pro futuristické tlačítko
-const FuturisticButton: React.FC<FuturisticButtonProps> = ({ href, children }) => {
+// Komponenta pro statistiku projektu
+const ProjectStat = ({ value, label }: { value: string, label: string }) => {
   return (
-    <motion.a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="relative group inline-flex items-center px-6 py-3 bg-orange-500 text-white font-medium rounded-full overflow-hidden"
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.98 }}
-    >
-      {/* Světelný efekt při hover */}
-      <span className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-        <span className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000"></span>
-      </span>
-      <span className="relative z-10 flex items-center">
-        {children}
-        <motion.svg 
-          className="ml-2 w-5 h-5" 
-          fill="none" 
-          stroke="currentColor" 
-          viewBox="0 0 24 24" 
-          xmlns="http://www.w3.org/2000/svg"
-          initial={{ x: 0 }}
-          animate={{ x: [0, 5, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 2 }}
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-        </motion.svg>
-      </span>
-    </motion.a>
+    <div className="flex flex-col items-center bg-slate-800/40 border border-orange-500/10 px-3 py-2 rounded-lg">
+      <span className="text-orange-400 text-2xl font-bold">{value}</span>
+      <span className="text-slate-400 text-xs">{label}</span>
+    </div>
+  );
+};
+
+// Komponenta pro úspěch projektu
+const ProjectAchievement = ({ text }: { text: string }) => {
+  return (
+    <div className="flex items-center mb-2">
+      <div className="mr-2 text-orange-500">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+      <span className="text-sm text-slate-300">{text}</span>
+    </div>
   );
 };
 
 // Komponenta pro projekt
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
   const technologies = project.technologies.split(", ");
-  
-  // Varianty pro animace
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: { 
-      opacity: 1,
-      transition: { 
-        staggerChildren: 0.1,
-        delayChildren: 0.3
-      }
-    }
-  };
-  
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.8 } }
-  };
+  const [isHovered, setIsHovered] = useState(false);
   
   return (
-    <motion.div
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.3 }}
-      variants={containerVariants}
-      className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center py-10"
-    >
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center py-12 relative">
+      {/* Futuristická dekorativní linie */}
+      <div className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-orange-500/30 to-transparent"></div>
+      
       {!project.invertLayout ? (
         <>
           {/* Image on the left */}
-          <motion.div 
-            className="relative overflow-hidden rounded-lg group"
-            variants={itemVariants}
+          <div 
+            className="relative overflow-hidden rounded-lg"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
           >
+            
+            
             {/* Project number */}
-            <div className="absolute top-4 left-4 bg-orange-500 bg-opacity-75 text-white text-sm font-bold px-3 py-1 rounded-full z-20 backdrop-blur-sm">
-              #{project.id}
+            <div className="absolute top-4 left-4 bg-slate-800/80 border border-orange-500/30 text-orange-400 text-sm font-mono px-3 py-1 rounded-md z-20 backdrop-blur-sm flex items-center">
+              <span className="mr-1 opacity-70">PROJECT</span>
+              <span className="font-bold">{String(project.id).padStart(2, '0')}</span>
             </div>
             
             {/* Futuristické rohy */}
@@ -223,15 +245,15 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
             <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-orange-500 opacity-80 z-10"></div>
             <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-orange-500 opacity-80 z-10"></div>
             
-            {/* Skenující efekt */}
+            {/* Skenující efekt - pouze na desktopu */}
             <motion.div
-              className="absolute left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-orange-500/60 to-transparent z-10"
+              className="absolute left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-orange-500/60 to-transparent z-10 hidden lg:block"
               initial={{ top: "-10%" }}
               animate={{ top: ["0%", "100%"] }}
               transition={{ 
                 duration: 3, 
                 repeat: Infinity, 
-                repeatDelay: 1,
+                repeatDelay: 0.5,
                 ease: "linear"
               }}
             />
@@ -240,101 +262,140 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
             <img
               src={project.image}
               alt={project.title}
-              className="w-full h-auto object-cover rounded-lg lg:max-h-[800px] pointer-events-none relative transition-transform duration-1000 group-hover:scale-105"
+              className="w-full h-auto object-cover rounded-lg lg:max-h-[600px] pointer-events-none relative transition-transform duration-1000 scale-100 group-hover:scale-105"
             />
             
-            {/* Overlay efekt při hoveru */}
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          </motion.div>
+            {/* Overlay efekt s odkazem */}
+            <div 
+              className={`absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/60 to-slate-900/30 transition-opacity duration-300 flex flex-col items-center justify-center ${isHovered ? 'opacity-100' : 'opacity-0'}`}
+            >
+              <a 
+                href={project.link} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-orange-400 font-semibold border border-orange-500/30 px-4 py-2 rounded-md bg-slate-900/40 backdrop-blur-sm hover:bg-orange-500/20 transition-colors"
+              >
+                <div className="flex items-center">
+                  <span>Navštívit projekt</span>
+                  <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </div>
+              </a>
+            </div>
+          </div>
           
           {/* Text on the right */}
-          <div className="space-y-8">
-            <motion.h3 
-              className="text-4xl font-extrabold text-white relative inline-block"
-              variants={itemVariants}
-            >
-              {project.title}
-              <motion.div 
-                className="absolute left-0 bottom-[-6px] h-[3px] w-1/3 bg-gradient-to-r from-orange-500 to-transparent"
-                initial={{ scaleX: 0 }}
-                whileInView={{ scaleX: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-              />
-            </motion.h3>
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-4xl font-extrabold text-white relative inline-block">
+                {project.title}
+                <div className="absolute left-0 bottom-[-6px] h-[3px] w-1/3 bg-gradient-to-r from-orange-500 to-transparent" />
+              </h3>
+              
+              {/* Projekt statistiky */}
+              <div className="grid grid-cols-3 gap-2 mt-6">
+                {project.stats?.map((stat, index) => (
+                  <ProjectStat key={index} value={stat.value} label={stat.label} />
+                ))}
+              </div>
+            </div>
             
-            <motion.p 
-              className="text-gray-300 leading-relaxed"
-              variants={itemVariants}
-            >
+            <p className="text-gray-300 leading-relaxed border-l-2 border-orange-500/30 pl-4">
               {project.description}
-            </motion.p>
+            </p>
             
-            <motion.div
-              className="flex flex-wrap"
-              variants={itemVariants}
-            >
-              {technologies.map((tech, techIndex) => (
-                <TechBadge key={techIndex} tech={tech} index={techIndex} />
-              ))}
-            </motion.div>
+            {/* Klíčové úspěchy */}
+            <div className="space-y-2">
+              <div className="text-sm text-orange-400 font-semibold flex items-center">
+                <div className="w-4 h-px bg-orange-500 mr-2"></div>
+                KLÍČOVÉ ÚSPĚCHY
+              </div>
+              <div className="pl-2">
+                {project.achievements?.map((achievement, index) => (
+                  <ProjectAchievement key={index} text={achievement} />
+                ))}
+              </div>
+            </div>
             
-            <motion.div variants={itemVariants}>
-              <FuturisticButton href={project.link}>
-                Mrknout na web
-              </FuturisticButton>
-            </motion.div>
+            {/* Technologie */}
+            <div>
+              <div className="text-sm text-orange-400 font-semibold flex items-center mb-2">
+                <div className="w-4 h-px bg-orange-500 mr-2"></div>
+                TECHNOLOGIE
+              </div>
+              <div className="flex flex-wrap">
+                {technologies.map((tech, techIndex) => (
+                  <TechBadge key={techIndex} tech={tech} index={techIndex} />
+                ))}
+              </div>
+            </div>
           </div>
         </>
       ) : (
         <>
           {/* Text on the left */}
-          <div className="order-2 lg:order-1 space-y-8">
-            <motion.h3 
-              className="text-4xl font-extrabold text-white relative inline-block"
-              variants={itemVariants}
-            >
-              {project.title}
-              <motion.div 
-                className="absolute left-0 bottom-[-6px] h-[3px] w-1/3 bg-gradient-to-r from-orange-500 to-transparent"
-                initial={{ scaleX: 0 }}
-                whileInView={{ scaleX: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-              />
-            </motion.h3>
+          <div className="order-2 lg:order-1 space-y-6">
+            <div>
+              <h3 className="text-4xl font-extrabold text-white relative inline-block">
+                {project.title}
+                <div className="absolute left-0 bottom-[-6px] h-[3px] w-1/3 bg-gradient-to-r from-orange-500 to-transparent" />
+              </h3>
+              
+              {/* Projekt statistiky */}
+              <div className="grid grid-cols-3 gap-2 mt-6">
+                {project.stats?.map((stat, index) => (
+                  <ProjectStat key={index} value={stat.value} label={stat.label} />
+                ))}
+              </div>
+            </div>
             
-            <motion.p 
-              className="text-gray-300 leading-relaxed"
-              variants={itemVariants}
-            >
+            <p className="text-gray-300 leading-relaxed border-l-2 border-orange-500/30 pl-4">
               {project.description}
-            </motion.p>
+            </p>
             
-            <motion.div
-              className="flex flex-wrap"
-              variants={itemVariants}
-            >
-              {technologies.map((tech, techIndex) => (
-                <TechBadge key={techIndex} tech={tech} index={techIndex} />
-              ))}
-            </motion.div>
+            {/* Klíčové úspěchy */}
+            <div className="space-y-2">
+              <div className="text-sm text-orange-400 font-semibold flex items-center">
+                <div className="w-4 h-px bg-orange-500 mr-2"></div>
+                KLÍČOVÉ ÚSPĚCHY
+              </div>
+              <div className="pl-2">
+                {project.achievements?.map((achievement, index) => (
+                  <ProjectAchievement key={index} text={achievement} />
+                ))}
+              </div>
+            </div>
             
-            <motion.div variants={itemVariants}>
-              <FuturisticButton href={project.link}>
-                Mrknout na web
-              </FuturisticButton>
-            </motion.div>
+            {/* Technologie */}
+            <div>
+              <div className="text-sm text-orange-400 font-semibold flex items-center mb-2">
+                <div className="w-4 h-px bg-orange-500 mr-2"></div>
+                TECHNOLOGIE
+              </div>
+              <div className="flex flex-wrap">
+                {technologies.map((tech, techIndex) => (
+                  <TechBadge key={techIndex} tech={tech} index={techIndex} />
+                ))}
+              </div>
+            </div>
           </div>
           
           {/* Image on the right */}
-          <motion.div 
-            className="order-1 lg:order-2 relative overflow-hidden rounded-lg group"
-            variants={itemVariants}
+          <div 
+            className="order-1 lg:order-2 relative overflow-hidden rounded-lg"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
           >
+            {/* HexaFrame kolem projektu */}
+            <div className="absolute inset-0 z-10">
+              
+            </div>
+            
             {/* Project number */}
-            <div className="absolute top-4 left-4 bg-orange-500 bg-opacity-75 text-white text-sm font-bold px-3 py-1 rounded-full z-20 backdrop-blur-sm">
-              #{project.id}
+            <div className="absolute top-4 left-4 bg-slate-800/80 border border-orange-500/30 text-orange-400 text-sm font-mono px-3 py-1 rounded-md z-20 backdrop-blur-sm flex items-center">
+              <span className="mr-1 opacity-70">PROJECT</span>
+              <span className="font-bold">{String(project.id).padStart(2, '0')}</span>
             </div>
             
             {/* Futuristické rohy */}
@@ -343,15 +404,15 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
             <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-orange-500 opacity-80 z-10"></div>
             <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-orange-500 opacity-80 z-10"></div>
             
-            {/* Skenující efekt */}
+            {/* Skenující efekt - pouze na desktopu */}
             <motion.div
-              className="absolute left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-orange-500/60 to-transparent z-10"
+              className="absolute left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-orange-500/60 to-transparent z-10 hidden lg:block"
               initial={{ top: "-10%" }}
               animate={{ top: ["0%", "100%"] }}
               transition={{ 
                 duration: 3, 
                 repeat: Infinity, 
-                repeatDelay: 1,
+                repeatDelay: 0.5,
                 ease: "linear"
               }}
             />
@@ -360,15 +421,34 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
             <img
               src={project.image}
               alt={project.title}
-              className="w-full h-auto object-cover rounded-lg lg:max-h-[800px] pointer-events-none relative transition-transform duration-1000 group-hover:scale-105"
+              className="w-full h-auto object-cover rounded-lg lg:max-h-[600px] pointer-events-none relative transition-transform duration-1000 scale-100 group-hover:scale-105"
             />
             
-            {/* Overlay efekt při hoveru */}
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          </motion.div>
+            {/* Overlay efekt s odkazem */}
+            <div 
+              className={`absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/60 to-slate-900/30 transition-opacity duration-300 flex flex-col items-center justify-center ${isHovered ? 'opacity-100' : 'opacity-0'}`}
+            >
+              <a 
+                href={project.link} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-orange-400 font-semibold border border-orange-500/30 px-4 py-2 rounded-md bg-slate-900/40 backdrop-blur-sm hover:bg-orange-500/20 transition-colors"
+              >
+                <div className="flex items-center">
+                  <span>Navštívit projekt</span>
+                  <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </div>
+              </a>
+            </div>
+          </div>
         </>
       )}
-    </motion.div>
+      
+      {/* Futuristická dekorativní linie */}
+      <div className="absolute left-0 right-0 bottom-0 h-px bg-gradient-to-r from-transparent via-orange-500/30 to-transparent"></div>
+    </div>
   );
 };
 
@@ -381,11 +461,44 @@ const ProjectsSection: React.FC = () => {
       {/* Přidejte komponentu s částicemi */}
       <ParticlesBackground />
       
-      {/* Dark blurred gradient background */}
+      {/* Cyberpunk grid - futuristická mřížka na pozadí */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 opacity-70 blur-lg"></div>
-        <div className="absolute top-0 left-1/4 w-1/2 h-full bg-gradient-to-t from-transparent via-gray-700 to-transparent opacity-50 blur-xl"></div>
-        <div className="absolute bottom-0 right-1/4 w-1/2 h-full bg-gradient-to-b from-transparent via-gray-700 to-transparent opacity-50 blur-xl"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 opacity-70"></div>
+        
+        {/* Horizontální linky */}
+        {[...Array(10)].map((_, i) => (
+          <div 
+            key={`h-line-${i}`} 
+            className="absolute left-0 right-0 h-px bg-orange-500/5"
+            style={{ top: `${10 * i}%` }}
+          />
+        ))}
+        
+        {/* Vertikální linky */}
+        {[...Array(10)].map((_, i) => (
+          <div 
+            key={`v-line-${i}`} 
+            className="absolute top-0 bottom-0 w-px bg-orange-500/5"
+            style={{ left: `${10 * i}%` }}
+          />
+        ))}
+        
+        {/* Dekorativní kruhy */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-orange-500/5 blur-3xl"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full bg-blue-500/5 blur-3xl"></div>
+        
+        {/* Futuristické nody */}
+        {[...Array(5)].map((_, i) => (
+          <div 
+            key={`node-${i}`}
+            className="absolute w-2 h-2 bg-orange-500/30 rounded-full"
+            style={{ 
+              top: `${20 + Math.random() * 60}%`, 
+              left: `${20 + Math.random() * 60}%`,
+              boxShadow: '0 0 15px rgba(249, 115, 22, 0.3)'
+            }}
+          />
+        ))}
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10 mt-12">
@@ -393,58 +506,60 @@ const ProjectsSection: React.FC = () => {
         <div className="text-center mb-20">
           <FuturisticSectionTitle>Moje Projekty</FuturisticSectionTitle>
           <motion.p 
-            className="text-gray-400 text-xl max-w-2xl mx-auto leading-loose mt-10"
+            className="text-gray-400 text-xl max-w-3xl mx-auto leading-loose mt-10"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
+            transition={{ duration: 0.6 }}
           >
-            Vybrané ukázky práce, v nichž kombinuji webdesign, moderní technologie a
-            uživatelskou přívětivost. Můžete mít svůj projekt také!
+            Vybral jsem ukázky projektů, které kombinují moderní technologie, optimalizovaný design a přívětivé uživatelské rozhraní.
+            Každý projekt přináší unikátní hodnotu klientovi i koncovým uživatelům.
           </motion.p>
         </div>
 
-        {/* Spojovací linie mezi projekty - vertikální časová osa */}
-        <div className="absolute left-1/2 transform -translate-x-1/2 top-[470px] bottom-40 w-px bg-gradient-to-b from-orange-500/20 via-orange-500/50 to-orange-500/20 hidden lg:block"></div>
-
-        {/* Projects List */}
-        <div className="space-y-28">
+        {/* Projects List - odstraněny on-scroll efekty */}
+        <motion.div 
+          className="space-y-16"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6 }}
+        >
           {projectsData.map((project, index) => (
             <ProjectCard key={project.id} project={project} index={index} />
           ))}
-        </div>
-        
-        {/* Final CTA */}
-        <motion.div 
-          className="text-center mt-32"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
-          <div className="relative inline-block">
-            <h3 className="text-2xl md:text-3xl font-bold text-white mb-6">Máte nápad na projekt?</h3>
-            <motion.div 
-              className="absolute -top-4 -left-4 w-4 h-4 border-t border-l border-orange-500/50"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-            ></motion.div>
-            <motion.div 
-              className="absolute -bottom-4 -right-4 w-4 h-4 border-b border-r border-orange-500/50"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.5 }}
-            ></motion.div>
-          </div>
-          <p className="text-gray-400 max-w-xl mx-auto mb-10">
-            Potřebujete webové stránky, e-shop nebo úpravu stávajícího webu? Nezávazně si popovídáme o vašich představách.
-          </p>
-          <FuturisticButton href="/kontakt">
-            Pojďme na to!
-          </FuturisticButton>
         </motion.div>
+        
+        {/* Final CTA - vylepšený */}
+        <div className="relative mt-32 bg-slate-900/50 border border-orange-500/10 rounded-xl p-8 backdrop-blur-sm">
+          {/* Dekorativní prvky */}
+          <div className="absolute top-0 left-0 w-16 h-16">
+            <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-orange-500/60"></div>
+          </div>
+          <div className="absolute bottom-0 right-0 w-16 h-16">
+            <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-orange-500/60"></div>
+          </div>
+          
+          <div className="text-center max-w-3xl mx-auto relative z-10">
+            <div className="relative inline-block mb-4">
+              <h3 className="text-2xl md:text-3xl font-bold text-white">Máte vlastní nápad na projekt?</h3>
+              <div className="absolute top-0 -left-3 w-1 h-full bg-orange-500"></div>
+            </div>
+            <p className="text-gray-400 mb-8">
+              Specializuji se na komplexní webové aplikace, e-shopy a interaktivní prezentace. 
+              Společně můžeme váš nápad proměnit v digitální realitu. První konzultace je zdarma.
+            </p>
+            <a 
+              href="/kontakt" 
+              className="relative inline-flex items-center px-6 py-3 bg-slate-800 text-orange-400 font-medium rounded-md overflow-hidden border border-orange-500/30 hover:bg-slate-700/80 transition-colors group"
+            >
+              <span className="relative z-10 flex items-center">
+                <span className="mr-2">Konzultace zdarma</span>
+                <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </span>
+            </a>
+          </div>
+        </div>
       </div>
     </section>
   );

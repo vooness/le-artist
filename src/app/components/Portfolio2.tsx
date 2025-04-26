@@ -2,12 +2,9 @@
 
 import React, { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import Slider from "react-slick";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import ParticlesBackground from "./ParticlesBakckground"; // Import vaší komponenty s částicemi
+import ParticlesBackground from "./ParticlesBakckground";
 
 // Typ pro položky obsahu
 interface ContentItem {
@@ -18,38 +15,7 @@ interface ContentItem {
   title?: string;
 }
 
-// Data for banners (images) – now with a total of 6 banners
-const banners: ContentItem[] = [
-  { id: 1, image: "/imgs/kolagen.png", alt: "Banner 1" },
-  { id: 2, image: "/imgs/malate.png", alt: "Banner 2" },
-  { id: 3, image: "/imgs/banner8.jpg", alt: "Banner 3" },
-  { id: 4, image: "/imgs/banner12.jpg", alt: "Banner 4" },
-  { id: 5, image: "/imgs/g3.jpg", alt: "Banner 5" },
-  { id: 6, image: "/imgs/Grounded---one.jpg", alt: "Banner 6" },
-];
-
-// New slider settings for the banners section
-// Desktop: 1 row, 2 banners per slide (2x1)
-// Mobile: 1 row, 1 banner per slide (1x1)
-const bannerSliderSettings = {
-  autoplay: true,
-  autoplaySpeed: 1500, // changes every 1.5 seconds
-  speed: 500,
-  infinite: true,
-  rows: 1,
-  slidesPerRow: 2,
-  responsive: [
-    {
-      breakpoint: 640,
-      settings: {
-        rows: 1,
-        slidesPerRow: 1,
-      },
-    },
-  ],
-};
-
-// Data for PlayStation Store graphics (images)
+// Data for PlayStation Store graphics (images) - rozšířeno na 12 položek
 const psStoreGraphics: ContentItem[] = [
   { id: 1, image: "/imgs/playstation.png", alt: "PS Graphic 1" },
   { id: 2, image: "/imgs/playstation-8.png", alt: "PS Graphic 2" },
@@ -59,34 +25,11 @@ const psStoreGraphics: ContentItem[] = [
   { id: 6, image: "/imgs/playstation-5.png", alt: "PS Graphic 6" },
   { id: 7, image: "/imgs/playstation-6.png", alt: "PS Graphic 7" },
   { id: 8, image: "/imgs/playstation-7.png", alt: "PS Graphic 8" },
+  { id: 9, image: "/imgs/playstation.png", alt: "PS Graphic 9" },
+  { id: 10, image: "/imgs/playstation-2.png", alt: "PS Graphic 10" },
+  { id: 11, image: "/imgs/playstation-3.png", alt: "PS Graphic 11" },
+  { id: 12, image: "/imgs/playstation-4.png", alt: "PS Graphic 12" },
 ];
-
-// Slider settings for PlayStation Store graphics
-const psSliderSettings = {
-  dots: true,
-  infinite: true,
-  speed: 500,
-  slidesToShow: 3,
-  slidesToScroll: 1,
-  autoplay: true,
-  autoplaySpeed: 1500,
-  responsive: [
-    { breakpoint: 1024, settings: { slidesToShow: 2 } },
-    { breakpoint: 640, settings: { slidesToShow: 1 } },
-  ],
-};
-
-// Mobile slider settings for other sections
-const sliderSettingsMobile = {
-  dots: false,
-  arrows: false,
-  infinite: true,
-  autoplay: true,
-  autoplaySpeed: 3000,
-  speed: 1000,
-  slidesToShow: 2,
-  slidesToScroll: 1,
-};
 
 // Data for Animované bannery (videos)
 const animatedBannerVideos: ContentItem[] = [
@@ -102,13 +45,6 @@ const shortAdsVideos: ContentItem[] = [
   { id: 2, videoUrl: "/imgs/magnesium.mp4", title: "Krátká reklama 2" },
   { id: 3, videoUrl: "/imgs/jimbo.mp4", title: "Krátká reklama 3" },
   { id: 4, videoUrl: "/imgs/serda.mp4", title: "Krátká reklama 4" },
-];
-
-// Data for Fotografování (photography) – 3 photos only.
-const photographyItems: ContentItem[] = [
-  { id: 1, image: "/imgs/tribulus---kmenweb.jpg", alt: "Photography 1", title: "Fotografie 1" },
-  { id: 2, image: "/imgs/probiotika---kmenweb.jpg", alt: "Photography 2", title: "Fotografie 2" },
-  { id: 3, image: "/imgs/_MG_7402.webp", alt: "Photography 3", title: "Fotografie 3" },
 ];
 
 // Komponenta pro futuristický nadpis sekce
@@ -145,29 +81,25 @@ const FuturisticSectionTitle: React.FC<SectionTitleProps> = ({ children }) => {
   );
 };
 
-// Komponenta pro futuristický obrázek
-interface FuturisticImageProps {
-  src: string;
+// Komponenta pro futuristickou kartu PlayStation
+interface PlayStationCardProps {
+  image: string;
   alt: string;
-  aspectRatio?: string;
-  isPlayStation?: boolean;
+  index: number;
 }
 
-const FuturisticImage: React.FC<FuturisticImageProps> = ({ 
-  src, 
-  alt, 
-  aspectRatio = "aspect-[16/9]",
-  isPlayStation = false
-}) => {
+const PlayStationCard: React.FC<PlayStationCardProps> = ({ image, alt, index }) => {
   const [isHovered, setIsHovered] = useState(false);
   
   return (
-    <motion.div 
-      className={`relative ${aspectRatio} rounded-lg overflow-hidden group`}
-      whileHover={{ scale: 1.02 }}
-      transition={{ duration: 0.3 }}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
+    <motion.div
+      className="relative aspect-square bg-slate-900/80 rounded-lg overflow-hidden backdrop-blur-sm group"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.05 * index }}
+      whileHover={{ scale: 1.05, y: -5 }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       {/* Futuristické rohy */}
       <div className="absolute top-0 left-0 w-4 h-4 border-t border-l border-orange-500 opacity-80 z-10"></div>
@@ -175,41 +107,55 @@ const FuturisticImage: React.FC<FuturisticImageProps> = ({
       <div className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-orange-500 opacity-80 z-10"></div>
       <div className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-orange-500 opacity-80 z-10"></div>
       
-      {/* Skenující efekt pouze při hover */}
+      {/* Číslování */}
+      <div className="absolute top-3 left-3 bg-slate-800/80 border border-orange-500/30 text-orange-400 text-xs font-mono px-2 py-1 rounded-md z-20 backdrop-blur-sm">
+        {String(index + 1).padStart(2, '0')}
+      </div>
+      
+      {/* Skenující efekt - aktivní při hoveru */}
       {isHovered && (
         <motion.div
-          className="absolute left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-orange-500/60 to-transparent z-10"
+          className="absolute left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-orange-500/60 to-transparent z-10"
           initial={{ top: "-10%" }}
           animate={{ top: ["0%", "100%"] }}
           transition={{ 
             duration: 1.5, 
             repeat: Infinity, 
-            repeatDelay: 0,
             ease: "linear"
           }}
         />
       )}
       
-      {/* Glowing efekt při hover pro PlayStation grafiku */}
-      {isPlayStation && isHovered && (
+      {/* Obrázek */}
+      <div className="relative w-full h-full">
+        <Image
+          src={image}
+          alt={alt}
+          fill
+          className="object-cover transition-transform duration-700 group-hover:scale-110"
+        />
+      </div>
+      
+      {/* Overlay efekt - aktivní při hoveru */}
+      <div 
+        className={`absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/60 to-slate-900/30 transition-opacity duration-300 flex items-center justify-center p-4 ${isHovered ? 'opacity-100' : 'opacity-0'}`}
+      >
+        <a 
+          href="#" 
+          className="text-orange-400 font-semibold border border-orange-500/30 px-4 py-2 rounded-md bg-slate-900/60 backdrop-blur-sm hover:bg-orange-500/20 transition-colors"
+        >
+          Zobrazit detail
+        </a>
+      </div>
+
+      {/* Animovaný gradient highlight při hoveru */}
+      {isHovered && (
         <motion.div 
-          className="absolute inset-0 bg-orange-500/20 z-10 pointer-events-none"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: [0, 0.2, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
+          className="absolute inset-0 bg-gradient-to-r from-orange-600/5 to-orange-400/5 pointer-events-none"
+          animate={{ opacity: [0, 1, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
         />
       )}
-      
-      {/* Samotný obrázek */}
-      <Image
-        src={src}
-        alt={alt}
-        fill
-        className="object-cover transition-transform duration-700 group-hover:scale-105"
-      />
-      
-      {/* Overlay efekt při hoveru */}
-      <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
     </motion.div>
   );
 };
@@ -217,10 +163,9 @@ const FuturisticImage: React.FC<FuturisticImageProps> = ({
 // Komponenta pro futuristické video
 interface FuturisticVideoProps {
   src: string;
-  title?: string;
 }
 
-const FuturisticVideo: React.FC<FuturisticVideoProps> = ({ src, title }) => {
+const FuturisticVideo: React.FC<FuturisticVideoProps> = ({ src }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   
@@ -276,25 +221,6 @@ const FuturisticVideo: React.FC<FuturisticVideoProps> = ({ src, title }) => {
       
       {/* Overlay efekt */}
       <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-      
-      {/* Skenující efekt */}
-      <motion.div
-        className="absolute left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-orange-500/60 to-transparent z-10"
-        initial={{ top: "-10%" }}
-        animate={{ top: ["0%", "100%", "0%"] }}
-        transition={{ 
-          duration: 8, 
-          repeat: Infinity,
-          ease: "linear"
-        }}
-      />
-      
-      {/* Název videa pod videem */}
-      {title && (
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent py-3 px-4">
-          <p className="text-white text-sm">{title}</p>
-        </div>
-      )}
     </motion.div>
   );
 };
@@ -306,107 +232,71 @@ const Portfolio2: React.FC = () => {
     <section className="relative bg-[#0f172a] text-white py-16 px-8 overflow-hidden">
       {/* Přidáme komponentu s částicemi */}
       <ParticlesBackground />
-      
-      
 
-      {/* Banners Section as Slider */}
+      {/* PlayStation Store Graphics Section - Změněno na Grid 3x4 */}
       <motion.div 
-        className="max-w-7xl mx-auto mb-16 lg:mb-32 relative z-10"
+        className="max-w-7xl mx-auto mb-24 relative z-10"
         initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
-        <div className="text-center mb-12">
-          <FuturisticSectionTitle>Ukázka bannerů</FuturisticSectionTitle>
+        <div className="text-center mb-16">
+          <FuturisticSectionTitle>PlayStation Store grafika</FuturisticSectionTitle>
         </div>
         
-        <Slider {...bannerSliderSettings}>
-          {banners.map((banner) => (
-            <div key={banner.id} className="px-2">
-              {banner.image && (
-                <FuturisticImage 
-                  src={banner.image} 
-                  alt={banner.alt || ""} 
+        {/* Desktop Grid: 3x4 layout (3 sloupce, 4 řady) */}
+        <div className="hidden md:grid grid-cols-3 gap-6">
+          {psStoreGraphics.map((graphic, index) => (
+            <div key={graphic.id}>
+              {graphic.image && (
+                <PlayStationCard 
+                  image={graphic.image} 
+                  alt={graphic.alt || ""} 
+                  index={index}
                 />
               )}
             </div>
           ))}
-        </Slider>
-      </motion.div>
-
-      {/* PlayStation Store Graphics Section */}
-      <motion.div 
-        className="max-w-7xl mx-auto relative z-10"
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
-      >
-        <div className="text-center mb-12">
-          <FuturisticSectionTitle>PlayStation Store grafika</FuturisticSectionTitle>
         </div>
         
-        <Slider {...psSliderSettings}>
-          {psStoreGraphics.map((graphic) => (
-            <div key={graphic.id} className="px-4">
-              <div className="rounded-lg overflow-hidden shadow-lg">
-                {graphic.image && (
-                  <FuturisticImage 
-                    src={graphic.image} 
-                    alt={graphic.alt || ""} 
-                    aspectRatio="aspect-square"
-                    isPlayStation={true}
-                  />
-                )}
-              </div>
+        {/* Mobile Layout: 1x1 (1 položka pod druhou) */}
+        <div className="md:hidden space-y-6">
+          {psStoreGraphics.map((graphic, index) => (
+            <div key={graphic.id}>
+              {graphic.image && (
+                <PlayStationCard 
+                  image={graphic.image} 
+                  alt={graphic.alt || ""} 
+                  index={index}
+                />
+              )}
             </div>
           ))}
-        </Slider>
+        </div>
       </motion.div>
 
       {/* Animované bannery Section */}
       <motion.div 
         className="max-w-7xl mx-auto mt-24 relative z-10"
         initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
         <div className="text-center mb-12">
           <FuturisticSectionTitle>Animované bannery</FuturisticSectionTitle>
         </div>
         
-        {/* Desktop Grid: 4 items per row */}
-        <div className="hidden md:grid grid-cols-4 gap-6">
+        {/* Grid layout pro všechny velikosti */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
           {animatedBannerVideos.map((video) => (
-            <div key={video.id} className="flex flex-col items-center">
+            <div key={video.id}>
               {video.videoUrl && (
                 <FuturisticVideo 
                   src={video.videoUrl} 
-                  title={video.title}
                 />
               )}
-              <p className="text-center mt-3 text-gray-400">{video.title}</p>
             </div>
           ))}
-        </div>
-        
-        {/* Mobile Slider: 2 items per view */}
-        <div className="md:hidden">
-          <Slider {...sliderSettingsMobile}>
-            {animatedBannerVideos.map((video) => (
-              <div key={video.id} className="px-2">
-                {video.videoUrl && (
-                  <FuturisticVideo 
-                    src={video.videoUrl} 
-                    title={video.title}
-                  />
-                )}
-                <p className="text-center mt-3 text-gray-400">{video.title}</p>
-              </div>
-            ))}
-          </Slider>
         </div>
       </motion.div>
 
@@ -414,93 +304,24 @@ const Portfolio2: React.FC = () => {
       <motion.div 
         className="max-w-7xl mx-auto mt-24 relative z-10"
         initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
         <div className="text-center mb-12">
           <FuturisticSectionTitle>Krátké reklamy</FuturisticSectionTitle>
         </div>
         
-        {/* Desktop Grid: 4 items per row */}
-        <div className="hidden md:grid grid-cols-4 gap-6">
+        {/* Grid layout pro všechny velikosti */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
           {shortAdsVideos.map((video) => (
-            <div key={video.id} className="flex flex-col items-center">
+            <div key={video.id}>
               {video.videoUrl && (
                 <FuturisticVideo 
                   src={video.videoUrl} 
-                  title={video.title}
                 />
               )}
-              <p className="text-center mt-3 text-gray-400">{video.title}</p>
             </div>
           ))}
-        </div>
-        
-        {/* Mobile Slider: 2 items per view */}
-        <div className="md:hidden">
-          <Slider {...sliderSettingsMobile}>
-            {shortAdsVideos.map((video) => (
-              <div key={video.id} className="px-2">
-                {video.videoUrl && (
-                  <FuturisticVideo 
-                    src={video.videoUrl} 
-                    title={video.title}
-                  />
-                )}
-                <p className="text-center mt-3 text-gray-400">{video.title}</p>
-              </div>
-            ))}
-          </Slider>
-        </div>
-      </motion.div>
-
-      {/* Fotografování Section */}
-      <motion.div 
-        className="max-w-7xl mx-auto mt-24 relative z-10"
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
-      >
-        <div className="text-center mb-12">
-          <FuturisticSectionTitle>Fotografování</FuturisticSectionTitle>
-        </div>
-        
-        {/* Desktop Grid: 3 items per row */}
-        <div className="hidden md:grid grid-cols-3 gap-6">
-          {photographyItems.map((item) => (
-            <div key={item.id} className="flex flex-col items-center">
-              {item.image && (
-                <div className="relative w-full aspect-video">
-                  <FuturisticImage 
-                    src={item.image} 
-                    alt={item.alt || ""} 
-                  />
-                </div>
-              )}
-              <p className="text-center mt-3 text-gray-400">{item.title}</p>
-            </div>
-          ))}
-        </div>
-        
-        {/* Mobile Slider: 2 items per view */}
-        <div className="md:hidden">
-          <Slider {...sliderSettingsMobile}>
-            {photographyItems.map((item) => (
-              <div key={item.id} className="px-2">
-                {item.image && (
-                  <div className="relative w-full aspect-video">
-                    <FuturisticImage 
-                      src={item.image} 
-                      alt={item.alt || ""} 
-                    />
-                  </div>
-                )}
-                <p className="text-center mt-3 text-gray-400">{item.title}</p>
-              </div>
-            ))}
-          </Slider>
         </div>
       </motion.div>
       
@@ -508,11 +329,14 @@ const Portfolio2: React.FC = () => {
       <motion.div 
         className="max-w-4xl mx-auto mt-24 mb-12 text-center relative z-10"
         initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
-        <div className="bg-gradient-to-r from-orange-500/20 to-slate-800/40 rounded-lg border border-orange-500/20 p-8">
+        <div className="bg-slate-800/60 backdrop-blur-md rounded-lg border border-orange-500/20 p-8 relative overflow-hidden">
+          {/* Futuristické dekorativní prvky */}
+          <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-orange-500/60"></div>
+          <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-orange-500/60"></div>
+          
           <h3 className="text-2xl font-bold text-white mb-4">Hledáte profesionální grafické a video služby?</h3>
           <p className="text-gray-300 mb-6">
             Od bannerů po animace, nabízím kompletní řešení pro vaši značku, e-shop nebo sociální sítě.
