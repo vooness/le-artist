@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from 'react';
-import { motion, useScroll, useTransform, useMotionValue } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import Link from 'next/link';
 import ParticlesBackground from "./ParticlesBakckground";
 
@@ -13,9 +13,8 @@ const isClient = () => {
 const IntroSection = () => {
   const sectionRef = useRef(null);
   const imageRef = useRef(null);
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
   const [hoveredServiceId, setHoveredServiceId] = useState<number | null>(null);
+
   
   // State pro sledování velikosti obrazovky
   const [isMobileOrTablet, setIsMobileOrTablet] = useState(false);
@@ -37,27 +36,14 @@ const IntroSection = () => {
     // Cleanup
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
-  
-  // Sledování pohybu myši pro interaktivní efekty
-  useEffect(() => {
-    if (!isClient()) return; // Předčasné ukončení, pokud nejsme na klientovi
-    
-    const handleMouseMove = (e: { clientX: number; clientY: number; }) => {
-      mouseX.set(e.clientX);
-      mouseY.set(e.clientY);
-    };
-    
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [mouseX, mouseY]);
 
-  // Animace při scrollování
+  // Animace při scrollování - pouze na desktopu
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"]
   });
   
-  // Paralaxové efekty
+  // Paralaxové efekty - pouze pro desktop
   const imageY = useTransform(scrollYProgress, [0, 1], ['-5%', '5%']);
   const textY = useTransform(scrollYProgress, [0, 1], ['5%', '-5%']);
   
@@ -133,7 +119,7 @@ const IntroSection = () => {
     },
     {
       id: 6,
-      name: "Interaktivní cvičení",
+      name: "Interaktivní kvízy",
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -143,34 +129,35 @@ const IntroSection = () => {
     }
   ];
 
-  // Animační varianty pro komponenty
+  // Animační varianty pro komponenty - optimalizované pro mobilní zařízení
   const imageContainerVariants = {
-    hidden: { opacity: 0, x: -40 },
-    visible: { opacity: 1, x: 0, transition: { duration: 0.7, ease: "easeOut" } },
+    hidden: { opacity: 0, x: isMobileOrTablet ? 0 : -40 },
+    visible: { 
+      opacity: 1, 
+      x: 0, 
+      transition: { 
+        duration: isMobileOrTablet ? 0.4 : 0.7, 
+        ease: "easeOut" 
+      } 
+    },
   };
 
-  const pulseAnimation = {
-    hidden: { opacity: 0.3, scale: 0.9 },
+  // Základní a zjednodušená animace pro mobilní zařízení
+  const simplePulseAnimation = {
     visible: {
-      opacity: [0.3, 0.6, 0.3],
-      scale: [0.9, 1.05, 0.9],
-      transition: { duration: 6, repeat: Infinity, ease: "easeInOut" }
+      opacity: [0.8, 1, 0.8],
+      transition: { duration: 2, repeat: Infinity, ease: "easeInOut" }
     }
   };
 
   const shadowPulseAnimation = {
-    hidden: { boxShadow: "0 0 10px rgba(249, 115, 22, 0.3)" },
     visible: {
-      boxShadow: ["0 0 10px rgba(249, 115, 22, 0.3)", "0 0 20px rgba(249, 115, 22, 0.5)", "0 0 10px rgba(249, 115, 22, 0.3)"],
-      transition: { duration: 3, repeat: Infinity, ease: "easeInOut" }
-    }
-  };
-
-  const scanLineAnimation = {
-    hidden: { top: "0%" },
-    visible: {
-      top: ["0%", "100%", "0%"],
-      transition: { duration: 8, repeat: Infinity, ease: "easeInOut", repeatDelay: 2 }
+      boxShadow: !isMobileOrTablet 
+        ? ["0 0 10px rgba(249, 115, 22, 0.3)", "0 0 20px rgba(249, 115, 22, 0.5)", "0 0 10px rgba(249, 115, 22, 0.3)"]
+        : "0 0 10px rgba(249, 115, 22, 0.3)",
+      transition: !isMobileOrTablet 
+        ? { duration: 3, repeat: Infinity, ease: "easeInOut" }
+        : { duration: 0 }
     }
   };
 
@@ -179,29 +166,20 @@ const IntroSection = () => {
       ref={sectionRef}
       className="relative py-24 bg-[#0f172a] text-white overflow-hidden"
     >
-       <ParticlesBackground />
+      {!isMobileOrTablet && <ParticlesBackground />}
+      
       {/* Dynamické pozadí */}
       <div className="absolute inset-0 overflow-hidden">
         {renderBackgroundEffects()}
-        
-        {/* Interaktivní spotlight efekt sledující myš */}
-        <motion.div 
-          className="absolute w-[600px] h-[600px] rounded-full opacity-[0.07] pointer-events-none"
-          style={{
-            background: 'radial-gradient(circle, rgba(249, 115, 22, 0.5) 0%, rgba(15, 23, 42, 0) 70%)',
-            x: useTransform(mouseX, value => value - 300),
-            y: useTransform(mouseY, value => value - 300),
-          }}
-        />
       </div>
       
       <div className="container mx-auto px-4 relative z-10">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16">
-          {/* Levá strana - VYLEPŠENÝ FUTURISTICKÝ DESIGN */}
+          {/* Levá strana - VYLEPŠENÝ FUTURISTICKÝ DESIGN - optimalizován */}
           <motion.div 
             ref={imageRef}
             className="w-full lg:w-5/12" 
-            style={{ y: imageY }}
+            style={!isMobileOrTablet ? { y: imageY } : {}}
             variants={imageContainerVariants}
             initial="hidden"
             animate="visible"
@@ -220,174 +198,157 @@ const IntroSection = () => {
                 <div className="absolute inset-0 bg-gradient-to-br from-orange-500/30 via-orange-500/10 to-blue-500/20 rounded-lg"></div>
               </div>
               
-              {/* Pulzující vnitřní rámeček */}
-              <motion.div 
-                className="absolute inset-0 border-2 border-orange-500/30 rounded-lg"
-                style={{ 
-                  clipPath: "polygon(0% 15%, 15% 0%, 85% 0%, 100% 15%, 100% 85%, 85% 100%, 15% 100%, 0% 85%)", 
-                  width: "105%", 
-                  height: "105%", 
-                  top: "-2.5%", 
-                  left: "-2.5%" 
-                }}
-                variants={shadowPulseAnimation}
-                initial="hidden"
-                animate="visible"
-              ></motion.div>
-              
-              {/* Pulzující záře */}
-              <motion.div 
-                className="absolute"
-                style={{
-                  width: "120%",
-                  height: "120%",
-                  top: "-10%",
-                  left: "-10%",
-                  background: "radial-gradient(circle, rgba(249, 115, 22, 0.3) 0%, rgba(15, 23, 42, 0) 70%)",
-                  filter: "blur(20px)"
-                }}
-                variants={pulseAnimation}
-                initial="hidden"
-                animate="visible"
-              ></motion.div>
-              
-              {/* Rotující kruhy - zjednodušeno */}
-              <motion.div
-                className="absolute rounded-full border border-orange-500/20"
-                style={{
-                  width: "115%",
-                  height: "115%",
-                  top: "-7.5%",
-                  left: "-7.5%",
-                  borderWidth: 1,
-                }}
-                animate={{ rotate: 360 }}
-                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-              />
-              
-              {/* Technologické detaily */}
-              <div className="absolute inset-0">
-                {/* Horní levý roh */}
+              {/* Pulzující vnitřní rámeček - pouze pro desktop */}
+              {!isMobileOrTablet && (
                 <motion.div 
-                  className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-orange-500/60"
-                  animate={{ opacity: [0.6, 1, 0.6] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                ></motion.div>
-                
-                {/* Dolní pravý roh */}
-                <motion.div 
-                  className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-orange-500/60"
-                  animate={{ opacity: [0.6, 1, 0.6] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-                ></motion.div>
-                
-                {/* Orbiting particles - zjednodušeno */}
-                {[...Array(4)].map((_, i) => {
-                  const angle = (i / 4) * Math.PI * 2;
-                  const radius = 45; // % of container
-                  const centerX = 50; // %
-                  const centerY = 50; // %
+                  className="absolute inset-0 border-2 border-orange-500/30 rounded-lg"
+                  style={{ 
+                    clipPath: "polygon(0% 15%, 15% 0%, 85% 0%, 100% 15%, 100% 85%, 85% 100%, 15% 100%, 0% 85%)", 
+                    width: "105%", 
+                    height: "105%", 
+                    top: "-2.5%", 
+                    left: "-2.5%" 
+                  }}
+                  variants={shadowPulseAnimation}
+                  animate="visible"
+                />
+              )}
+              
+              {/* Rotující kruhy - pouze pro desktop */}
+              {!isMobileOrTablet && (
+                <motion.div
+                  className="absolute rounded-full border border-orange-500/20"
+                  style={{
+                    width: "115%",
+                    height: "115%",
+                    top: "-7.5%",
+                    left: "-7.5%",
+                    borderWidth: 1,
+                  }}
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                />
+              )}
+              
+              {/* Technologické detaily - pouze pro desktop */}
+              {!isMobileOrTablet && (
+                <div className="absolute inset-0">
+                  {/* Horní levý roh */}
+                  <motion.div 
+                    className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-orange-500/60"
+                    animate={{ opacity: [0.6, 1, 0.6] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                  />
                   
-                  return (
-                    <motion.div
-                      key={`orbit-particle-${i}`}
-                      className="absolute rounded-full bg-orange-500"
-                      style={{
-                        width: 3 + (i % 2),
-                        height: 3 + (i % 2),
-                        left: `${centerX + Math.cos(angle) * radius}%`,
-                        top: `${centerY + Math.sin(angle) * radius}%`,
-                        opacity: 0.7
-                      }}
-                      animate={{
-                        left: `${centerX + Math.cos(angle + Math.PI * 2) * radius}%`,
-                        top: `${centerY + Math.sin(angle + Math.PI * 2) * radius}%`,
-                      }}
-                      transition={{
-                        duration: 8 + i,
-                        repeat: Infinity,
-                        ease: "linear",
-                      }}
-                    />
-                  );
-                })}
-              </div>
+                  {/* Dolní pravý roh */}
+                  <motion.div 
+                    className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-orange-500/60"
+                    animate={{ opacity: [0.6, 1, 0.6] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+                  />
+                  
+                  {/* Orbiting particles - pouze pro desktop */}
+                  {[...Array(4)].map((_, i) => {
+                    const angle = (i / 4) * Math.PI * 2;
+                    const radius = 45;
+                    const centerX = 50;
+                    const centerY = 50;
+                    
+                    return (
+                      <motion.div
+                        key={`orbit-particle-${i}`}
+                        className="absolute rounded-full bg-orange-500"
+                        style={{
+                          width: 3 + (i % 2),
+                          height: 3 + (i % 2),
+                          left: `${centerX + Math.cos(angle) * radius}%`,
+                          top: `${centerY + Math.sin(angle) * radius}%`,
+                          opacity: 0.7
+                        }}
+                        animate={{
+                          left: `${centerX + Math.cos(angle + Math.PI * 2) * radius}%`,
+                          top: `${centerY + Math.sin(angle + Math.PI * 2) * radius}%`,
+                        }}
+                        transition={{
+                          duration: 8 + i,
+                          repeat: Infinity,
+                          ease: "linear",
+                        }}
+                      />
+                    );
+                  })}
+                </div>
+              )}
               
-              {/* Obrázek s prosvětlením */}
+              {/* Obrázek s prosvětlením - zjednodušeno pro mobil */}
               <div className="relative p-6 flex items-center justify-center">
                 <motion.div
                   className="absolute inset-0 bg-gradient-to-br from-orange-500/5 via-transparent to-blue-500/5 rounded-lg"
-                  animate={{ opacity: [0.3, 0.7, 0.3] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                ></motion.div>
+                  animate={{ opacity: isMobileOrTablet ? [0.4, 0.6, 0.4] : [0.3, 0.7, 0.3] }}
+                  transition={{ 
+                    duration: isMobileOrTablet ? 2 : 4, 
+                    repeat: Infinity, 
+                    ease: "easeInOut" 
+                  }}
+                />
                 
                 <img 
                   src="/imgs/logo5.svg" 
                   alt="Tři veselí psi" 
                   className="relative z-10 max-w-full h-auto transform scale-110" 
                 />
-                
-                {/* Interaktivní highlight kolem obrázku */}
-                <motion.div
-                  className="absolute inset-0 rounded-lg"
-                  style={{
-                    background: "radial-gradient(circle at center, rgba(249, 115, 22, 0.2) 0%, rgba(15, 23, 42, 0) 70%)",
-                    x: useTransform(mouseX, value => {
-                      if (!isClient()) return 0;
-                      return (value - (window.innerWidth/2)) / 20;
-                    }),
-                    y: useTransform(mouseY, value => {
-                      if (!isClient()) return 0;
-                      return (value - (window.innerHeight/2)) / 20;
-                    }),
-                  }}
-                ></motion.div>
               </div>
               
               {/* Futuristický štítek dole */}
-              <motion.div
+              <div
                 className="absolute bottom-[-15px] left-1/2 transform -translate-x-1/2 py-1 px-4 bg-[#0f172a] border border-orange-500/30 rounded-full z-20"
-                variants={shadowPulseAnimation}
-                initial="hidden"
-                animate="visible"
               >
                 <div className="text-xs font-mono text-orange-400 flex items-center">
                   <span className="mr-1">v</span>
                   <motion.span
-                    animate={{ opacity: [1, 0.7, 1] }}
-                    transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                    animate={{ opacity: isMobileOrTablet ? 1 : [1, 0.7, 1] }}
+                    transition={{ 
+                      duration: isMobileOrTablet ? 0 : 1.5, 
+                      repeat: isMobileOrTablet ? 0 : Infinity, 
+                      ease: "easeInOut" 
+                    }}
                   >
                     3.0
                   </motion.span>
                 </div>
-              </motion.div>
-              
-              {/* Skenující efekt */}
-              <div className="absolute inset-0 overflow-hidden"
-                style={{
-                  clipPath: "polygon(0% 15%, 15% 0%, 85% 0%, 100% 15%, 100% 85%, 85% 100%, 15% 100%, 0% 85%)", 
-                  width: "100%", 
-                  height: "100%"
-                }}>
-                <motion.div
-                  className="absolute left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-orange-500/80 to-transparent"
-                  variants={scanLineAnimation}
-                  initial="hidden"
-                  animate="visible"
-                ></motion.div>
               </div>
+              
+              {/* Skenující efekt - pouze pro desktop */}
+              {!isMobileOrTablet && (
+                <div className="absolute inset-0 overflow-hidden"
+                  style={{
+                    clipPath: "polygon(0% 15%, 15% 0%, 85% 0%, 100% 15%, 100% 85%, 85% 100%, 15% 100%, 0% 85%)", 
+                    width: "100%", 
+                    height: "100%"
+                  }}>
+                  <motion.div
+                    className="absolute left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-orange-500/80 to-transparent"
+                    animate={{ top: ["0%", "100%", "0%"] }}
+                    transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", repeatDelay: 2 }}
+                  />
+                </div>
+              )}
             </div>
           </motion.div>
           
-          {/* Pravá strana - zachována beze změn */}
+          {/* Pravá strana - optimalizovaná pro mobilní zařízení */}
           <motion.div 
             className="w-full lg:w-7/12"
-            style={{ y: textY }}
-            initial={{ opacity: 0, x: 40 }}
+            style={!isMobileOrTablet ? { y: textY } : {}}
+            initial={{ opacity: 0, x: isMobileOrTablet ? 0 : 40 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7, ease: "easeOut", delay: 0.1 }}
+            transition={{ 
+              duration: isMobileOrTablet ? 0.4 : 0.7, 
+              ease: "easeOut", 
+              delay: isMobileOrTablet ? 0 : 0.1 
+            }}
           >
-            {/* Nadpis s animovanými tečkami */}
+            {/* Nadpis s animovanými tečkami - zjednodušeno pro mobil */}
             <div className="mb-8 flex items-center">
               <div className="flex space-x-1.5 mr-4">
                 {[...Array(3)].map((_, i) => (
@@ -395,15 +356,15 @@ const IntroSection = () => {
                     key={`header-dot-${i}`}
                     className="w-2 h-2 rounded-full bg-orange-500"
                     animate={{ 
-                      opacity: [0.6, 1, 0.6],
-                      scale: [1, 1.2, 1]
+                      opacity: isMobileOrTablet ? (0.6 + (i * 0.1)) : [0.6, 1, 0.6],
+                      scale: isMobileOrTablet ? 1 : [1, 1.2, 1]
                     }}
-                    transition={{ 
+                    transition={!isMobileOrTablet ? { 
                       duration: 2,
                       delay: i * 0.3,
                       repeat: Infinity,
                       ease: "easeInOut"
-                    }}
+                    } : {}}
                   />
                 ))}
               </div>
@@ -413,16 +374,23 @@ const IntroSection = () => {
                   className="absolute left-0 bottom-[-8px] h-1 bg-gradient-to-r from-orange-500 to-orange-400 rounded-full"
                   initial={{ width: 0 }}
                   animate={{ width: '100%' }}
-                  transition={{ duration: 0.8, ease: "easeOut", delay: 0.4 }}
+                  transition={{ 
+                    duration: isMobileOrTablet ? 0.5 : 0.8, 
+                    ease: "easeOut", 
+                    delay: isMobileOrTablet ? 0.2 : 0.4 
+                  }}
                 />
               </h2>
             </div>
             
             {/* BOX S PŘESVĚDČIVÝM TEXTEM */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: isMobileOrTablet ? 10 : 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
+              transition={{ 
+                duration: isMobileOrTablet ? 0.4 : 0.6, 
+                delay: isMobileOrTablet ? 0.1 : 0.3 
+              }}
               className="relative"
             >
               <div className="p-6 rounded-lg bg-slate-800/60 backdrop-blur-sm border border-orange-500/20 shadow-lg relative overflow-hidden">
@@ -457,21 +425,27 @@ const IntroSection = () => {
               <div className="absolute -bottom-1 -right-1 w-3 h-3 border-b-2 border-r-2 border-orange-500/50" />
             </motion.div>
             
-            {/* SEKCE PRO IKONKY SLUŽEB - VYLEPŠENÁ S ODKAZY A HOVER EFEKTY */}
+            {/* SEKCE PRO IKONKY SLUŽEB - OPTIMALIZOVANÁ */}
             <motion.div
               className="mt-8"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.7 }}
+              transition={{ 
+                duration: isMobileOrTablet ? 0.5 : 0.8, 
+                delay: isMobileOrTablet ? 0.2 : 0.7 
+              }}
             >
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {services.map((service, index) => (
                   <Link href={service.link} key={service.id}>
                     <motion.div
                       className="p-4 bg-slate-800/40 border border-orange-500/20 rounded-lg transition-all duration-300 group relative overflow-hidden cursor-pointer"
-                      initial={{ opacity: 0, y: 20 }}
+                      initial={{ opacity: 0, y: isMobileOrTablet ? 10 : 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.4, delay: 0.7 + index * 0.1 }}
+                      transition={{ 
+                        duration: isMobileOrTablet ? 0.3 : 0.4, 
+                        delay: isMobileOrTablet ? (0.2 + index * 0.05) : (0.7 + index * 0.1) 
+                      }}
                       onHoverStart={() => !isMobileOrTablet && setHoveredServiceId(service.id)}
                       onHoverEnd={() => !isMobileOrTablet && setHoveredServiceId(null)}
                       whileHover={!isMobileOrTablet ? { 
@@ -544,9 +518,9 @@ const IntroSection = () => {
                           />
                         )}
                         
-                        {/* Text zobrazení služby - samostatný prostor - pouze na desktopu */}
+                        {/* Text zobrazení služby - pouze na desktopu */}
                         {!isMobileOrTablet && (
-                          <div className="h-5 mt-2 relative"> {/* Vyhrazený prostor pro "Zobrazit" text */}
+                          <div className="h-5 mt-2 relative">
                             <motion.div
                               className="absolute left-0 right-0 text-xs text-orange-400/80 flex items-center justify-center"
                               initial={{ opacity: 0, y: 5 }}
@@ -570,12 +544,15 @@ const IntroSection = () => {
               </div>
             </motion.div>
             
-            {/* Tlačítko portfolia */}
+            {/* Tlačítko portfolia - zjednodušeno pro mobil */}
             <motion.div
               className="mt-10"
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: isMobileOrTablet ? 10 : 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.9 }}
+              transition={{ 
+                duration: isMobileOrTablet ? 0.3 : 0.5, 
+                delay: isMobileOrTablet ? 0.3 : 0.9
+              }}
             >
               <a 
                 href="/portfolio" 
@@ -585,10 +562,12 @@ const IntroSection = () => {
                 <span className="absolute inset-0 bg-gradient-to-r from-orange-600 to-orange-500 transition-all duration-300 
                               group-hover:from-orange-500 group-hover:to-orange-600" />
                 
-                {/* Efekt světla při hoveru */}
-                <span className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                  <span className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000"></span>
-                </span>
+                {/* Efekt světla při hoveru - pouze pro desktop */}
+                {!isMobileOrTablet && (
+                  <span className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    <span className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000"></span>
+                  </span>
+                )}
                 
                 {/* Text tlačítka */}
                 <span className="relative flex items-center z-10">

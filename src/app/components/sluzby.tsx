@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import ParticlesBackground from "./ParticlesBakckground";
 import { 
   Globe, 
   ShoppingCart, 
@@ -65,7 +66,7 @@ const serviceCategories: ServiceCategory[] = [
   },
   {
     id: "interactive",
-    title: "Interaktivní cvičení",
+    title: "Interaktivní kvízy",
     description: "E‑learningové moduly pro ZŠ a SŠ: kvízy, úlohy a SCORM export.",
     icon: ActivitySquare,
     color: "#818CF8", // indigo
@@ -89,33 +90,22 @@ const particleSettings = [
   { left: 40, leftOffset: -3, delay: 2.5, duration: 10, color: "#38BDF8" },
   { left: 65, leftOffset: 4, delay: 3.8, duration: 11, color: "#F97316" },
   { left: 80, leftOffset: -2, delay: 1.9, duration: 8, color: "#38BDF8" },
-  { left: 35, leftOffset: 3, delay: 4.2, duration: 12, color: "#F97316" },
-  { left: 55, leftOffset: -4, delay: 2.1, duration: 9, color: "#38BDF8" },
-  { left: 90, leftOffset: 2, delay: 3.4, duration: 10, color: "#F97316" },
-  { left: 20, leftOffset: -3, delay: 1.8, duration: 11, color: "#38BDF8" },
-  { left: 70, leftOffset: 5, delay: 2.7, duration: 9, color: "#F97316" },
-  { left: 45, leftOffset: -2, delay: 3.3, duration: 10, color: "#38BDF8" },
-  { left: 85, leftOffset: 4, delay: 1.5, duration: 12, color: "#F97316" },
-  { left: 30, leftOffset: -5, delay: 2.9, duration: 8, color: "#38BDF8" },
-  { left: 60, leftOffset: 3, delay: 3.7, duration: 11, color: "#F97316" },
-  { left: 15, leftOffset: -4, delay: 1.4, duration: 9, color: "#38BDF8" },
-  { left: 50, leftOffset: 2, delay: 2.6, duration: 10, color: "#F97316" }
+  { left: 35, leftOffset: 3, delay: 4.2, duration: 12, color: "#F97316" }
 ];
 
 // FIXNÍ HODNOTY PRO SVĚTELNÉ PRUHY
 const beamSettings = [
   { width: 130, height: 1.2, color: "#F97316" },
   { width: 125, height: 1.5, color: "#38BDF8" },
-  { width: 120, height: 1.3, color: "#F97316" },
-  { width: 135, height: 1.1, color: "#38BDF8" },
-  { width: 128, height: 1.4, color: "#F97316" }
+  { width: 120, height: 1.3, color: "#F97316" }
 ];
 
-// Komponenta pro futuristické animované pozadí - výraznější animace
-const FuturisticBackground: React.FC = () => {
+// Komponenta pro futuristické pozadí - STATICKÉ VERZE místo animací
+const StaticBackground: React.FC = () => {
   return (
     <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-     
+       <ParticlesBackground/>
+      {/* Mřížka na pozadí - ponecháno beze změn */}
       <div className="absolute inset-0 opacity-[0.05]" 
         style={{
           backgroundImage: 
@@ -125,136 +115,75 @@ const FuturisticBackground: React.FC = () => {
         }} 
       />
       
-      
-      <motion.div 
+      {/* Statický kruh místo animovaného */}
+      <div 
         className="absolute w-[800px] h-[800px] rounded-full opacity-10"
         style={{
           top: '50%',
           left: '50%',
-          x: '-50%',
-          y: '-50%',
+          transform: 'translate(-50%, -50%)',
           background: 'radial-gradient(circle, rgba(249, 115, 22, 0.2) 0%, rgba(15, 23, 42, 0) 70%)',
           filter: 'blur(40px)'
         }}
-        animate={{
-          scale: [1, 1.1, 1],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
       />
       
-      
-      <motion.div 
+      {/* Statický hexagon místo animovaného */}
+      <div 
         className="absolute"
         style={{
           width: '1000px',
           height: '1000px',
           top: '50%',
           left: '50%',
-          x: '-50%',
-          y: '-50%',
+          transform: 'translate(-50%, -50%)',
           clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
           border: '1px solid rgba(249, 115, 22, 0.1)',
           opacity: 0.15
         }}
-        animate={{
-          rotate: [0, 360],
-        }}
-        transition={{
-          duration: 180,
-          repeat: Infinity,
-          ease: "linear"
-        }}
       />
       
-      <motion.div 
+      {/* Statický vnitřní hexagon */}
+      <div 
         className="absolute"
         style={{
           width: '800px',
           height: '800px',
           top: '50%',
           left: '50%',
-          x: '-50%',
-          y: '-50%',
+          transform: 'translate(-50%, -50%)',
           clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
           border: '1px solid rgba(56, 189, 248, 0.1)',
           opacity: 0.15
         }}
-        animate={{
-          rotate: [360, 0],
-        }}
-        transition={{
-          duration: 180,
-          repeat: Infinity,
-          ease: "linear"
-        }}
       />
       
       
-      {particleSettings.map((particle, i) => (
-        <motion.div
-          key={`bright-particle-${i}`}
-          className="absolute w-1 h-1 rounded-full z-10"
-          style={{
-            backgroundColor: particle.color,
-            boxShadow: `0 0 10px ${particle.color}`,
-            left: `${particle.left}%`,
-            top: '100%',
-          }}
-          animate={{
-            top: [null, '-10%'],
-            left: [null, `${particle.left + particle.leftOffset}%`],
-            opacity: [0, 0.8, 0]
-          }}
-          transition={{
-            duration: particle.duration,
-            repeat: Infinity,
-            delay: particle.delay,
-            ease: "easeOut",
-            times: [0, 0.6, 1]
-          }}
-        />
-      ))}
       
-     
+      {/* Statické světelné pruhy místo pohyblivých */}
       {beamSettings.map((beam, i) => {
         const topPosition = 20 + i * 15;
-        const delay = i * 2;
         
         return (
-          <motion.div
-            key={`light-beam-${i}`}
+          <div
+            key={`static-beam-${i}`}
             className="absolute"
             style={{
               width: `${beam.width}%`,
               height: `${beam.height}px`,
-              left: '-50%',
+              left: '25%',
               top: `${topPosition}%`,
               background: `linear-gradient(90deg, transparent, ${beam.color}50, transparent)`,
               opacity: 0.15,
               filter: 'blur(2px)'
             }}
-            animate={{
-              left: ['-50%', '100%'],
-              opacity: [0, 0.15, 0]
-            }}
-            transition={{
-              duration: 12,
-              repeat: Infinity,
-              delay,
-              ease: "linear"
-            }}
           />
         );
       })}
       
-      
+      {/* Statické kruhy místo animovaných koncentrických kruhů */}
       {[...Array(3)].map((_, i) => (
-        <motion.div
-          key={`light-circle-${i}`}
+        <div
+          key={`static-circle-${i}`}
           className="absolute rounded-full"
           style={{
             width: `${400 + i * 200}px`,
@@ -263,17 +192,7 @@ const FuturisticBackground: React.FC = () => {
             opacity: 0.1,
             top: '50%',
             left: '50%',
-            x: '-50%',
-            y: '-50%',
-          }}
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.1, 0.15, 0.1]
-          }}
-          transition={{
-            duration: 15 + i * 5,
-            repeat: Infinity,
-            ease: "easeInOut"
+            transform: 'translate(-50%, -50%)',
           }}
         />
       ))}
@@ -287,7 +206,7 @@ interface ServiceCategoryCardProps {
   index: number;
 }
 
-// Futuristická karta služby - bez procent a progress baru
+// Futuristická karta služby - OPRAVENO: odstranění blur a špatného scale efektu při hoveru
 const ServiceCategoryCard: React.FC<ServiceCategoryCardProps> = ({ category, index }) => {
   const [isHovered, setIsHovered] = useState(false);
   
@@ -308,26 +227,23 @@ const ServiceCategoryCard: React.FC<ServiceCategoryCardProps> = ({ category, ind
         onMouseLeave={() => setIsHovered(false)}
       >
         <motion.div
+          // OPRAVENO: Odstranění scale efektu, který způsoboval nežádoucí změnu velikosti
           whileHover={{ 
-            scale: 1.02,
+            boxShadow: `0 0 15px ${category.color}40`,
             transition: { duration: 0.2 } 
           }}
           className="relative overflow-hidden rounded-lg h-full flex flex-col"
-          style={{
-            boxShadow: isHovered ? `0 0 15px ${category.color}40` : 'none',
-            transition: 'box-shadow 0.3s ease'
-          }}
         >
         
           <div className="absolute inset-0 border border-slate-700/30 rounded-lg z-10"></div>
           
-          
+          {/* Rohové akcenty */}
           <div className="absolute top-0 left-0 w-3 h-3 border-t border-l rounded-tl-lg opacity-70" style={{ borderColor: category.color }}></div>
           <div className="absolute top-0 right-0 w-3 h-3 border-t border-r rounded-tr-lg opacity-70" style={{ borderColor: category.color }}></div>
           <div className="absolute bottom-0 left-0 w-3 h-3 border-b border-l rounded-bl-lg opacity-70" style={{ borderColor: category.color }}></div>
           <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r rounded-br-lg opacity-70" style={{ borderColor: category.color }}></div>
           
-          
+          {/* Spodní gradient */}
           <div 
             className="absolute bottom-0 left-0 right-0 h-1 z-10 opacity-70"
             style={{ 
@@ -335,49 +251,43 @@ const ServiceCategoryCard: React.FC<ServiceCategoryCardProps> = ({ category, ind
             }}
           ></div>
           
-          
+          {/* Hlavní obsah karty */}
           <div 
             className="relative p-6 h-full flex flex-col rounded-lg z-0 bg-[#111827]/70 backdrop-blur-sm transition-all duration-300"
           >
+           
             
-            <motion.div 
-              className="absolute inset-0 opacity-0 pointer-events-none rounded-lg"
+            {/* OPRAVENO: Upraveno pozadí při hoveru - bez blur efektu, pouze změna opacity */}
+            <div 
+              className="absolute inset-0 pointer-events-none rounded-lg transition-opacity duration-300"
               style={{ 
-                background: `radial-gradient(circle at center, ${category.color}15 0%, transparent 70%)` 
+                background: `radial-gradient(circle at center, ${category.color}15 0%, transparent 70%)`,
+                opacity: isHovered ? 0.8 : 0
               }}
-              animate={{ 
-                opacity: isHovered ? 0.8 : 0,
-              }}
-              transition={{ duration: 0.3 }}
             />
             
-           
+            {/* Ikona */}
             <div className="flex justify-center mb-5">
-              <motion.div 
-                className="relative p-3 rounded-full"
+              <div 
+                className="relative p-3 rounded-full transition-all duration-300"
                 style={{ 
                   color: category.color,
                   filter: `drop-shadow(0 0 8px ${category.color}70)`,
-                  backgroundColor: `${category.color}15`
-                }}
-                animate={{
-                  boxShadow: isHovered ? `0 0 15px ${category.color}40` : `0 0 5px ${category.color}20`,
-                }}
-                transition={{
-                  duration: 0.3
+                  backgroundColor: `${category.color}15`,
+                  boxShadow: isHovered ? `0 0 15px ${category.color}40` : `0 0 5px ${category.color}20`
                 }}
               >
                 <category.icon className="w-8 h-8" />
-              </motion.div>
+              </div>
             </div>
             
-           
+            {/* Název a popis */}
             <div className="text-center mb-6">
               <h3 className="text-xl font-bold text-white mb-3">{category.title}</h3>
               <p className="text-sm text-gray-300 line-clamp-3">{category.description}</p>
             </div>
             
-            
+            {/* Tlačítko */}
             <div className="flex justify-center mt-auto">
               <motion.div 
                 className="flex items-center px-4 py-2 rounded text-sm font-medium transition-colors relative overflow-hidden"
@@ -420,10 +330,18 @@ const ServiceCategoryCard: React.FC<ServiceCategoryCardProps> = ({ category, ind
 
 // Hlavní komponenta
 const ServiceCategoriesSection: React.FC = () => {
+  const [mounted, setMounted] = useState(false);
+  
+  // Použijeme useEffect pro řešení hydratačních problémů
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  
   return (
     <section className="min-h-screen py-24 px-6 bg-[#0f172a] text-white relative overflow-hidden">
       
-      <FuturisticBackground />
+      {/* Statické pozadí místo animovaného */}
+      <StaticBackground />
       
       <div className="max-w-7xl mx-auto relative z-10">
         
@@ -437,7 +355,7 @@ const ServiceCategoriesSection: React.FC = () => {
           </Link>
         </div>
         
-      
+        {/* Nadpis sekce */}
         <div className="text-center relative mb-16">
         
           <div className="flex items-center justify-center gap-4 mb-4">
@@ -448,38 +366,42 @@ const ServiceCategoriesSection: React.FC = () => {
           
           <h2 className="text-4xl sm:text-3xl md:text-4xl lg:text-5xl text-white font-extrabold tracking-tight relative inline-block">
             Služby a ceník
-            <motion.div
-              initial={{ scaleX: 0, opacity: 0 }}
-              animate={{ scaleX: 1, opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-              className="absolute right-1/5 -translate-x-2/3 bottom-[-10px] h-[3px] w-full bg-gradient-to-r from-orange-600 to-orange-400 rounded-full origin-center"
-            />
+            {mounted && (
+              <motion.div
+                initial={{ scaleX: 0, opacity: 0 }}
+                animate={{ scaleX: 1, opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+                className="absolute right-1/5 -translate-x-2/3 bottom-[-10px] h-[3px] w-full bg-gradient-to-r from-orange-600 to-orange-400 rounded-full origin-center"
+              />
+            )}
           </h2>
           
           
           <div className="flex justify-center mt-4">
-            <motion.div 
-              className="flex items-center space-x-2 text-xs font-mono text-orange-500/80"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
-            >
-              <span>{'//'}</span>
+            {mounted && (
               <motion.div 
-                className="h-px w-8 bg-orange-500/40"
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ delay: 0.9, duration: 0.4 }}
-              />
-              <span className="tracking-wider">VŠECHNY KATEGORIE</span>
-              <motion.div 
-                className="h-px w-8 bg-orange-500/40"
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ delay: 0.9, duration: 0.4 }}
-              />
-              <span>{'//'}</span>
-            </motion.div>
+                className="flex items-center space-x-2 text-xs font-mono text-orange-500/80"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.8 }}
+              >
+                <span>{'//'}</span>
+                <motion.div 
+                  className="h-px w-8 bg-orange-500/40"
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ delay: 0.9, duration: 0.4 }}
+                />
+                <span className="tracking-wider">VŠECHNY KATEGORIE</span>
+                <motion.div 
+                  className="h-px w-8 bg-orange-500/40"
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ delay: 0.9, duration: 0.4 }}
+                />
+                <span>{'//'}</span>
+              </motion.div>
+            )}
           </div>
         </div>
         
@@ -487,7 +409,7 @@ const ServiceCategoriesSection: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-fr">
           {serviceCategories.map((category, index) => (
             <ServiceCategoryCard 
-              key={category.id} // Změněno - odstraněn index z klíče pro lepší stabilitu
+              key={category.id}
               category={category} 
               index={index} 
             />
