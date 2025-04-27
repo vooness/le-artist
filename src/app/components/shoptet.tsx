@@ -482,7 +482,7 @@ const ShoptetServicesPage: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
               <PricingPackage
                 title="Základní e-shop"
-                price="od 15 000 Kč"
+                price="od 25 000 Kč"
                 features={[
                   "Základní nastavení Shoptet",
                   "Úprava šablony",
@@ -497,7 +497,7 @@ const ShoptetServicesPage: React.FC = () => {
               
               <PricingPackage
                 title="Business e-shop"
-                price="od 25 000 Kč"
+                price="od 35 000 Kč"
                 features={[
                   "Kompletní nastavení Shoptet",
                   "Vlastní úpravy šablony",
@@ -513,7 +513,7 @@ const ShoptetServicesPage: React.FC = () => {
               
               <PricingPackage
                 title="Premium e-shop"
-                price="od 40 000 Kč"
+                price="od 50 000 Kč"
                 features={[
                   "Komplexní individuální řešení",
                   "Vlastní design",

@@ -7,7 +7,7 @@ import ParticlesBackground from "./ParticlesBakckground";
 
 export const HeroSection: React.FC = () => {
   return (
-    <section className="relative bg-[#0f172a] text-white py-12 sm:py-20 lg:py-28 flex flex-col items-center justify-center overflow-hidden px-6 sm:px-8 lg:px-20 min-h-screen">
+    <section className="relative bg-[#0c1320] text-white py-12 sm:py-20 lg:py-28 flex flex-col items-center justify-center overflow-hidden px-6 sm:px-8 lg:px-20 min-h-screen">
        <ParticlesBackground />
      
       <div className="absolute inset-0 z-0">

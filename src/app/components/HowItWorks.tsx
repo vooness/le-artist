@@ -2,6 +2,8 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { motion, useAnimation, useInView } from "framer-motion";
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
 import { 
   FaHandshake, 
   FaBrain, 
@@ -13,7 +15,9 @@ import {
   FaShieldAlt,
   FaRegLightbulb,
   FaRegClock,
-  FaArrowRight
+  FaArrowRight,
+  FaArrowDown,
+  FaChevronDown
 } from "react-icons/fa";
 
 // Definice rozhraní pro krok
@@ -209,6 +213,62 @@ const steps: StepInfo[] = [
   },
 ];
 
+// Komponenta pro animovanou šipku
+const AnimatedArrow = () => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.2 });
+  const [isMobile, setIsMobile] = useState(true);
+  
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const checkIsMobile = () => {
+        setIsMobile(window.innerWidth < 768);
+      };
+      
+      checkIsMobile();
+      window.addEventListener('resize', checkIsMobile);
+      
+      return () => {
+        window.removeEventListener('resize', checkIsMobile);
+      };
+    }
+  }, []);
+
+  if (isMobile) {
+    return (
+      <div ref={ref} className="flex justify-center my-6">
+        <div className="text-orange-500 text-3xl">
+          <FaChevronDown />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div ref={ref} className="flex justify-center my-6">
+      <motion.div 
+        className="text-orange-500 text-3xl"
+        initial={{ y: -10, opacity: 0 }}
+        animate={isInView ? { 
+          y: [0, 10, 0],
+          opacity: 1
+        } : {}}
+        transition={{
+          y: {
+            duration: 1.5,
+            repeat: Infinity,
+            repeatType: "reverse",
+            ease: "easeInOut"
+          },
+          opacity: { duration: 0.5 }
+        }}
+      >
+        <FaChevronDown />
+      </motion.div>
+    </div>
+  );
+};
+
 // Komponenta pro jeden krok procesu
 const ProcessStep = ({ step }: { step: StepInfo }) => {
   const ref = useRef(null);
@@ -232,26 +292,8 @@ const ProcessStep = ({ step }: { step: StepInfo }) => {
   }, []);
 
   return (
-    <div ref={ref} className="relative mb-24 last:mb-8">
-      {/* Vertikální spojovací čára mezi kroky */}
-      {step.step < steps.length && (
-        <div className="absolute left-1/2 transform -translate-x-1/2 top-full h-24 w-px">
-          <div className="h-full bg-gradient-to-b from-orange-500 to-transparent"></div>
-          {!isMobile && (
-            <motion.div 
-              className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3 h-3 rounded-full bg-orange-500"
-              initial={{ scale: 0, opacity: 0 }}
-              animate={isInView ? { scale: 1, opacity: 1 } : {}}
-              transition={{ duration: 0.5, delay: 0.6 }}
-            />
-          )}
-          {isMobile && (
-            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3 h-3 rounded-full bg-orange-500"></div>
-          )}
-        </div>
-      )}
-
-      {/* Číslo kroku s velkou ikonou */}
+    <div ref={ref} className="relative mb-12 last:mb-8">
+      {/* Číslo kroku s velkou ikonou - pouze na desktopu */}
       {!isMobile ? (
         <motion.div 
           className="hidden lg:block absolute -left-10 top-8"
@@ -262,7 +304,7 @@ const ProcessStep = ({ step }: { step: StepInfo }) => {
           <div className="relative text-9xl font-bold text-orange-500/10">{step.step}</div>
         </motion.div>
       ) : (
-        <div className="hidden lg:block absolute -left-10 top-8 opacity-50">
+        <div className="hidden lg:block absolute -left-10 top-8 opacity-10">
           <div className="relative text-9xl font-bold text-orange-500/10">{step.step}</div>
         </div>
       )}
@@ -282,13 +324,7 @@ const ProcessStep = ({ step }: { step: StepInfo }) => {
             <div className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-orange-500/80"></div>
             <div className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-orange-500/80"></div>
             
-            {/* Skenující efekt - pouze na desktopu */}
-            <motion.div 
-              className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-orange-500/60 to-transparent z-10"
-              initial={{ top: "0%", opacity: 0 }}
-              animate={isInView ? { top: ["0%", "100%"], opacity: [0, 1, 0] } : {}}
-              transition={{ duration: 2, delay: 0.5, ease: "linear" }}
-            />
+           
             
             {/* Hlavička karty */}
             <div className="bg-[#111927] border-b border-orange-500/30 p-4">
@@ -454,6 +490,9 @@ const ProcessStep = ({ step }: { step: StepInfo }) => {
           </div>
         </div>
       )}
+
+      {/* Šipka ukazující na další krok, pokud není poslední */}
+      {step.step < steps.length && <AnimatedArrow />}
     </div>
   );
 };
@@ -503,6 +542,17 @@ const HowItWorks: React.FC = () => {
       </div>
       
       <div className="max-w-6xl mx-auto relative z-10 mt-12">
+        {/* Přidaný odkaz na hlavní stránku */}
+        <div className="mb-10">
+          <Link 
+            href="/" 
+            className="inline-flex items-center text-gray-400 hover:text-orange-500 transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            <span>Zpátky na hlavní stránku</span>
+          </Link>
+        </div>
+        
         {/* Hlavička sekce */}
         {!isMobile && isMounted ? (
           <motion.div
@@ -540,7 +590,7 @@ const HowItWorks: React.FC = () => {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.4 }}
             >
-              Jak vytváříme{" "}
+              Jak vytvářím{" "}
               <motion.span 
                 className="text-orange-500 relative inline-block"
                 initial={{ opacity: 0 }}
@@ -584,7 +634,7 @@ const HowItWorks: React.FC = () => {
             </div>
             
             <h2 className="text-4xl md:text-5xl font-bold text-white mt-6 mb-8">
-              Jak vytváříme <span className="text-orange-500">váš web</span>
+              Jak vytvářím <span className="text-orange-500">váš web</span>
             </h2>
             
             <div className="h-1 w-36 bg-gradient-to-r from-transparent via-orange-500 to-transparent mx-auto mb-8"></div>

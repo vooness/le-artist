@@ -3,33 +3,33 @@
 import React, { useEffect, useState } from "react"
 import Link from "next/link"
 
-// Příklady projektů
+/// Příklady projektů
 const projects = [
   {
-    title: "E-shop pro módní značku",
-    description: "Kompletní řešení e-commerce platformy s automatizovaným zpracováním objednávek a personalizací pro zákazníky.",
-    category: "E-commerce",
-    technologies: ["React", "Next.js", "Stripe", "MongoDB"],
-    image: "/api/placeholder/600/400",
-    result: "42% nárůst konverzí, 68% snížení míry opuštění košíku"
+    title: "EdukoPlatform",
+    description: "Zabezpečená vzdělávací platforma s interaktivními cvičeními a animacemi propojenými s odkazy v učebnicích. Přístup je umožněn pouze přes zabezpečené odkazy s tokeny.",
+    category: "Vzdělávací software",
+    technologies: ["React", "Node.js", "JWT", "MongoDB", "GSAP Animations"],
+    image: "/imgs/web3.png",
+    result: "87% studentů hodnotí platformu jako velmi užitečnou, 34% zlepšení studijních výsledků"
   },
   {
-    title: "Rezervační systém pro restauraci",
-    description: "Intuitivní rezervační systém s automatickými upomínkami, integrací s POS a správou stolu v reálném čase.",
+    title: "Království zdraví e-shop",
+    description: "Komplexní úprava Shoptet šablony, rozšíření funkcionalit a stylů pro e-shop Království zdraví. Vytvořeno několik vlastních modulů a přizpůsobení pro zlepšení uživatelského zážitku.",
+    category: "E-commerce úpravy",
+    technologies: ["Shoptet", "CSS/SCSS", "JavaScript", "HTML5", ],
+    image: "/imgs/kz.png",
+    result: "43% nárůst objednávek, 28% prodloužení času stráveného na stránce"
+  },
+  {
+    title: "Filmová databáze",
+    description: "Aplikace pro vyhledávání filmů s využitím externího API. Umožňuje filtrování podle žánrů, hodnocení a roku vydání, ukládání oblíbených filmů a vytváření vlastních seznamů.",
     category: "Webová aplikace",
-    technologies: ["Vue.js", "Node.js", "PostgreSQL", "Twilio API"],
-    image: "/api/placeholder/600/400",
-    result: "32% méně nevyužitých rezervací, 27% nárůst obsazenosti"
-  },
-  {
-    title: "Firemní intranet",
-    description: "Komplexní intranetový systém s moduly pro HR, správu dokumentů a interní komunikaci.",
-    category: "Podnikový software",
-    technologies: ["React", "GraphQL", "AWS", "Firebase Auth"],
-    image: "/api/placeholder/600/400",
-    result: "45% úspora času při administrativních procesech"
+    technologies: ["React", "Tailwind CSS", "REST API", "LocalStorage"],
+    image: "/imgs/movie.png",
+    result: "Přes 5,000 aktivních uživatelů během prvního měsíce"
   }
-]
+];
 
 const ProjectsSection = () => {
   // State pro postupné zobrazení prvků

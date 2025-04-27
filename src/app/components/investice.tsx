@@ -399,7 +399,7 @@ const InvestmentSection = () => {
             <div className="relative group">
               <div className="absolute -inset-1 bg-gradient-to-r from-orange-500 to-orange-400 rounded-md blur opacity-50 group-hover:opacity-75 transition-opacity"></div>
               <a 
-                href="#contact" 
+                href="/kontakt" 
                 className="relative block text-center py-3 md:py-4 px-6 md:px-8 bg-orange-500 hover:bg-orange-600 text-black font-medium rounded-md transition-all duration-300 group overflow-hidden"
               >
                 <span className="relative z-10 flex items-center justify-center font-bold">

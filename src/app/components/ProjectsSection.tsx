@@ -265,24 +265,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
               className="w-full h-auto object-cover rounded-lg lg:max-h-[600px] pointer-events-none relative transition-transform duration-1000 scale-100 group-hover:scale-105"
             />
             
-            {/* Overlay efekt s odkazem */}
-            <div 
-              className={`absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/60 to-slate-900/30 transition-opacity duration-300 flex flex-col items-center justify-center ${isHovered ? 'opacity-100' : 'opacity-0'}`}
-            >
-              <a 
-                href={project.link} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-orange-400 font-semibold border border-orange-500/30 px-4 py-2 rounded-md bg-slate-900/40 backdrop-blur-sm hover:bg-orange-500/20 transition-colors"
-              >
-                <div className="flex items-center">
-                  <span>Navštívit projekt</span>
-                  <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                  </svg>
-                </div>
-              </a>
-            </div>
+            
           </div>
           
           {/* Text on the right */}
@@ -424,24 +407,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
               className="w-full h-auto object-cover rounded-lg lg:max-h-[600px] pointer-events-none relative transition-transform duration-1000 scale-100 group-hover:scale-105"
             />
             
-            {/* Overlay efekt s odkazem */}
-            <div 
-              className={`absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/60 to-slate-900/30 transition-opacity duration-300 flex flex-col items-center justify-center ${isHovered ? 'opacity-100' : 'opacity-0'}`}
-            >
-              <a 
-                href={project.link} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-orange-400 font-semibold border border-orange-500/30 px-4 py-2 rounded-md bg-slate-900/40 backdrop-blur-sm hover:bg-orange-500/20 transition-colors"
-              >
-                <div className="flex items-center">
-                  <span>Navštívit projekt</span>
-                  <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                  </svg>
-                </div>
-              </a>
-            </div>
+            
           </div>
         </>
       )}
@@ -501,9 +467,30 @@ const ProjectsSection: React.FC = () => {
         ))}
       </div>
 
-      <div className="max-w-7xl mx-auto relative z-10 mt-12">
+      <div className="max-w-7xl mx-auto relative z-10">
+        {/* Nově přidaný odkaz "Zpátky na hlavní stránku" */}
+        <div className="mb-12">
+          <motion.a
+            href="/"
+            className="inline-flex items-center text-orange-400 hover:text-orange-300 transition-colors group"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4 }}
+          >
+            <svg 
+              className="w-5 h-5 mr-2 transform transition-transform group-hover:-translate-x-1" 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            <span className="font-medium">Zpátky na hlavní stránku</span>
+          </motion.a>
+        </div>
+
         {/* Section Header */}
-        <div className="text-center mb-20">
+        <div className="text-center mb-20 mt-12">
           <FuturisticSectionTitle>Moje Projekty</FuturisticSectionTitle>
           <motion.p 
             className="text-gray-400 text-xl max-w-3xl mx-auto leading-loose mt-10"
@@ -528,38 +515,116 @@ const ProjectsSection: React.FC = () => {
           ))}
         </motion.div>
         
-        {/* Final CTA - vylepšený */}
-        <div className="relative mt-32 bg-slate-900/50 border border-orange-500/10 rounded-xl p-8 backdrop-blur-sm">
-          {/* Dekorativní prvky */}
-          <div className="absolute top-0 left-0 w-16 h-16">
-            <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-orange-500/60"></div>
+ {/* Premium CTA s vylepšeným designem */}
+<div className="relative mt-32 overflow-hidden">
+  {/* Hlavní container s gradientem a efekty */}
+  <div className="relative bg-gradient-to-br from-[#131b2f] via-[#1a2133] to-[#151e32] rounded-xl border border-orange-500/20 p-12 shadow-2xl backdrop-blur-sm">
+    {/* Dekorativní prvky a efekty */}
+    <div className="absolute top-0 left-0 w-[5px] h-full bg-gradient-to-b from-orange-500 to-orange-500/10"></div>
+    <div className="absolute bottom-0 right-0 w-[5px] h-full bg-gradient-to-t from-orange-500 to-orange-500/10"></div>
+    
+    {/* Vrchní horizontální linie */}
+    <div className="absolute top-0 left-[5px] right-0 h-[1px] bg-gradient-to-r from-orange-500 to-transparent"></div>
+    
+    {/* Spodní horizontální linie */}
+    <div className="absolute bottom-0 right-[5px] left-0 h-[1px] bg-gradient-to-l from-orange-500 to-transparent"></div>
+    
+    {/* Rohové dekorace */}
+    <div className="absolute top-0 left-0 w-20 h-20">
+      <div className="absolute top-0 left-0 w-8 h-8 border-t-[3px] border-l-[3px] border-orange-500/80"></div>
+    </div>
+    <div className="absolute bottom-0 right-0 w-20 h-20">
+      <div className="absolute bottom-0 right-0 w-8 h-8 border-b-[3px] border-r-[3px] border-orange-500/80"></div>
+    </div>
+    
+    {/* Dekorativní body - "tech" efekt */}
+    <div className="absolute top-[30%] left-[5%] w-2 h-2 bg-orange-500/30 rounded-full" style={{ boxShadow: '0 0 15px rgba(249, 115, 22, 0.5)' }}></div>
+    <div className="absolute bottom-[25%] right-[8%] w-1 h-1 bg-orange-500/40 rounded-full" style={{ boxShadow: '0 0 10px rgba(249, 115, 22, 0.6)' }}></div>
+    
+    {/* Subtilní síťový vzor na pozadí */}
+    <div className="absolute inset-0 opacity-5">
+      <div className="h-full w-full" 
+        style={{
+          backgroundImage: `linear-gradient(to right, rgba(249,115,22,0.3) 1px, transparent 1px), 
+                            linear-gradient(to bottom, rgba(249,115,22,0.3) 1px, transparent 1px)`,
+          backgroundSize: '30px 30px'
+        }}
+      />
+    </div>
+
+    {/* Obsah */}
+    <div className="relative z-10 text-center max-w-3xl mx-auto">
+      <div className="inline-block relative">
+        <h3 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
+          Máte vlastní nápad na projekt?
+        </h3>
+        <div className="mt-2 h-[3px] w-1/3 bg-gradient-to-r from-orange-500 to-transparent mx-auto"></div>
+      </div>
+      
+      <p className="text-gray-300 my-8 text-lg leading-relaxed">
+        Specializuji se na komplexní webové aplikace, e-shopy a interaktivní prezentace.
+        <span className="block mt-2">
+          Společně můžeme váš nápad proměnit v <span className="text-orange-400 font-medium">digitální realitu</span>. 
+          První konzultace je <span className="text-orange-400 font-medium">zdarma</span>.
+        </span>
+      </p>
+      
+      {/* Výhody - důvěryhodnostní indikátory */}
+      <div className="grid grid-cols-3 gap-4 mb-8 mt-8 text-center">
+        <div className="flex flex-col items-center">
+          <div className="text-orange-500 mb-2">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
           </div>
-          <div className="absolute bottom-0 right-0 w-16 h-16">
-            <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-orange-500/60"></div>
-          </div>
-          
-          <div className="text-center max-w-3xl mx-auto relative z-10">
-            <div className="relative inline-block mb-4">
-              <h3 className="text-2xl md:text-3xl font-bold text-white">Máte vlastní nápad na projekt?</h3>
-              <div className="absolute top-0 -left-3 w-1 h-full bg-orange-500"></div>
-            </div>
-            <p className="text-gray-400 mb-8">
-              Specializuji se na komplexní webové aplikace, e-shopy a interaktivní prezentace. 
-              Společně můžeme váš nápad proměnit v digitální realitu. První konzultace je zdarma.
-            </p>
-            <a 
-              href="/kontakt" 
-              className="relative inline-flex items-center px-6 py-3 bg-slate-800 text-orange-400 font-medium rounded-md overflow-hidden border border-orange-500/30 hover:bg-slate-700/80 transition-colors group"
-            >
-              <span className="relative z-10 flex items-center">
-                <span className="mr-2">Konzultace zdarma</span>
-                <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
-              </span>
-            </a>
-          </div>
+          <p className="text-white text-sm font-medium">Rychlý vývoj</p>
         </div>
+        
+        <div className="flex flex-col items-center">
+          <div className="text-orange-500 mb-2">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+          </div>
+          <p className="text-white text-sm font-medium">Bezpečné řešení</p>
+        </div>
+        
+        <div className="flex flex-col items-center">
+          <div className="text-orange-500 mb-2">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+            </svg>
+          </div>
+          <p className="text-white text-sm font-medium">Prémiová kvalita</p>
+        </div>
+      </div>
+      
+      {/* CTA Tlačítko */}
+      <div className="inline-block relative group">
+        {/* Animovaný glow efekt */}
+        <div className="absolute -inset-0.5 bg-gradient-to-r from-orange-600 to-orange-500 rounded-lg blur opacity-30 group-hover:opacity-70 transition duration-500"></div>
+        
+        <a
+          href="/kontakt"
+          className="relative flex items-center justify-center px-8 py-4 bg-[#1a2133] text-orange-400 font-bold rounded-lg overflow-hidden border border-orange-500/50 hover:border-orange-400 transition-all duration-300 group"
+        >
+          <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-orange-500/50"></div>
+          <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-orange-500/50"></div>
+          
+          <span className="flex items-center">
+            <span className="mr-2">Konzultace zdarma</span>
+            <svg className="w-5 h-5 transform transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </span>
+        </a>
+      </div>
+      
+      {/* Důvěryhodnostní indikátor */}
+      <p className="text-gray-500 text-xs mt-5">Přes 30+ úspěšně dokončených projektů</p>
+    </div>
+  </div>
+</div>
       </div>
     </section>
   );

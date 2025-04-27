@@ -22,7 +22,7 @@ const services: Service[] = [
       "Moderní, rychlé a responzivní webové stránky pro lepší prezentaci. Web, který prodává a roste s vámi.",
     icon: <Monitor className="w-8 h-8" />,
     checkmarks: [
-      "Základní web již od 10 000 Kč",
+      "Základní web již od 20 000 Kč",
       "React nebo .Net core řešení",
       "SEO optimalizace v ceně",
       "Responzivní design",

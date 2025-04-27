@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion } from "framer-motion";
-import { FaPaperPlane, FaEnvelope, FaPhone, FaIdCard, FaUser } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
+import { FaPaperPlane, FaEnvelope, FaPhone, FaIdCard, FaUser, FaArrowLeft } from "react-icons/fa";
 import Image from "next/image";
 
 type FieldName = "name" | "email" | "subject" | "message";
@@ -15,8 +15,9 @@ const ContactForm: React.FC = () => {
     message: ""
   });
   
-  // explicitně typujeme, že může být buď FieldName, nebo null
   const [focusedField, setFocusedField] = useState<FieldName | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
@@ -25,8 +26,25 @@ const ContactForm: React.FC = () => {
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formState);
-    alert("Formulář byl odeslán! (demo)");
+    setIsSubmitting(true);
+    
+    // Simulujeme odeslání formuláře
+    setTimeout(() => {
+      console.log("Form submitted:", formState);
+      setIsSubmitting(false);
+      setIsSubmitted(true);
+      
+      // Reset formuláře po 5 sekundách
+      setTimeout(() => {
+        setIsSubmitted(false);
+        setFormState({
+          name: "",
+          email: "",
+          subject: "",
+          message: ""
+        });
+      }, 5000);
+    }, 1500);
   };
 
   return (
@@ -61,6 +79,20 @@ const ContactForm: React.FC = () => {
       </div>
 
       <div className="max-w-5xl w-full px-6 lg:px-8 z-10 relative">
+        {/* Zpět na hlavní stránku odkaz */}
+        <div className="mb-8">
+          <motion.a
+            href="/"
+            className="inline-flex items-center text-orange-400 hover:text-orange-300 transition-colors group"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4 }}
+          >
+            <FaArrowLeft className="w-4 h-4 mr-2 transition-transform group-hover:-translate-x-1" />
+            <span className="font-medium">Zpátky na hlavní stránku</span>
+          </motion.a>
+        </div>
+
         {/* Section title */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -199,6 +231,31 @@ const ContactForm: React.FC = () => {
               </h3>
               <div className="mt-1 h-[2px] w-20 bg-gradient-to-r from-orange-500 to-transparent" />
             </div>
+
+            {/* Animace překrývající formulář po odeslání */}
+            <AnimatePresence>
+              {isSubmitted && (
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="absolute inset-0 bg-gradient-to-br from-gray-800/95 to-gray-900/95 flex flex-col items-center justify-center z-50"
+                >
+                  <motion.div 
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                    className="text-green-500 mb-4 p-4 rounded-full bg-green-500/10"
+                  >
+                    <svg className="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                  </motion.div>
+                  <h3 className="text-2xl font-bold text-white mb-2">Děkuji za zprávu!</h3>
+                  <p className="text-gray-400 text-center">Ozvu se vám co nejdříve to bude možné.</p>
+                </motion.div>
+              )}
+            </AnimatePresence>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div className="relative">
@@ -261,14 +318,135 @@ const ContactForm: React.FC = () => {
                       <div className="absolute left-0 bottom-0 w-2 h-2 border-b border-l border-orange-500" />
                       <div className="absolute right-0 bottom-0 w-2 h-2 border-b border-r border-orange-500" />
                     </motion.div>
-                  )}{"}"}
+                  )}
                 </div>
               </div>
             </div>
             
-            {/* … pokračuje dále stejně pro subject, message a button … */}
+            <div className="relative">
+              <label htmlFor="subject" className="block text-gray-300 mb-2 text-sm font-medium">Předmět</label>
+              <div className={`relative ${focusedField === "subject" ? "z-20" : "z-10"}`}>
+                <input
+                  type="text"
+                  id="subject"
+                  value={formState.subject}
+                  onChange={handleChange}
+                  onFocus={() => setFocusedField("subject")}
+                  onBlur={() => setFocusedField(null)}
+                  className="w-full bg-gray-900/70 text-white px-4 py-3 rounded-lg border border-gray-700 focus:outline-none focus:border-orange-500 transition-all duration-300"
+                  placeholder="Předmět zprávy"
+                  required
+                />
+                {focusedField === "subject" && (
+                  <motion.div 
+                    layoutId="focusHighlight"
+                    className="absolute -inset-[1px] rounded-lg border border-orange-500"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className="absolute left-0 top-0 w-2 h-2 border-t border-l border-orange-500" />
+                    <div className="absolute right-0 top-0 w-2 h-2 border-t border-r border-orange-500" />
+                    <div className="absolute left-0 bottom-0 w-2 h-2 border-b border-l border-orange-500" />
+                    <div className="absolute right-0 bottom-0 w-2 h-2 border-b border-r border-orange-500" />
+                  </motion.div>
+                )}
+              </div>
+            </div>
+            
+            <div className="relative">
+              <label htmlFor="message" className="block text-gray-300 mb-2 text-sm font-medium">Zpráva</label>
+              <div className={`relative ${focusedField === "message" ? "z-20" : "z-10"}`}>
+                <textarea
+                  id="message"
+                  value={formState.message}
+                  onChange={handleChange}
+                  onFocus={() => setFocusedField("message")}
+                  onBlur={() => setFocusedField(null)}
+                  className="w-full bg-gray-900/70 text-white px-4 py-3 rounded-lg border border-gray-700 focus:outline-none focus:border-orange-500 transition-all duration-300 min-h-[150px] resize-none"
+                  placeholder="Váš dotaz nebo zpráva"
+                  required
+                />
+                {focusedField === "message" && (
+                  <motion.div 
+                    layoutId="focusHighlight"
+                    className="absolute -inset-[1px] rounded-lg border border-orange-500"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className="absolute left-0 top-0 w-2 h-2 border-t border-l border-orange-500" />
+                    <div className="absolute right-0 top-0 w-2 h-2 border-t border-r border-orange-500" />
+                    <div className="absolute left-0 bottom-0 w-2 h-2 border-b border-l border-orange-500" />
+                    <div className="absolute right-0 bottom-0 w-2 h-2 border-b border-r border-orange-500" />
+                  </motion.div>
+                )}
+              </div>
+            </div>
+            
+            <div className="mt-6">
+              <motion.button
+                type="submit"
+                disabled={isSubmitting}
+                className="relative w-full overflow-hidden group flex items-center justify-center px-6 py-3 bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white font-medium rounded-lg transition-all duration-300 disabled:opacity-70"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <div className="absolute inset-0 w-full h-full">
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-300">
+                    <div className="absolute inset-0" style={{
+                      backgroundSize: "20px 20px",
+                      backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.5) 1px, transparent 1px)"
+                    }} />
+                  </div>
+                  <div className="absolute top-0 left-0 w-4 h-4 border-t border-l border-white/20" />
+                  <div className="absolute top-0 right-0 w-4 h-4 border-t border-r border-white/20" />
+                  <div className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-white/20" />
+                  <div className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-white/20" />
+                </div>
+                
+                {isSubmitting ? (
+                  <div className="flex items-center">
+                    <motion.div 
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                      className="mr-2 w-5 h-5"
+                    >
+                      <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                      </svg>
+                    </motion.div>
+                    Odesílám...
+                  </div>
+                ) : (
+                  <div className="flex items-center">
+                    <span>Odeslat zprávu</span>
+                    <svg className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </div>
+                )}
+              </motion.button>
+            </div>
+            
+            {/* Dekorativní prvek na tlačítku */}
+            <motion.div
+              className="absolute bottom-6 right-6 h-[30px] w-[30px]"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0.3, 0.6, 0.3] }}
+              transition={{ duration: 3, repeat: Infinity }}
+            >
+              <div className="w-full h-full border-r-2 border-b-2 border-orange-500/30" />
+            </motion.div>
           </motion.form>
         </div>
+        
+        {/* Dekorativní prvky v pozadí */}
+        <div className="absolute top-[20%] left-[5%] w-2 h-2 bg-orange-500/50 rounded-full" style={{ boxShadow: '0 0 15px rgba(249, 115, 22, 0.5)' }} />
+        <div className="absolute top-[70%] right-[10%] w-3 h-3 bg-orange-500/40 rounded-full" style={{ boxShadow: '0 0 20px rgba(249, 115, 22, 0.4)' }} />
+        <div className="absolute bottom-[15%] left-[25%] w-1 h-1 bg-blue-500/60 rounded-full" style={{ boxShadow: '0 0 15px rgba(59, 130, 246, 0.6)' }} />
       </div>
     </section>
   );

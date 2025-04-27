@@ -466,40 +466,40 @@ const WebServicesPage: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
               <PricingPackage
                 title="Basic"
-                price="od 10 000 Kč"
+                price="od 20 000 Kč"
                 features={[
                   "Do 5 stránek",
                   "Responzivní design",
                   "Kontaktní formulář",
                   "Základní SEO",
-                  "Dodání 14-21 dní"
+                  "Dodání 10 dní"
                 ]}
                 color="#F97316"
               />
               
               <PricingPackage
                 title="Business"
-                price="od 18 000 Kč"
+                price="od 35 000 Kč"
                 features={[
                   "Až 10 stránek",
                   "Blog systém",
                   "Pokročilé funkce",
                   "Napojení na sociální sítě",
-                  "Dodání 21-30 dní"
+                  "Dodání 20 dní"
                 ]}
                 color="#F97316"
               />
               
               <PricingPackage
                 title="Premium"
-                price="od 30 000 Kč"
+                price="od 50 000 Kč"
                 features={[
                   "Neomezený počet stránek",
                   "Vlastní administrace",
                   "E-mail marketing",
                   "Analytika návštěvnosti",
                   "Optimalizace pro vyhledávače",
-                  "Dodání 30-45 dní"
+                  "Dodání 30 dní"
                 ]}
                 color="#F97316"
               />
