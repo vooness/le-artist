@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useMemo } from "react";
 import { motion, useReducedMotion, useInView } from "framer-motion";
 import Image from "next/image";
 import {
@@ -36,12 +36,16 @@ const skills: Skill[] = [
 // Plně optimalizovaná SkillCard - žádné animace na mobilu
 const SkillCard: React.FC<{ skill: Skill; index: number; isMobile: boolean }> = ({ skill, index, isMobile }) => {
   const cardRef = useRef<HTMLDivElement>(null);
-  // InView jen na desktopu, na mobilu automaticky true
-  const isInView = isMobile ? true : useInView(cardRef, { once: true, amount: 0.2 });
+  // Použití jedné reference pro useInView
+  const inViewRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(inViewRef, { once: true, amount: 0.2 });
+  
+  // Pokud jsme na mobilu, nastavíme výsledek na true
+  const shouldAnimate = isMobile ? false : isInView;
 
   return (
     <div
-      ref={cardRef}
+      ref={inViewRef}
       className="relative overflow-hidden border border-white/10 rounded-xl bg-gradient-to-br from-slate-800/70 to-slate-900/70 backdrop-blur-sm shadow-xl opacity-100"
       style={{ 
         boxShadow: isMobile ? undefined : `0 10px 20px -15px ${skill.color}40`,
@@ -77,7 +81,7 @@ const SkillCard: React.FC<{ skill: Skill; index: number; isMobile: boolean }> = 
         <div className="flex justify-between items-start mb-6">
           {/* Ikona - žádný pulzující efekt na mobilu */}
           <div className="relative flex items-center justify-center">
-            {!isMobile && isInView && (
+            {shouldAnimate && (
               <div
                 className="absolute inset-0 rounded-full blur-xl hidden md:block"
                 style={{ 
@@ -115,7 +119,7 @@ const SkillCard: React.FC<{ skill: Skill; index: number; isMobile: boolean }> = 
 
           <div className="h-3 w-full bg-slate-900/80 rounded-full overflow-hidden backdrop-blur-md border border-white/5">
             {/* Skenující efekt pouze na desktopu */}
-            {!isMobile && isInView && (
+            {shouldAnimate && (
               <div
                 className="absolute h-full w-2 rounded-full hidden md:block"
                 style={{ 
@@ -138,7 +142,7 @@ const SkillCard: React.FC<{ skill: Skill; index: number; isMobile: boolean }> = 
               }}
             >
               {/* Světelný efekt pouze na desktopu */}
-              {!isMobile && isInView && (
+              {shouldAnimate && (
                 <div
                   className="absolute top-0 h-full w-20 bg-white/20 hidden md:block"
                   style={{ 
