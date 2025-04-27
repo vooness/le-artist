@@ -17,8 +17,8 @@
 }
 
 
-html {
-  scroll-behavior: smooth;
+html, body {
+  scroll-behavior: smooth !important;
 }
 
 
