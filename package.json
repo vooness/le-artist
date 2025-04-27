@@ -13,6 +13,7 @@
     "@nextui-org/react": "^2.4.8",
     "@nextui-org/system": "^2.2.6",
     "@nextui-org/theme": "^2.2.11",
+    "@studio-freight/lenis": "^1.0.42",
     "@tabler/icons-react": "^3.31.0",
     "@types/node": "22.9.3",
     "@types/react": "18.3.12",
@@ -24,6 +25,7 @@
     "eslint": "9.15.0",
     "eslint-config-next": "15.0.3",
     "framer-motion": "^10.15.1",
+    "locomotive-scroll": "^4.1.4",
     "lucide-react": "^0.474.0",
     "motion": "^12.7.4",
     "next": "^15.1.4",
@@ -41,6 +43,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@types/locomotive-scroll": "^4.1.4",
     "@types/react-slick": "^0.23.13",
     "@types/react-vertical-timeline-component": "^3.3.6",
     "babel-plugin-react-compiler": "^19.1.0-rc.1",
