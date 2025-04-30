@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useRef, useEffect, useState, useMemo } from "react";
-import { motion, useReducedMotion, useInView } from "framer-motion";
+import React, { useRef, useEffect, useState } from "react";
+import { motion, useInView } from "framer-motion";
 import Image from "next/image";
 import {
   FaHtml5,
@@ -33,25 +33,20 @@ const skills: Skill[] = [
   { name: "Tailwind CSS", value: 85, icon: <SiTailwindcss />, color: "#0EA5E9" },
 ];
 
-// Plně optimalizovaná SkillCard - žádné animace na mobilu
-const SkillCard: React.FC<{ skill: Skill; index: number; isMobile: boolean }> = ({ skill, index, isMobile }) => {
+// Verze SkillCard pro desktop s animacemi
+const DesktopSkillCard: React.FC<{ skill: Skill; index: number }> = ({ skill, index }) => {
   const cardRef = useRef<HTMLDivElement>(null);
-  // Použití jedné reference pro useInView
-  const inViewRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(inViewRef, { once: true, amount: 0.2 });
+  const isInView = useInView(cardRef, { once: true, amount: 0.2 });
   
-  // Pokud jsme na mobilu, nastavíme výsledek na true
-  const shouldAnimate = isMobile ? false : isInView;
-
   return (
-    <div
-      ref={inViewRef}
-      className="relative overflow-hidden border border-white/10 rounded-xl bg-gradient-to-br from-slate-800/70 to-slate-900/70 backdrop-blur-sm shadow-xl opacity-100"
+    <motion.div
+      ref={cardRef}
+      initial={{ opacity: 0, y: 20 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      transition={{ duration: 0.4, delay: index * 0.1 }}
+      className="relative overflow-hidden border border-white/10 rounded-xl bg-gradient-to-br from-slate-800/70 to-slate-900/70 backdrop-blur-sm shadow-xl"
       style={{ 
-        boxShadow: isMobile ? undefined : `0 10px 20px -15px ${skill.color}40`,
-        // Žádné animace ani transformace na mobilu
-        transition: isMobile ? 'none' : 'opacity 0.4s ease-out, transform 0.4s ease-out',
-        transitionDelay: isMobile ? '0s' : `${0.1 * index}s`
+        boxShadow: `0 10px 20px -15px ${skill.color}40`
       }}
     >
       <div className="absolute inset-0 opacity-10">
@@ -60,8 +55,8 @@ const SkillCard: React.FC<{ skill: Skill; index: number; isMobile: boolean }> = 
         <div className="absolute left-0 h-full w-px bg-gradient-to-b from-transparent via-white/20 to-transparent" />
         <div className="absolute right-0 h-full w-px bg-gradient-to-b from-transparent via-white/20 to-transparent" />
         
-        {/* Binární efekty pouze na desktopu */}
-        {!isMobile && [...Array(3)].map((_, i) => (
+        {/* Binární efekty na pozadí */}
+        {[...Array(3)].map((_, i) => (
           <div 
             key={`bit-${index}-${i}`} 
             className="absolute text-[10px] font-mono opacity-20"
@@ -79,17 +74,15 @@ const SkillCard: React.FC<{ skill: Skill; index: number; isMobile: boolean }> = 
 
       <div className="p-5 relative z-10">
         <div className="flex justify-between items-start mb-6">
-          {/* Ikona - žádný pulzující efekt na mobilu */}
+          {/* Ikona s pulzujícím efektem */}
           <div className="relative flex items-center justify-center">
-            {shouldAnimate && (
-              <div
-                className="absolute inset-0 rounded-full blur-xl hidden md:block"
-                style={{ 
-                  backgroundColor: skill.color,
-                  animation: 'pulse-slow 3s ease-in-out infinite'
-                }}
-              />
-            )}
+            <div
+              className="absolute inset-0 rounded-full blur-xl"
+              style={{ 
+                backgroundColor: skill.color,
+                animation: 'pulse-slow 3s ease-in-out infinite'
+              }}
+            />
             <div className="relative z-10 text-3xl p-3" style={{ color: skill.color }}>{skill.icon}</div>
           </div>
 
@@ -106,7 +99,7 @@ const SkillCard: React.FC<{ skill: Skill; index: number; isMobile: boolean }> = 
 
         <h4 className="text-lg font-medium mb-3 text-white">{skill.name}</h4>
 
-        {/* Progress bar - okamžitě zobrazen na mobilu */}
+        {/* Progress bar s animací */}
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
             {[...Array(4)].map((_, i) => (
@@ -118,40 +111,100 @@ const SkillCard: React.FC<{ skill: Skill; index: number; isMobile: boolean }> = 
           </div>
 
           <div className="h-3 w-full bg-slate-900/80 rounded-full overflow-hidden backdrop-blur-md border border-white/5">
-            {/* Skenující efekt pouze na desktopu */}
-            {shouldAnimate && (
-              <div
-                className="absolute h-full w-2 rounded-full hidden md:block"
-                style={{ 
-                  background: `${skill.color}`,
-                  animation: 'scan-bar 3s ease-in-out infinite',
-                  animationDelay: `${1 + index * 0.2}s`
-                }}
-              />
-            )}
-
-            {/* Progress bar ihned viditelný na mobilu */}
+            {/* Skenující efekt */}
             <div
+              className="absolute h-full w-2 rounded-full"
+              style={{ 
+                background: `${skill.color}`,
+                animation: 'scan-bar 3s ease-in-out infinite',
+                animationDelay: `${1 + index * 0.2}s`
+              }}
+            />
+
+            {/* Progress bar s animací */}
+            <motion.div
+              initial={{ width: 0 }}
+              animate={isInView ? { width: `${skill.value}%` } : { width: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 + (0.1 * index) }}
               className="h-full rounded-full relative overflow-hidden"
               style={{ 
-                width: `${skill.value}%`,
-                background: `linear-gradient(90deg, ${skill.color}80, ${skill.color})`,
-                // Žádné animace ani přechody na mobilu
-                transition: isMobile ? 'none' : 'width 0.8s ease-out',
-                transitionDelay: isMobile ? '0s' : `${0.2 + (0.1 * index)}s`
+                background: `linear-gradient(90deg, ${skill.color}80, ${skill.color})`
               }}
             >
-              {/* Světelný efekt pouze na desktopu */}
-              {shouldAnimate && (
-                <div
-                  className="absolute top-0 h-full w-20 bg-white/20 hidden md:block"
-                  style={{ 
-                    animation: 'shine 2s ease-in-out infinite',
-                    animationDelay: `${1.5 + index * 0.2}s` 
-                  }}
-                />
-              )}
+              {/* Světelný efekt */}
+              <div
+                className="absolute top-0 h-full w-20 bg-white/20"
+                style={{ 
+                  animation: 'shine 2s ease-in-out infinite',
+                  animationDelay: `${1.5 + index * 0.2}s` 
+                }}
+              />
+            </motion.div>
+          </div>
+        </div>
+
+        {/* Rohové dekorace */}
+        <div className="absolute top-1 left-1 w-2 h-2 border-t border-l" style={{ borderColor: `${skill.color}50` }} />
+        <div className="absolute top-1 right-1 w-2 h-2 border-t border-r" style={{ borderColor: `${skill.color}50` }} />
+        <div className="absolute bottom-1 left-1 w-2 h-2 border-b border-l" style={{ borderColor: `${skill.color}50` }} />
+        <div className="absolute bottom-1 right-1 w-2 h-2 border-b border-r" style={{ borderColor: `${skill.color}50` }} />
+      </div>
+    </motion.div>
+  );
+};
+
+// Verze SkillCard pro mobil bez animací
+const MobileSkillCard: React.FC<{ skill: Skill; index: number }> = ({ skill, index }) => {
+  return (
+    <div
+      className="relative overflow-hidden border border-white/10 rounded-xl bg-gradient-to-br from-slate-800/70 to-slate-900/70 backdrop-blur-sm shadow-xl"
+    >
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute top-0 w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+        <div className="absolute bottom-0 w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+        <div className="absolute left-0 h-full w-px bg-gradient-to-b from-transparent via-white/20 to-transparent" />
+        <div className="absolute right-0 h-full w-px bg-gradient-to-b from-transparent via-white/20 to-transparent" />
+      </div>
+
+      <div className="p-5 relative z-10">
+        <div className="flex justify-between items-start mb-6">
+          {/* Jednoduchá ikona bez efektů */}
+          <div className="relative flex items-center justify-center">
+            <div className="relative z-10 text-3xl p-3" style={{ color: skill.color }}>{skill.icon}</div>
+          </div>
+
+          {/* Procenta */}
+          <div className="relative">
+            <div className="relative bg-slate-800/80 px-3 py-1 rounded border border-white/10 backdrop-blur-sm">
+              <div className="flex items-center">
+                <span className="font-mono text-sm" style={{ color: skill.color }}>{skill.value}%</span>
+              </div>
             </div>
+          </div>
+        </div>
+
+        <h4 className="text-lg font-medium mb-3 text-white">{skill.name}</h4>
+
+        {/* Jednoduchý progress bar bez animací */}
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            {[...Array(4)].map((_, i) => (
+              <div 
+                key={`tick-${index}-${i}`}
+                className="h-full w-px mx-auto bg-white/20 opacity-30"
+              />
+            ))}
+          </div>
+
+          <div className="h-3 w-full bg-slate-900/80 rounded-full overflow-hidden backdrop-blur-md border border-white/5">
+            {/* Jednoduchý progress bar */}
+            <div
+              className="h-full rounded-full relative"
+              style={{ 
+                width: `${skill.value}%`,
+                background: `linear-gradient(90deg, ${skill.color}80, ${skill.color})`
+              }}
+            />
           </div>
         </div>
 
@@ -165,42 +218,40 @@ const SkillCard: React.FC<{ skill: Skill; index: number; isMobile: boolean }> = 
   );
 };
 
-// Zjednodušený a optimalizovaný pozadí pattern
-const SimplifiedDotPattern: React.FC<{isMobile: boolean}> = ({isMobile}) => {
-  // Výrazně omezený počet bodů na mobilu
-  const dotCount = isMobile ? 8 : 80;
-  const dotsPerRow = isMobile ? 4 : 10;
-  
+// Pozadí s plnou animací pro desktop
+const DesktopDotPattern: React.FC = () => {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {/* Extrémně zjednodušené pozadí na mobilu */}
       <div className="absolute inset-0">
-        {/* Minimální počet bodů na mobilu */}
-        {!isMobile && [...Array(dotCount)].map((_, i) => {
-          const row = Math.floor(i / dotsPerRow);
-          const col = i % dotsPerRow;
+        {[...Array(80)].map((_, i) => {
+          const row = Math.floor(i / 10);
+          const col = i % 10;
           
           return (
-            <div
+            <motion.div
               key={`dot-${i}`}
-              className="absolute h-1 w-1 rounded-full bg-orange-500/20 hidden md:block"
+              className="absolute h-1 w-1 rounded-full bg-orange-500/20"
               style={{
                 top: `${row * 12}%`,
                 left: `${col * 10}%`,
-                opacity: 0.3,
-                animation: 'pulse-slow 4s ease-in-out infinite',
-                animationDelay: `${Math.random() * 2}s`
+              }}
+              animate={{
+                opacity: [0.2, 0.5, 0.2],
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                delay: Math.random() * 2
               }}
             />
           );
         })}
       </div>
       
-      {/* Žádné dekorační linie na mobilu */}
-      {!isMobile && [...Array(3)].map((_, i) => (
+      {[...Array(3)].map((_, i) => (
         <div
           key={`h-line-${i}`}
-          className="absolute h-[1px] w-full bg-gradient-to-r from-transparent via-orange-500/20 to-transparent hidden md:block"
+          className="absolute h-[1px] w-full bg-gradient-to-r from-transparent via-orange-500/20 to-transparent"
           style={{ 
             top: `${40 + i * 25}%`,
             opacity: 0.2
@@ -208,10 +259,10 @@ const SimplifiedDotPattern: React.FC<{isMobile: boolean}> = ({isMobile}) => {
         />
       ))}
       
-      {!isMobile && [...Array(3)].map((_, i) => (
+      {[...Array(3)].map((_, i) => (
         <div
           key={`v-line-${i}`}
-          className="absolute w-[1px] h-full bg-gradient-to-b from-transparent via-blue-500/20 to-transparent hidden md:block"
+          className="absolute w-[1px] h-full bg-gradient-to-b from-transparent via-blue-500/20 to-transparent"
           style={{ 
             left: `${50 + i * 25}%`,
             opacity: 0.2
@@ -222,31 +273,50 @@ const SimplifiedDotPattern: React.FC<{isMobile: boolean}> = ({isMobile}) => {
   );
 };
 
-// Optimalizovaná grid sekce s dovednostmi
-const SkillsGrid: React.FC<{isMobile: boolean}> = ({ isMobile }) => {
+// Zjednodušené pozadí pro mobil - statické
+const MobileDotPattern: React.FC = () => {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 bg-slate-900/20" />
+    </div>
+  );
+};
+
+// Optimalizovaný Grid dovedností pro desktop
+const DesktopSkillsGrid: React.FC = () => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative">
-      {/* Propojovací linky pouze na desktopu */}
-      {!isMobile && (
-        <div className="absolute inset-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pointer-events-none">
-          {[...Array(6)].map((_, i) => (
-            <div
-              key={`connector-${i}`}
-              className="hidden lg:block absolute h-px bg-orange-500/20"
-              style={{
-                width: "30px",
-                left: `${25 + (i % 3) * 25}%`,
-                top: `${30 + Math.floor(i / 3) * 40}%`,
-                opacity: 1
-              }}
-            />
-          ))}
-        </div>
-      )}
+      {/* Propojovací linky */}
+      <div className="absolute inset-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pointer-events-none">
+        {[...Array(6)].map((_, i) => (
+          <div
+            key={`connector-${i}`}
+            className="hidden lg:block absolute h-px bg-orange-500/20"
+            style={{
+              width: "30px",
+              left: `${25 + (i % 3) * 25}%`,
+              top: `${30 + Math.floor(i / 3) * 40}%`,
+              opacity: 1
+            }}
+          />
+        ))}
+      </div>
       
       {/* Karty dovedností */}
       {skills.map((skill, index) => (
-        <SkillCard key={index} skill={skill} index={index} isMobile={isMobile} />
+        <DesktopSkillCard key={index} skill={skill} index={index} />
+      ))}
+    </div>
+  );
+};
+
+// Optimalizovaný Grid dovedností pro mobil - bez animací
+const MobileSkillsGrid: React.FC = () => {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 relative">
+      {/* Karty dovedností */}
+      {skills.map((skill, index) => (
+        <MobileSkillCard key={index} skill={skill} index={index} />
       ))}
     </div>
   );
@@ -260,12 +330,15 @@ const AboutMeSection: React.FC = () => {
   // Detekce mobilního zařízení a zabránění hydration erroru
   useEffect(() => {
     setIsMounted(true);
-    const checkMobile = () => {
+    setIsMobile(window.innerWidth < 768);
+    
+    // Přidání event listeneru pro resize pouze pro desktop
+    const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
     };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   // Předejít hydration erroru - vrátit základní strukturu při prvním renderování
@@ -278,7 +351,6 @@ const AboutMeSection: React.FC = () => {
               O mně
             </h2>
           </div>
-          {/* Základní kostra struktury bez obsahu */}
         </div>
       </section>
     );
@@ -289,21 +361,23 @@ const AboutMeSection: React.FC = () => {
       id="about-me"
       className="relative py-16 md:py-24 px-4 md:px-6 bg-[#0f172a] text-white overflow-hidden"
     >
-      {/* Optimalizované pozadí pro mobil */}
-      <SimplifiedDotPattern isMobile={isMobile} />
+      {/* Podmíněné renderování pozadí podle zařízení */}
+      {isMobile ? <MobileDotPattern /> : <DesktopDotPattern />}
       
-      {/* Jemná mřížka - skrytá na mobilu */}
-      <div 
-        className={`absolute inset-0 opacity-[0.04] ${isMobile ? 'hidden' : 'block'}`}
-        style={{
-          backgroundImage: 
-            `linear-gradient(to right, rgba(148, 163, 184, 0.1) 1px, transparent 1px),
-             linear-gradient(to bottom, rgba(148, 163, 184, 0.1) 1px, transparent 1px)`,
-          backgroundSize: '50px 50px'
-        }} 
-      />
+      {/* Jemná mřížka - pouze pro desktop */}
+      {!isMobile && (
+        <div 
+          className="absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage: 
+              `linear-gradient(to right, rgba(148, 163, 184, 0.1) 1px, transparent 1px),
+               linear-gradient(to bottom, rgba(148, 163, 184, 0.1) 1px, transparent 1px)`,
+            backgroundSize: '50px 50px'
+          }} 
+        />
+      )}
       
-      {/* Barevné oblasti na pozadí - méně intenzivní na mobilu */}
+      {/* Barevné oblasti na pozadí */}
       <div className="absolute top-0 left-0 w-full h-full">
         <div className={`absolute -top-40 -left-40 w-80 h-80 bg-orange-600/5 rounded-full ${isMobile ? 'blur-2xl' : 'blur-3xl'}`}></div>
         <div className={`absolute top-1/3 right-1/4 w-96 h-96 bg-blue-600/5 rounded-full ${isMobile ? 'blur-2xl' : 'blur-3xl'}`}></div>
@@ -329,13 +403,17 @@ const AboutMeSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Bio sekce - bez animací na mobilu */}
-        <div className="flex flex-col lg:flex-row items-center gap-16 mb-24">
+        {/* Bio sekce */}
+        <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16 mb-20">
           {/* Profilový obrázek */}
           <div className="w-full lg:w-5/12 relative">
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 via-transparent to-slate-800/20 rounded-2xl transform rotate-3"></div>
-              <div className="absolute -inset-4 border-2 border-dashed border-orange-500/20 rounded-2xl transform -rotate-2"></div>
+              {!isMobile && (
+                <>
+                  <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 via-transparent to-slate-800/20 rounded-2xl transform rotate-3"></div>
+                  <div className="absolute -inset-4 border-2 border-dashed border-orange-500/20 rounded-2xl transform -rotate-2"></div>
+                </>
+              )}
               
               <div className="relative z-10 bg-slate-800/30 backdrop-blur-sm p-6 rounded-xl border border-slate-700/50 shadow-xl">
                 <Image
@@ -349,8 +427,12 @@ const AboutMeSection: React.FC = () => {
                 />
               </div>
               
-              <div className="absolute -top-6 -left-6 w-12 h-12 bg-orange-500/10 rounded-full blur-md"></div>
-              <div className="absolute -bottom-4 right-10 w-16 h-16 bg-orange-500/10 rounded-full blur-md"></div>
+              {!isMobile && (
+                <>
+                  <div className="absolute -top-6 -left-6 w-12 h-12 bg-orange-500/10 rounded-full blur-md"></div>
+                  <div className="absolute -bottom-4 right-10 w-16 h-16 bg-orange-500/10 rounded-full blur-md"></div>
+                </>
+              )}
             </div>
           </div>
           
@@ -381,8 +463,12 @@ const AboutMeSection: React.FC = () => {
                   </p>
                 </div>
                 
-                <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-orange-500/10 to-transparent" />
-                <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-orange-500/10 to-transparent" />
+                {!isMobile && (
+                  <>
+                    <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-orange-500/10 to-transparent" />
+                    <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-orange-500/10 to-transparent" />
+                  </>
+                )}
               </div>
               
               <div className="absolute -top-1 -left-1 w-3 h-3 border-t-2 border-l-2 border-orange-500/50" />
@@ -393,7 +479,7 @@ const AboutMeSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Sekce dovedností - nadpis bez animací na mobilu */}
+        {/* Sekce dovedností - nadpis */}
         <div className="text-center mb-14 relative">
           <div className="absolute left-1/2 -translate-x-1/2 -top-8 w-32 h-px opacity-60 bg-gradient-to-r from-transparent via-orange-500/50 to-transparent"></div>
           
@@ -414,7 +500,7 @@ const AboutMeSection: React.FC = () => {
                 {/* Text shadow efekt pouze na desktopu */}
                 {!isMobile && (
                   <span 
-                    className="absolute left-0 top-0 w-full text-transparent hidden md:block"
+                    className="absolute left-0 top-0 w-full text-transparent"
                     style={{ 
                       WebkitTextStroke: "1px rgba(249, 115, 22, 0.3)",
                       filter: "blur(4px)",
@@ -439,8 +525,8 @@ const AboutMeSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Grid dovedností - optimalizovaná verze */}
-        <SkillsGrid isMobile={isMobile} />
+        {/* Podmíněné renderování grid komponent podle zařízení */}
+        {isMobile ? <MobileSkillsGrid /> : <DesktopSkillsGrid />}
       </div>
 
       {/* Animační keyframes - používané pouze na desktopu */}

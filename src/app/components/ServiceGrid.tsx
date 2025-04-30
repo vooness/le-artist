@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
 import { Monitor, Edit, Video, CheckCircle2, Info } from "lucide-react";
 
 // Definice typů pro service
@@ -14,7 +13,7 @@ interface Service {
   color: string;
 }
 
-// Data for services (icons, titles, descriptions, checkmarks)
+// Data pro služby (ikony, tituly, popisy, checkmarky)
 const services: Service[] = [
   {
     title: "Webovky",
@@ -60,45 +59,17 @@ const services: Service[] = [
   },
 ];
 
-// Animation variants for cards - zjednodušeno pro lepší výkon na mobilu
-const cardAnimation = {
-  hidden: { opacity: 0, y: 30 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay: i * 0.2, // Zkráceno zpoždění
-      duration: 0.5, // Zkrácena doba animace
-      ease: "easeOut",
-    },
-  }),
-};
-
-// Interface for ServiceCard props
-interface ServiceCardProps {
-  service: Service;
-  index: number;
-  isMobile: boolean;
-}
-
-// Optimalizovaná ServiceCard komponenta
-const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, isMobile }) => {
+// Optimalizovaný ServiceCard bez animací pro mobilní zařízení
+const ServiceCard: React.FC<{ service: Service, index: number }> = ({ service, index }) => {
   const router = useRouter();
   
   return (
-    <motion.div
-      custom={index}
-      variants={cardAnimation}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-50px" }} // Zajistí dřívější načtení
-      className="w-full max-w-sm group relative overflow-hidden"
-    >
-      {/* Základní futuristický kontejner */}
+    <div className="w-full max-w-sm group relative overflow-hidden">
+      {/* Základní kontejner */}
       <div className="relative bg-slate-800/60 backdrop-blur-lg rounded-xl border border-white/10 shadow-lg
-          hover:shadow-[0_0_15px_rgba(249,115,22,0.3)] transition-all duration-300 overflow-hidden">
+        hover:shadow-[0_0_15px_rgba(249,115,22,0.3)] transition-all duration-300 overflow-hidden">
         
-        {/* Statické technologické okraje - bez animací */}
+        {/* Jednoduché statické okraje */}
         <div className="absolute inset-0">
           <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-orange-500/30 to-transparent"></div>
           <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-orange-500/30 to-transparent"></div>
@@ -106,7 +77,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, isMobile }) =
           <div className="absolute right-0 top-0 h-full w-px bg-gradient-to-b from-transparent via-orange-500/30 to-transparent"></div>
         </div>
         
-        {/* Statické digitální akcenty */}
+        {/* Statické rohové akcenty */}
         <div className="absolute top-0 right-0 w-8 h-8 border-t-[1px] border-r-[1px] border-white/20 rounded-tr-xl"></div>
         <div className="absolute bottom-0 left-0 w-8 h-8 border-b-[1px] border-l-[1px] border-white/20 rounded-bl-xl"></div>
         
@@ -114,27 +85,24 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, isMobile }) =
         <div className="p-6 sm:p-8 relative z-10">
           {/* Ikona a nadpis */}
           <div className="flex justify-center items-center mb-6">
-            {/* Ikona - bez animace na mobilních zařízeních */}
             <div className="relative mr-4" style={{ color: service.color }}>
               {service.icon}
             </div>
-            
-            {/* Stylizovaný nadpis - bez animace textu */}
             <h3 className="text-2xl sm:text-3xl font-bold relative" style={{ color: service.color }}>
               {service.title}
             </h3>
           </div>
           
-          {/* Popis bez animací */}
+          {/* Popis */}
           <div className="mb-6">
             <p className="text-gray-300 text-sm leading-relaxed">{service.description}</p>
             <div className="mt-4 h-px w-2/3 mx-auto" 
                  style={{ background: `linear-gradient(to right, transparent, ${service.color}40, transparent)` }}></div>
           </div>
           
-          {/* Optimalizované checklisty - bez přebytečných animací */}
+          {/* Checklisty */}
           <ul className="space-y-3 mt-6">
-            {service.checkmarks.map((check: string, idx: number) => (
+            {service.checkmarks.map((check, idx) => (
               <li 
                 key={idx} 
                 className="flex items-start text-gray-300 text-sm"
@@ -147,7 +115,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, isMobile }) =
             ))}
           </ul>
           
-          {/* Optimalizované CTA tlačítko */}
+          {/* CTA tlačítko */}
           <div className="mt-6 pt-4 border-t border-gray-700/50">
             <button
               onClick={() => router.push("/sluzby")}
@@ -164,7 +132,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, isMobile }) =
         </div>
       </div>
       
-      {/* Statické rohové akcenty místo animovaných */}
+      {/* Statické rohové akcenty */}
       <div 
         className="absolute -bottom-2 -right-2 w-5 h-5 border-b-2 border-r-2 rounded-br-lg opacity-50"
         style={{ borderColor: service.color }}
@@ -173,102 +141,43 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, isMobile }) =
         className="absolute -top-2 -left-2 w-5 h-5 border-t-2 border-l-2 rounded-tl-lg opacity-50"
         style={{ borderColor: service.color }}
       />
-    </motion.div>
-  );
-};
-
-// Statické pozadí místo animovaného
-const StaticBackground: React.FC = () => {
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {/* Statické tečky místo animovaných */}
-      <div className="absolute inset-0">
-        {[...Array(20)].map((_, i) => {
-          const row = Math.floor(i / 5);
-          const col = i % 5;
-          
-          return (
-            <div
-              key={`dot-${i}`}
-              className="absolute h-1 w-1 rounded-full bg-orange-500/10"
-              style={{
-                top: `${row * 20 + 5}%`,
-                left: `${col * 20 + 5}%`,
-              }}
-            />
-          );
-        })}
-      </div>
-      
-      {/* Statické horizontální linie */}
-      {[...Array(2)].map((_, i) => (
-        <div
-          key={`h-line-${i}`}
-          className="absolute h-[1px] w-full bg-gradient-to-r from-transparent via-orange-500/10 to-transparent"
-          style={{ top: `${30 + i * 40}%` }}
-        />
-      ))}
-      
-      {/* Statické vertikální linie */}
-      {[...Array(2)].map((_, i) => (
-        <div
-          key={`v-line-${i}`}
-          className="absolute w-[1px] h-full bg-gradient-to-b from-transparent via-blue-500/10 to-transparent"
-          style={{ left: `${30 + i * 40}%` }}
-        />
-      ))}
     </div>
   );
 };
 
-// Grid of service cards with heading
+// Velmi jednoduché statické pozadí
+const StaticBackground: React.FC = () => {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-40">
+      <div className="absolute inset-0 bg-slate-900/20"></div>
+    </div>
+  );
+};
+
+// Optimalizovaná hlavní komponenta
 const ServicesGrid: React.FC = () => {
-  const [isMounted, setIsMounted] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   
+  // Detekce mobilních zařízení - pouze při prvním načtení
   useEffect(() => {
-    setIsMounted(true);
-    
-    // Detekce mobilního zařízení
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    // Počáteční kontrola
-    checkMobile();
-    
-    // Listener pro změnu velikosti
-    window.addEventListener('resize', checkMobile);
-    
-    // Cleanup
-    return () => window.removeEventListener('resize', checkMobile);
+    setIsMobile(window.innerWidth < 768);
   }, []);
   
   return (
-    <div className="max-w-7xl mx-auto px-4 mt-12 sm:mt-16 relative py-16 sm:py-20">
-      {/* Použití statického pozadí pro všechny zařízení */}
+    <div className="max-w-7xl mx-auto px-4 mt-8 sm:mt-12 relative py-10 sm:py-16">
+      {/* Základní pozadí */}
       <StaticBackground />
       
-      {/* Jemná mřížka na pozadí - statická */}
-      <div className="absolute inset-0 opacity-[0.04]" 
-        style={{
-          backgroundImage: 
-            `linear-gradient(to right, rgba(148, 163, 184, 0.1) 1px, transparent 1px),
-             linear-gradient(to bottom, rgba(148, 163, 184, 0.1) 1px, transparent 1px)`,
-          backgroundSize: '50px 50px'
-        }} 
-      />
-      
-      {/* Optimalizovaný nadpis - méně animací */}
-      <h2 className="text-3xl sm:text-4xl md:text-5xl text-center text-white font-extrabold tracking-tight relative inline-block mb-8 sm:mb-16">
+      {/* Jednoduchý nadpis */}
+      <h2 className="text-3xl sm:text-4xl md:text-5xl text-center text-white font-extrabold tracking-tight relative inline-block mb-6 sm:mb-10">
         Rychlý přehled 
         <div
           className="absolute left-1/3 -translate-x-1/2 bottom-[-10px] h-[5px] w-2/3 bg-gradient-to-r from-[#F97316] to-yellow-500 rounded-full"
         />
       </h2>
       
-      {/* Zjednodušené značky pod nadpisem */}
-      <div className="flex justify-center mb-10 sm:mb-16">
+      {/* Značky pod nadpisem */}
+      <div className="flex justify-center mb-8 sm:mb-12">
         <div className="flex items-center space-x-2 text-xs font-mono text-orange-500/60">
           <span>{'//'}</span>
           <div className="h-px w-8 bg-orange-500/40" />
@@ -278,22 +187,19 @@ const ServicesGrid: React.FC = () => {
         </div>
       </div>
       
-      {/* Optimalizovaný grid - méně mezer na mobilu */}
-      <div
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-center gap-6 md:gap-10"
-      >
+      {/* Optimalizovaný grid - meně mezer pro mobilní zařízení */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-center gap-4 md:gap-8">
         {services.map((service, i) => (
           <ServiceCard 
             key={i} 
             service={service} 
             index={i} 
-            isMobile={isMobile}
           />
         ))}
       </div>
       
-      {/* Statický dekorativní prvek místo animovaného */}
-      <div className="flex justify-center mt-12 sm:mt-16">
+      {/* Jednoduchý dekorativní prvek */}
+      <div className="flex justify-center mt-8 sm:mt-12">
         <div className="w-32 h-px bg-gradient-to-r from-transparent via-orange-500/20 to-transparent" />
       </div>
     </div>
