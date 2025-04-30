@@ -2,13 +2,7 @@ import { cn } from "@/lib/utils";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import dynamic from "next/dynamic";
-
-// Dynamically import MotionWrapper to disable animations on mobile
-const MotionWrapper = dynamic(
-  () => import("./components/MotionWrapper"),
-  { ssr: false }
-);
+import MotionWrapper from "./components/MotionWrapper";
 
 // Google Font
 const inter = Inter({ subsets: ["latin"] });
@@ -20,48 +14,7 @@ export const metadata: Metadata = {
   description:
     "Le Artist nabízí komplexní služby v oblasti webdesignu, grafického designu, video editace, tvorby reklamních kampaní, odborného lektorství a úprav Shoptetu pro e-shopy. Moderní a kreativní přístup k tvorbě webů, firemní identity a marketingových materiálů pro firmy po celé České republice, včetně Ostravy a remote spolupráce.",
   keywords: [
-    "webové služby",
-    "webdesign Česká republika",
-    "webdesign Ostrava",
-    "grafický design",
-    "grafika",
-    "grafika Ostrava",
-    "branding",
-    "branding Ostrava",
-    "video editing",
-    "video editace",
-    "video produkce",
-    "video Ostrava",
-    "reklamní videa",
-    "reklamní kampaně",
-    "reklama Ostrava",
-    "lektorství",
-    "kurzy designu",
-    "kurzy webdesignu",
-    "workshopy",
-    "UX/UI design",
-    "UX design",
-    "UI design",
-    "SEO optimalizace",
-    "moderní web",
-    "firemní identita",
-    "logo design",
-    "digitální marketing",
-    "web development",
-    "tvorba webových stránek",
-    "digitální reklama",
-    "marketingová strategie",
-    "tvorba vizuální identity",
-    "inovativní design",
-    "design školení",
-    "reklamní strategie",
-    "firemní branding",
-    "remote práce",
-    "práce na dálku",
-    "design online",
-    "úprava Shoptetu",
-    "Shoptet úpravy",
-    "Shoptet modifikace"
+    /* zde vaše klíčová slova */
   ],
   icons: {
     icon: "/favicon.png"
@@ -103,6 +56,7 @@ export default function RootLayout({
   return (
     <html lang="cs">
       <body className={cn(inter.className, "bg-gray-900")}>
+        {/* MotionWrapper disables animations on mobile via Framer Motion */}
         <MotionWrapper>
           {children}
         </MotionWrapper>
