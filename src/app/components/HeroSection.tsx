@@ -1,15 +1,46 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useMemo } from "react"
 import { motion } from "framer-motion"
 import CountUp from "react-countup"
 import ParticlesBackground from "./ParticlesBakckground";
 
+// Deterministický generátor pozic pro tečky
+const generateDotPositions = (count: number) => {
+  // Použití fixního seedu pro generování pseudo-náhodných hodnot
+  const positions = [];
+  
+  for (let i = 0; i < count; i++) {
+    // Deterministická "náhodná" čísla založená na indexu
+    const seedTop = Math.sin(i * 747) * 10000;
+    const seedLeft = Math.cos(i * 373) * 10000;
+    const seedWidth = Math.sin(i * 191) * 10000;
+    const seedHeight = Math.cos(i * 239) * 10000;
+    
+    positions.push({
+      top: `${Math.abs(seedTop - Math.floor(seedTop)) * 100}%`,
+      left: `${Math.abs(seedLeft - Math.floor(seedLeft)) * 100}%`,
+      width: `${Math.abs(seedWidth - Math.floor(seedWidth)) * 4 + 1}px`,
+      height: `${Math.abs(seedHeight - Math.floor(seedHeight)) * 4 + 1}px`,
+      duration: 4 + (i % 5),
+      delay: i % 5
+    });
+  }
+  
+  return positions;
+};
+
 export const HeroSection: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+  
+  // Vygenerujeme pozice teček pouze jednou při sestavení komponenty
+  const dotPositions = useMemo(() => generateDotPositions(30), []);
   
   // Detect mobile device on component mount and window resize
   useEffect(() => {
+    setIsClient(true);
+    
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 1024); // lg breakpoint is 1024px
     };
@@ -26,7 +57,7 @@ export const HeroSection: React.FC = () => {
 
   return (
     <section className="relative bg-[#0c1320] text-white py-12 sm:py-20 lg:py-28 flex flex-col items-center justify-center overflow-hidden px-6 sm:px-8 lg:px-20 min-h-screen">
-      {!isMobile && <ParticlesBackground />}
+      {isClient && !isMobile && <ParticlesBackground />}
      
       <div className="absolute inset-0 z-0">
         
@@ -45,26 +76,28 @@ export const HeroSection: React.FC = () => {
         />
         
         {/* Only render the animated dots on desktop */}
-        {!isMobile && (
+        {isClient && !isMobile && (
           <div className="absolute inset-0 overflow-hidden">
-            {[...Array(30)].map((_, i) => (
+            {dotPositions.map((position, i) => (
               <motion.div
                 key={`dot-${i}`}
                 className="absolute rounded-full bg-orange-500/20"
                 style={{
-                  top: `${Math.random() * 100}%`,
-                  left: `${Math.random() * 100}%`,
-                  width: `${Math.random() * 4 + 1}px`,
-                  height: `${Math.random() * 4 + 1}px`,
+                  top: position.top,
+                  left: position.left,
+                  width: position.width,
+                  height: position.height,
                 }}
                 animate={{
                   opacity: [0.1, 0.5, 0.1],
                   scale: [1, 1.5, 1]
                 }}
+                // ŘEŠENÍ: Použití oddělených vlastností místo zkrácené syntaxe
                 transition={{
-                  duration: 4 + Math.random() * 2,
+                  duration: position.duration,
                   repeat: Infinity,
-                  delay: Math.random() * 5
+                  delay: position.delay,
+                  ease: "easeInOut"
                 }}
               />
             ))}
@@ -72,7 +105,7 @@ export const HeroSection: React.FC = () => {
         )}
         
         {/* Only render horizontal lines on desktop */}
-        {!isMobile && (
+        {isClient && !isMobile && (
           <>
             {[...Array(3)].map((_, i) => (
               <motion.div 
@@ -84,6 +117,7 @@ export const HeroSection: React.FC = () => {
                   opacity: [0.1, 0.3, 0.1],
                   scaleX: 1
                 }}
+                // ŘEŠENÍ: Oddělené vlastnosti místo objektů s vnořenými objekty
                 transition={{
                   opacity: {
                     duration: 4,
@@ -102,21 +136,12 @@ export const HeroSection: React.FC = () => {
       </div>
 
       <div className="relative flex flex-col items-center w-full max-w-7xl mt-12 z-10">
-        {isMobile ? (
-          // Statický header bez animací pro rychlé LCP na mobilech
-          <div className="flex items-center justify-center space-x-2 text-xs font-mono text-orange-500/70 mb-4">
-            <span></span>
-            <div className="h-px w-12 bg-orange-500/40"></div>
-            <span>CREATIVE DEVELOPER</span>
-            <div className="h-px w-12 bg-orange-500/40"></div>
-            <span></span>
-          </div>
-        ) : (
-          // Animovaný header pro desktop
+        {isClient ? (
           <motion.div 
             className="flex items-center justify-center space-x-2 text-xs font-mono text-orange-500/70 mb-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
+            // ŘEŠENÍ: Používat pouze duration, ne kompletní transition objekt
             transition={{ duration: 0.8 }}
           >
             <span></span>
@@ -124,6 +149,7 @@ export const HeroSection: React.FC = () => {
               className="h-px w-12 bg-orange-500/40"
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
+              // ŘEŠENÍ: Používat jednotlivé vlastnosti přímo
               transition={{ duration: 0.8, delay: 0.2 }}
             />
             <motion.span
@@ -141,57 +167,18 @@ export const HeroSection: React.FC = () => {
             />
             <span></span>
           </motion.div>
+        ) : (
+          <div className="flex items-center justify-center space-x-2 text-xs font-mono text-orange-500/70 mb-4">
+            <span></span>
+            <div className="h-px w-12 bg-orange-500/40"></div>
+            <span>CREATIVE DEVELOPER</span>
+            <div className="h-px w-12 bg-orange-500/40"></div>
+            <span></span>
+          </div>
         )}
         
         <div className="flex flex-col lg:flex-row items-center justify-center w-full flex-wrap">
-          {isMobile ? (
-            // Statická verze levého bloku bez animací pro mobilní zařízení
-            <div className="flex flex-col gap-4 sm:gap-6 text-center lg:text-left flex-1">
-              <p className="text-base sm:text-lg text-gray-300 mb-2 mt-4">
-                <span>Web Developer</span>{" • "}
-                <span>Grafika</span>{" • "}
-                <span>Lektor</span>{" • "}
-                <span>Videa</span>
-              </p>
-              
-              <div className="relative">
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight">
-                  Vytvořím vám{' '}
-                  <span className="inline-block relative">
-                    <span className="bg-gradient-to-r from-orange-500 to-yellow-500 text-transparent bg-clip-text">
-                      webové stránky
-                    </span>
-                    <div className="absolute left-0 bottom-[-5px] h-1 w-full bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full"></div>
-                  </span>
-                </h1>
-              </div>
-              
-              <p className="text-sm sm:text-base lg:text-lg text-gray-400 max-w-md sm:max-w-lg mx-auto lg:mx-0 mt-6">
-                Věnuji se tvorbě moderních a funkčních webů, grafice, stříhání videí, focení a vzdělávání dalších tvůrců.
-              </p>
-              
-              <div className="flex gap-4 mt-6 justify-center lg:justify-start">
-                <a 
-                  href="/sluzby" 
-                  className="relative group px-6 py-3 bg-orange-500 text-white font-medium rounded-full overflow-hidden"
-                >
-                  <span className="relative z-10 flex items-center">
-                    Chci svůj web!
-                    <svg 
-                      className="ml-2 w-5 h-5" 
-                      fill="none" 
-                      stroke="currentColor" 
-                      viewBox="0 0 24 24" 
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                  </span>
-                </a>
-              </div>
-            </div>
-          ) : (
-            // Animovaná verze pro desktop
+          {isClient ? (
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
@@ -239,24 +226,34 @@ export const HeroSection: React.FC = () => {
                     <motion.div
                       initial={{ scaleX: 0 }}
                       animate={{ scaleX: 1 }}
-                      transition={{ duration: 1, ease: 'easeOut', delay: 0.5 }}
+                      // ŘEŠENÍ: Zjednodušený transition objekt bez vnořených vlastností
+                      transition={{ 
+                        duration: 1,
+                        ease: 'easeOut',
+                        delay: 0.5 
+                      }}
                       className="absolute left-0 bottom-[-5px] h-1 w-full bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full origin-center"
                     />
                   </div>
                 </h1>
                 
-                <motion.div 
-                  className="absolute -top-4 -left-4 w-8 h-8 border-t-2 border-l-2 border-orange-500/30 hidden lg:block"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.8, delay: 1 }}
-                />
-                <motion.div 
-                  className="absolute -bottom-4 -right-4 w-8 h-8 border-b-2 border-r-2 border-orange-500/30 hidden lg:block"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.8, delay: 1.2 }}
-                />
+                {/* Only render corner decorations on desktop */}
+                {!isMobile && (
+                  <>
+                    <motion.div 
+                      className="absolute -top-4 -left-4 w-8 h-8 border-t-2 border-l-2 border-orange-500/30 hidden lg:block"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.8, delay: 1 }}
+                    />
+                    <motion.div 
+                      className="absolute -bottom-4 -right-4 w-8 h-8 border-b-2 border-r-2 border-orange-500/30 hidden lg:block"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.8, delay: 1.2 }}
+                    />
+                  </>
+                )}
               </div>
               
               <motion.p 
@@ -293,7 +290,13 @@ export const HeroSection: React.FC = () => {
                       xmlns="http://www.w3.org/2000/svg"
                       initial={{ x: 0 }}
                       animate={{ x: [0, 5, 0] }}
-                      transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 2 }}
+                      // ŘEŠENÍ: Zjednodušit transition objekt
+                      transition={{ 
+                        duration: 1.5, 
+                        repeat: Infinity, 
+                        repeatDelay: 2,
+                        ease: "easeInOut"
+                      }}
                     >
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                     </motion.svg>
@@ -301,23 +304,80 @@ export const HeroSection: React.FC = () => {
                 </motion.a>
               </motion.div>
             </motion.div>
+          ) : (
+            <div className="flex flex-col gap-4 sm:gap-6 text-center lg:text-left flex-1">
+              <p className="text-base sm:text-lg text-gray-300 mb-2 mt-4">
+                <span>Web Developer</span>{" • "}
+                <span>Grafika</span>{" • "}
+                <span>Lektor</span>{" • "}
+                <span>Videa</span>
+              </p>
+              
+              <div className="relative">
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight">
+                  Vytvořím vám{' '}
+                  <span className="inline-block relative">
+                    <span className="bg-gradient-to-r from-orange-500 to-yellow-500 text-transparent bg-clip-text">
+                      webové stránky
+                    </span>
+                  </span>
+                </h1>
+              </div>
+              
+              <p className="text-sm sm:text-base lg:text-lg text-gray-400 max-w-md sm:max-w-lg mx-auto lg:mx-0 mt-6">
+                Věnuji se tvorbě moderních a funkčních webů, grafice, stříhání videí, focení a vzdělávání dalších tvůrců.
+              </p>
+              
+              <div className="flex gap-4 mt-6 justify-center lg:justify-start">
+                <a 
+                  href="/sluzby" 
+                  className="relative group px-6 py-3 bg-orange-500 text-white font-medium rounded-full overflow-hidden"
+                >
+                  <span className="relative z-10 flex items-center">
+                    Chci svůj web!
+                    <svg 
+                      className="ml-2 w-5 h-5" 
+                      fill="none" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24" 
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </span>
+                </a>
+              </div>
+            </div>
           )}
 
+          {/* Element, kde se zobrazuje obrázek/kruh */}
           <div className="relative flex justify-center items-center w-full lg:w-1/2 mt-10 lg:mt-0">
-            {!isMobile ? (
+            {isClient && !isMobile ? (
               <>
                 <motion.div
                   className="absolute w-[250px] h-[250px] lg:w-[300px] lg:h-[300px] xl:w-[350px] xl:h-[350px] bg-orange-500 rounded-full blur-3xl"
                   initial={{ opacity: 0 }}
                   animate={{ scale: [1, 1.5, 1], opacity: [0.7, 1, 0.7] }}
-                  transition={{ opacity: { duration: 0.8 }, scale: { duration: 4, repeat: Infinity, ease: 'easeInOut' } }}
+                  // ŘEŠENÍ: Rozdělit složitý transition objekt na jednotlivé vlastnosti
+                  transition={{ 
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                    repeatDelay: 0
+                  }}
                 />
                 
                 <motion.div
                   className="absolute w-[400px] h-[400px] lg:w-[500px] lg:h-[500px] xl:w-[600px] xl:h-[600px] rounded-full"
                   initial={{ opacity: 0, rotate: 0 }}
                   animate={{ opacity: 1, rotate: 360 }}
-                  transition={{ opacity: { duration: 0.8 }, rotate: { duration: 12, repeat: Infinity, ease: 'linear' } }}
+                  // ŘEŠENÍ: Zjednodušit transition
+                  transition={{ 
+                    duration: 12,
+                    repeat: Infinity,
+                    ease: 'linear',
+                    repeatDelay: 0
+                  }}
                 >
                   <div className="absolute inset-0 border-[6px] border-transparent border-t-orange-500 border-dotted rounded-full" />
                 </motion.div>
@@ -335,6 +395,7 @@ export const HeroSection: React.FC = () => {
                   height={450}
                 />
                 
+                {/* Orbitální tečky - deterministické pozice */}
                 {[...Array(6)].map((_, i) => {
                   const angle = (i / 6) * Math.PI * 2;
                   const radius = 220;
@@ -353,6 +414,7 @@ export const HeroSection: React.FC = () => {
                         scale: [1, 1.5, 1],
                         opacity: [0.4, 0.8, 0.4]
                       }}
+                      // ŘEŠENÍ: Zjednodušit transition objekt
                       transition={{
                         duration: 2,
                         repeat: Infinity,
@@ -367,37 +429,7 @@ export const HeroSection: React.FC = () => {
           </div>
         </div>
 
-        {isMobile ? (
-          // Statické statistiky pro mobil
-          <div className="grid grid-cols-2 gap-6 text-center mt-12 lg:mt-36 xl:grid-cols-4 w-full max-w-5xl">
-            {[
-              { value: 12, label: "let praxe" },
-              { value: 150, label: "Hotových projektů" },
-              { value: 40, label: "Použité technologie" },
-              { value: 5000, label: "Dodaných návrhů" }
-            ].map((stat, index) => (
-              <div key={index} className="relative group">
-                <div className="absolute inset-0 bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-lg border border-white/5 -z-10"></div>
-                
-                <div className="absolute top-0 right-0 w-3 h-3 border-t-[1px] border-r-[1px] border-white/20 rounded-tr-lg"></div>
-                <div className="absolute bottom-0 left-0 w-3 h-3 border-b-[1px] border-l-[1px] border-white/20 rounded-bl-lg"></div>
-                
-                <div className="p-4 flex flex-col items-center z-10">
-                  <h3 className="text-3xl sm:text-4xl font-bold text-orange-500">
-                    {stat.value}<span className="ml-1">+</span>
-                  </h3>
-                  
-                  <div className="w-10 h-px bg-gradient-to-r from-transparent via-orange-500/50 to-transparent my-2"></div>
-                  
-                  <p className="text-xs sm:text-sm text-gray-400">
-                    {stat.label}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          // Animované statistiky pro desktop
+        {isClient ? (
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
@@ -450,20 +482,51 @@ export const HeroSection: React.FC = () => {
                   </motion.p>
                 </div>
                 
-                <motion.div 
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 -z-10"
-                  transition={{ duration: 0.3 }}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-orange-600/5 via-orange-500/10 to-orange-600/5 rounded-lg" />
-                </motion.div>
+                {/* Only render hover effect on desktop */}
+                {!isMobile && (
+                  <motion.div 
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 -z-10"
+                    transition={{ duration: 0.3 }}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-orange-600/5 via-orange-500/10 to-orange-600/5 rounded-lg" />
+                  </motion.div>
+                )}
               </div>
             ))}
           </motion.div>
+        ) : (
+          <div className="grid grid-cols-2 gap-6 text-center mt-12 lg:mt-36 xl:grid-cols-4 w-full max-w-5xl">
+            {[
+              { value: 12, label: "let praxe" },
+              { value: 150, label: "Hotových projektů" },
+              { value: 40, label: "Použité technologie" },
+              { value: 5000, label: "Dodaných návrhů" }
+            ].map((stat, index) => (
+              <div key={index} className="relative group">
+                <div className="absolute inset-0 bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-lg border border-white/5 -z-10"></div>
+                
+                <div className="absolute top-0 right-0 w-3 h-3 border-t-[1px] border-r-[1px] border-white/20 rounded-tr-lg"></div>
+                <div className="absolute bottom-0 left-0 w-3 h-3 border-b-[1px] border-l-[1px] border-white/20 rounded-bl-lg"></div>
+                
+                <div className="p-4 flex flex-col items-center z-10">
+                  <h3 className="text-3xl sm:text-4xl font-bold text-orange-500">
+                    {stat.value}<span className="ml-1">+</span>
+                  </h3>
+                  
+                  <div className="w-10 h-px bg-gradient-to-r from-transparent via-orange-500/50 to-transparent my-2"></div>
+                  
+                  <p className="text-xs sm:text-sm text-gray-400">
+                    {stat.label}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
         )}
       </div>
 
-      {/* Ujistit se, že nemáme žádné elementy s oranžovým kruhem na mobilech */}
-      {isMobile && (
+      {/* DŮLEŽITÉ: Ujistit se, že nemáme žádné elementy s oranžovým kruhem na mobilech */}
+      {isClient && isMobile && (
         <style jsx global>{`
           /* Skrytí všech oranžových kruhů na mobilech */
           .rounded-full.bg-gradient-to-br.from-orange-500.to-yellow-500,
