@@ -163,3 +163,10 @@ html, body {
 }
 
 
+/* Globálně na mobil: */
+@media (max-width: 768px) {
+  * {
+    backdrop-filter: none !important;
+    filter: none !important;
+  }
+}
