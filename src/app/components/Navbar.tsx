@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
@@ -9,17 +9,45 @@ import { FaPaw, FaEnvelope, FaCog, FaCode, FaRocket } from "react-icons/fa";
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
 
   // -----------------------------
-  // listener pro scrollování
+  // Optimalizovaný listener pro scrollování pomocí Intersection Observer
   // -----------------------------
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const handleScroll = () => setIsScrolled(window.scrollY > 10);
-    window.addEventListener("scroll", handleScroll);
-    handleScroll(); // inicializace při mountu
+    
+    // Vytvoření sentinel elementu, pokud ještě neexistuje
+    if (!sentinelRef.current) {
+      const sentinel = document.createElement('div');
+      sentinel.style.position = 'absolute';
+      sentinel.style.top = '0';
+      sentinel.style.height = '10px';
+      sentinel.style.width = '100%';
+      sentinel.style.pointerEvents = 'none';
+      sentinel.style.zIndex = '-1';
+      document.body.prepend(sentinel);
+      sentinelRef.current = sentinel;
+    }
+    
+    // Použití Intersection Observer místo scroll event listeneru
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsScrolled(!entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+    
+    if (sentinelRef.current) {
+      observer.observe(sentinelRef.current);
+    }
+    
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      observer.disconnect();
+      if (sentinelRef.current) {
+        sentinelRef.current.remove();
+        sentinelRef.current = null;
+      }
     };
   }, []);
 
@@ -33,41 +61,15 @@ const Navbar: React.FC = () => {
   }, [isOpen]);
 
   // -----------------------------
-  // Variants pro animace menu
+  // Minimální varianta pouze pro animaci zobrazení/skrytí menu
   // -----------------------------
   const menuBackgroundVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { duration: 0.3, when: "beforeChildren" }
+      transition: { duration: 0.2 }
     },
     exit: {
-      opacity: 0,
-      transition: { duration: 0.3, when: "afterChildren" }
-    }
-  };
-
-  const menuContentVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { duration: 0.5, staggerChildren: 0.1 }
-    },
-    exit: {
-      opacity: 0,
-      transition: { duration: 0.3 }
-    }
-  };
-
-  const menuItemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { type: "spring", stiffness: 100, damping: 15 }
-    },
-    exit: {
-      y: -20,
       opacity: 0,
       transition: { duration: 0.2 }
     }
@@ -83,22 +85,18 @@ const Navbar: React.FC = () => {
     >
       <div className="max-w-7xl mx-auto px-4 flex justify-between items-center py-4">
         {/* Logo */}
-        <Link href="/" className="flex items-center relative">
-          <motion.div
-            className="absolute -inset-2 rounded-lg blur-sm"
-            animate={{ opacity: [0.3, 0.6, 0.3] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-          />
+        <Link href="/" className="flex items-center">
           <Image
             src="/imgs/logoone.png"
             alt="Logo"
             width={180}
             height={50}
-            className="object-contain relative z-10"
+            className="object-contain"
+            priority
           />
         </Link>
 
-        {/* Desktop Menu */}
+        {/* Desktop Menu - beze změny */}
         <ul className="hidden lg:flex items-center gap-8">
           {[
             {
@@ -137,7 +135,7 @@ const Navbar: React.FC = () => {
           ))}
         </ul>
 
-        {/* Kontaktní tlačítko */}
+        {/* Kontaktní tlačítko - beze změny pro desktop */}
         <Link
           href="/kontakt"
           className="hidden lg:flex items-center px-5 py-2 bg-gradient-to-r from-orange-600 to-orange-500 text-white rounded-full font-medium relative overflow-hidden group"
@@ -149,135 +147,44 @@ const Navbar: React.FC = () => {
           <span className="relative z-10">Kontaktujte mě</span>
         </Link>
 
-        {/* Mobilní tlačítko */}
-        <motion.button
-          className="lg:hidden flex flex-col items-center justify-center relative focus:outline-none"
+        {/* Mobilní tlačítko - zjednodušeno */}
+        <button
+          className="lg:hidden flex flex-col items-center justify-center"
           onClick={() => setIsOpen(true)}
           aria-label="Open menu"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
         >
-          <FaPaw className="text-orange-500 text-3xl relative z-10" />
-          <motion.span
-            className="text-white text-xs mt-1 font-mono relative z-10"
-            animate={{ opacity: [0.7, 1, 0.7] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          >
-            Menu
-          </motion.span>
-        </motion.button>
+          <FaPaw className="text-orange-500 text-3xl" />
+          <span className="text-white text-xs mt-1 font-mono">Menu</span>
+        </button>
       </div>
 
-      {/* Futuristické mobilní menu */}
+      {/* Jednoduché mobilní menu bez animací na pozadí */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
             key="mobileMenu"
-            className="fixed inset-0 h-screen w-full z-[9999] bg-[#0f172a]/95 backdrop-blur-lg flex flex-col items-center justify-center overflow-hidden"
+            className="fixed inset-0 h-screen w-full z-[9999] bg-[#0f172a] flex flex-col items-center justify-center overflow-hidden"
             variants={menuBackgroundVariants}
             initial="hidden"
             animate="visible"
             exit="exit"
           >
-            {/* Digitální mřížka na pozadí */}
-            <div
-              className="absolute inset-0 overflow-hidden pointer-events-none"
-            >
-              <div
-                className="absolute inset-0 opacity-[0.05]"
-                style={{
-                  backgroundImage: 
-                    `linear-gradient(to right, rgba(249, 115, 22, 0.1) 1px, transparent 1px),
-                     linear-gradient(to bottom, rgba(249, 115, 22, 0.1) 1px, transparent 1px)`,
-                  backgroundSize: '30px 30px'
-                }}
-              />
-              {/* Světelné body */}
-              {[...Array(25)].map((_, i) => (
-                <motion.div
-                  key={`dot-${i}`}
-                  className="absolute rounded-full bg-orange-500/40"
-                  style={{
-                    width: `${2 + Math.random() * 4}px`,
-                    height: `${2 + Math.random() * 4}px`,
-                    top: `${Math.random() * 100}%`,
-                    left: `${Math.random() * 100}%`,
-                    filter: 'blur(1px)',
-                  }}
-                  animate={{
-                    opacity: [0.1, 0.5, 0.1],
-                    scale: [1, 1.3, 1],
-                    y: [0, Math.random() * 10 - 5, 0],
-                  }}
-                  transition={{
-                    duration: 4 + Math.random() * 3,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: Math.random() * 2,
-                  }}
-                />
-              ))}
-              {/* Diagonální linie */}
-              {[...Array(6)].map((_, i) => (
-                <motion.div
-                  key={`line-${i}`}
-                  className="absolute h-[1px] w-[200%] bg-gradient-to-r from-transparent via-orange-500/15 to-transparent"
-                  style={{
-                    top: `${i * 20}%`,
-                    left: '-50%',
-                    transform: `rotate(${15 + i * 6}deg)`,
-                  }}
-                  animate={{ opacity: [0.1, 0.3, 0.1] }}
-                  transition={{
-                    duration: 5,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: i * 0.4,
-                  }}
-                />
-              ))}
-              {/* Mlhavé efekty */}
-              <motion.div
-                className="absolute inset-0"
-                style={{
-                  background: 'radial-gradient(circle at 70% 30%, rgba(249, 115, 22, 0.03) 0%, transparent 60%)',
-                }}
-                animate={{ opacity: [0.3, 0.5, 0.3] }}
-                transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-              />
-              <motion.div
-                className="absolute inset-0"
-                style={{
-                  background: 'radial-gradient(circle at 30% 70%, rgba(249, 115, 22, 0.03) 0%, transparent 60%)',
-                }}
-                animate={{ opacity: [0.5, 0.3, 0.5] }}
-                transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-              />
-            </div>
 
             {/* Zavírací tlačítko */}
-            <motion.button
+            <button
               className="absolute top-6 right-6 w-12 h-12 flex items-center justify-center focus:outline-none z-50"
               onClick={() => setIsOpen(false)}
               aria-label="Close menu"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
             >
               <div className="relative w-8 h-8 flex items-center justify-center">
                 <div className="absolute w-8 h-0.5 bg-orange-500 rotate-45"></div>
                 <div className="absolute w-8 h-0.5 bg-orange-500 -rotate-45"></div>
               </div>
-            </motion.button>
+            </button>
 
             {/* Položky mobilního menu */}
-            <motion.ul
+            <ul
               className="flex flex-col items-center space-y-12 text-xl relative z-10 mt-8 mb-32"
-              variants={menuContentVariants}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
             >
               {[
                 { title: "Služby a ceník", href: "/sluzby" },
@@ -285,48 +192,30 @@ const Navbar: React.FC = () => {
                 { title: "Postup tvorby webu", href: "/postup" },
                 { title: "Kontakt", href: "/kontakt" }
               ].map((item, idx) => (
-                <motion.li key={idx} variants={menuItemVariants}>
+                <li key={idx}>
                   <Link
                     href={item.href}
                     onClick={() => setIsOpen(false)}
                     className="relative group"
                   >
-                    <span className="relative block text-center">
-                      <span className="text-white text-2xl font-medium tracking-wide group-hover:text-orange-400 transition-colors duration-300 relative z-10">
-                        {item.title}
-                      </span>
-                      <motion.span
-                        className="absolute -bottom-2 left-0 right-0 h-[2px] mx-auto bg-gradient-to-r from-orange-600 via-orange-500 to-transparent opacity-0 group-hover:opacity-100"
-                        initial={{ width: "0%" }}
-                        whileHover={{ width: "100%" }}
-                        transition={{ duration: 0.3 }}
-                      />
-                      <motion.div
-                        className="absolute -inset-4 rounded-lg opacity-0 group-hover:opacity-100 bg-orange-500/5"
-                        transition={{ duration: 0.3 }}
-                      />
+                    <span className="text-white text-2xl font-medium tracking-wide group-hover:text-orange-400 transition-colors duration-300">
+                      {item.title}
                     </span>
                   </Link>
-                </motion.li>
+                </li>
               ))}
-            </motion.ul>
+            </ul>
 
-            {/* Spodní kontaktní panel */}
-            <motion.div
-              className="absolute bottom-0 left-0 right-0 pt-8 pb-4 w-full bg-gradient-to-t from-[#0f172a] to-transparent"
-              variants={menuItemVariants}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
+            {/* Zjednodušený spodní kontaktní panel - bez animací */}
+            <div
+              className="absolute bottom-0 left-0 right-0 pt-8 pb-4 w-full bg-[#0f172a]"
             >
-              <motion.div
+              <div
                 className="absolute top-0 left-0 w-full h-[1px]"
                 style={{
                   background:
                     "linear-gradient(to right, transparent, rgba(249, 115, 22, 0.3), transparent)"
                 }}
-                animate={{ opacity: [0.3, 0.7, 0.3] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
               />
               <div className="text-center mb-5">
                 <h3 className="text-white text-lg font-medium">
@@ -386,10 +275,12 @@ const Navbar: React.FC = () => {
                   </span>
                 </a>
               </div>
-            </motion.div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
+      
+      {/* Odstraněny CSS animace, které již nejsou potřeba */}
     </nav>
   );
 };
