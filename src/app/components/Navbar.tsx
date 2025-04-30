@@ -60,21 +60,6 @@ const Navbar: React.FC = () => {
     document.documentElement.style.overflow = isOpen ? "hidden" : "";
   }, [isOpen]);
 
-  // -----------------------------
-  // Minimální varianta pouze pro animaci zobrazení/skrytí menu
-  // -----------------------------
-  const menuBackgroundVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { duration: 0.2 }
-    },
-    exit: {
-      opacity: 0,
-      transition: { duration: 0.2 }
-    }
-  };
-
   return (
     <nav
       className={`fixed top-0 left-0 w-full z-40 transition-all duration-300 ${
@@ -96,7 +81,7 @@ const Navbar: React.FC = () => {
           />
         </Link>
 
-        {/* Desktop Menu - beze změny */}
+        {/* Desktop Menu */}
         <ul className="hidden lg:flex items-center gap-8">
           {[
             {
@@ -135,7 +120,7 @@ const Navbar: React.FC = () => {
           ))}
         </ul>
 
-        {/* Kontaktní tlačítko - beze změny pro desktop */}
+        {/* Kontaktní tlačítko */}
         <Link
           href="/kontakt"
           className="hidden lg:flex items-center px-5 py-2 bg-gradient-to-r from-orange-600 to-orange-500 text-white rounded-full font-medium relative overflow-hidden group"
@@ -147,14 +132,20 @@ const Navbar: React.FC = () => {
           <span className="relative z-10">Kontaktujte mě</span>
         </Link>
 
-        {/* Mobilní tlačítko - zjednodušeno */}
+        {/* Mobilní tlačítko - přepínací s otáčecí animací */}
         <button
-          className="lg:hidden flex flex-col items-center justify-center"
-          onClick={() => setIsOpen(true)}
-          aria-label="Open menu"
+          className="lg:hidden flex flex-col items-center justify-center relative z-[10000]"
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label={isOpen ? "Close menu" : "Open menu"}
         >
-          <FaPaw className="text-orange-500 text-3xl" />
-          <span className="text-white text-xs mt-1 font-mono">Menu</span>
+          <div
+            className={`transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
+          >
+            <FaPaw className="text-orange-500 text-3xl" />
+          </div>
+          <span className="text-white text-xs mt-1 font-mono">
+            {isOpen ? "Zavřít" : "Menu"}
+          </span>
         </button>
       </div>
 
@@ -164,23 +155,12 @@ const Navbar: React.FC = () => {
           <motion.div
             key="mobileMenu"
             className="fixed inset-0 h-screen w-full z-[9999] bg-[#0f172a] flex flex-col items-center justify-center overflow-hidden"
-            variants={menuBackgroundVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
           >
-
-            {/* Zavírací tlačítko */}
-            <button
-              className="absolute top-6 right-6 w-12 h-12 flex items-center justify-center focus:outline-none z-50"
-              onClick={() => setIsOpen(false)}
-              aria-label="Close menu"
-            >
-              <div className="relative w-8 h-8 flex items-center justify-center">
-                <div className="absolute w-8 h-0.5 bg-orange-500 rotate-45"></div>
-                <div className="absolute w-8 h-0.5 bg-orange-500 -rotate-45"></div>
-              </div>
-            </button>
+            {/* Žádné zavírací tlačítko, používáme pouze packu v navigační liště */}
 
             {/* Položky mobilního menu */}
             <ul
@@ -279,8 +259,6 @@ const Navbar: React.FC = () => {
           </motion.div>
         )}
       </AnimatePresence>
-      
-      {/* Odstraněny CSS animace, které již nejsou potřeba */}
     </nav>
   );
 };
