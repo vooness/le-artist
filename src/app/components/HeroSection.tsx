@@ -247,8 +247,8 @@ export const HeroSection: React.FC = () => {
             </motion.div>
           </motion.div>
 
+          {/* Element, kde se zobrazuje obrázek/kruh */}
           <div className="relative flex justify-center items-center w-full lg:w-1/2 mt-10 lg:mt-0">
-            {/* Only render these decorative elements on desktop */}
             {!isMobile ? (
               <>
                 <motion.div
@@ -274,6 +274,10 @@ export const HeroSection: React.FC = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.8 }}
+                  fetchPriority="high"
+                  loading="eager"
+                  width={450}
+                  height={450}
                 />
                 
                 {[...Array(6)].map((_, i) => {
@@ -305,12 +309,8 @@ export const HeroSection: React.FC = () => {
                 })}
               </>
             ) : (
-              // Simple image for mobile without animations
-              <img
-                src="/imgs/banner5.svg"
-                alt="Tvoje fotka"
-                className="relative z-20 w-[200px] h-[200px]"
-              />
+              /* Vůbec nic na mobilu */
+              null
             )}
           </div>
         </div>
@@ -380,6 +380,23 @@ export const HeroSection: React.FC = () => {
           ))}
         </motion.div>
       </div>
+
+      {/* DŮLEŽITÉ: Ujistit se, že nemáme žádné elementy s oranžovým kruhem na mobilech */}
+      {/* Kontrola dodatečných elementů, které by mohly obsahovat oranžový kruh */}
+      {isMobile && (
+        <style jsx global>{`
+          /* Skrytí všech oranžových kruhů na mobilech */
+          .rounded-full.bg-gradient-to-br.from-orange-500.to-yellow-500,
+          .w-20.h-20.rounded-full,
+          .animate-pulse.bg-gradient-to-br {
+            display: none !important;
+            opacity: 0 !important;
+            width: 0 !important;
+            height: 0 !important;
+            visibility: hidden !important;
+          }
+        `}</style>
+      )}
     </section>
   )
 }
