@@ -2,9 +2,18 @@ import { cn } from "@/lib/utils";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import dynamic from "next/dynamic";
 
+// Dynamically import MotionWrapper to disable animations on mobile
+const MotionWrapper = dynamic(
+  () => import("./components/MotionWrapper"),
+  { ssr: false }
+);
+
+// Google Font
 const inter = Inter({ subsets: ["latin"] });
 
+// Metadata for SEO and social sharing
 export const metadata: Metadata = {
   title:
     "Le Artist - Profesionální webové služby, grafika, video editing, reklamy, lektorství a úpravy Shoptetu v České republice (včetně Ostravy)",
@@ -55,7 +64,7 @@ export const metadata: Metadata = {
     "Shoptet modifikace"
   ],
   icons: {
-    icon: "/favicon.png",
+    icon: "/favicon.png"
   },
   openGraph: {
     title:
@@ -69,11 +78,11 @@ export const metadata: Metadata = {
         url: "https://yourwebsite.com/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Le Artist - Profesionální webové služby, design a úpravy Shoptetu v Ostravě a ČR",
-      },
+        alt: "Le Artist - Profesionální webové služby, design a úpravy Shoptetu v Ostravě a ČR"
+      }
     ],
     locale: "cs_CZ",
-    type: "website",
+    type: "website"
   },
   twitter: {
     card: "summary_large_image",
@@ -81,20 +90,23 @@ export const metadata: Metadata = {
       "Le Artist - Profesionální webové služby, grafika, video editing, reklamy, lektorství a úpravy Shoptetu",
     description:
       "Moderní a komplexní řešení v oblasti webdesignu, grafiky, video editace, tvorby reklam a úprav Shoptetu pro e-shopy. Nabízím také odborné lektorství a kurzy pro firmy po celé České republice, včetně Ostravy, s možností remote spolupráce.",
-    images: ["https://yourwebsite.com/og-image.jpg"],
-  },
+    images: ["https://yourwebsite.com/og-image.jpg"]
+  }
 };
 
+// Root layout with Framer Motion config wrapper
 export default function RootLayout({
-  children,
+  children
 }: {
   children: React.ReactNode;
 }) {
   return (
     <html lang="cs">
-  <body className={cn(inter.className, "bg-gray-900")}>
-    {children}
-  </body>
-</html>
+      <body className={cn(inter.className, "bg-gray-900")}>
+        <MotionWrapper>
+          {children}
+        </MotionWrapper>
+      </body>
+    </html>
   );
 }
