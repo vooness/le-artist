@@ -149,3 +149,16 @@ html, body {
 /* Tailwind plugin nebo ručně: */
 .tap-manipulation { touch-action: manipulation; }
 .contain-panel { contain: layout style paint; }
+
+
+
+/* globals.css */
+
+@media (max-width: 768px) {
+  /* Zastaví všechny CSS animace a přechody */
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
