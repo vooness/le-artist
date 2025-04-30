@@ -1,44 +1,14 @@
 "use client";
-import { useEffect, useState, useRef, Suspense } from 'react';
+
+import { useEffect, useState, useRef, Suspense, useCallback } from 'react';
+import dynamic from 'next/dynamic';
 import Navbar from "./components/Navbar";
 import { HeroSection } from "./components/HeroSection";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import dynamic from 'next/dynamic';
 
-// Import essential components normally
-// Lazy load other components with preload option
-const WhatIDo = dynamic(() => import('./components/WhatIDo'), { 
-  ssr: true,
-  loading: () => <Skeleton height={400} />
-});
-const InvestmentSection = dynamic(() => import('./components/investice'), { 
-  ssr: true,
-  loading: () => <Skeleton height={400} />
-});
-const ServicesGrid = dynamic(() => import('./components/ServiceGrid'), { 
-  ssr: true,
-  loading: () => <Skeleton height={400} />
-});
-const WhyTrustMe = dynamic(() => import('./components/WhyTrustMe'), { 
-  ssr: true,
-  loading: () => <Skeleton height={400} />
-});
-const ProjectsSection = dynamic(() => import('./components/Project'), { 
-  ssr: true,
-  loading: () => <Skeleton height={400} />
-});
-const SkillsSection = dynamic(() => import('./components/SkillSection'), { 
-  ssr: true,
-  loading: () => <Skeleton height={400} />
-});
-const Footer = dynamic(() => import('./components/Footer'), { 
-  ssr: true,
-  loading: () => <Skeleton height={200} />
-});
-
-// Skeleton component pro lepší vizuální zážitek během načítání
+// Skeleton loader for lazy components
 const Skeleton = ({ height = 400 }: { height?: number }) => (
-  <div 
+  <div
     className="animate-pulse bg-gradient-to-b from-slate-900/40 to-slate-800/40 rounded-md"
     style={{ height: `${height}px` }}
   >
@@ -48,51 +18,41 @@ const Skeleton = ({ height = 400 }: { height?: number }) => (
   </div>
 );
 
-// Define interface for the LazyComponent props
+// Lazy-loading wrapper with optimized IntersectionObserver
 interface LazyComponentProps {
   children: React.ReactNode;
   height?: number;
   priority?: boolean;
 }
 
-// Component for intersection observer with fixed types and improved preloading
 const LazyComponent = ({ children, height = 400, priority = false }: LazyComponentProps) => {
   const [isVisible, setIsVisible] = useState(priority);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Předem načteme komponenty s vysokou prioritou
     if (priority) {
       setIsVisible(true);
       return;
     }
-
     if (!ref.current) return;
-    
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          // Přidáme malé zpoždění, aby se obsah načetl plynuleji
-          setTimeout(() => {
+          // Use rAF for next-paint scheduling
+          requestAnimationFrame(() => {
             setIsVisible(true);
-          }, 100);
+          });
           observer.disconnect();
         }
       },
-      { 
-        rootMargin: '400px', // Zvětšíme rootMargin pro dřívější načítání
-        threshold: 0.1 
-      }
+      { rootMargin: '600px', threshold: 0.01 }
     );
-    
+
     observer.observe(ref.current);
-    
-    return () => {
-      if (ref.current) observer.unobserve(ref.current);
-    };
+    return () => { if (ref.current) observer.unobserve(ref.current); };
   }, [priority]);
 
-  // Použíjeme Suspense pro lepší UX
   return (
     <div ref={ref}>
       {isVisible ? (
@@ -106,26 +66,52 @@ const LazyComponent = ({ children, height = 400, priority = false }: LazyCompone
   );
 };
 
-// Přidáme preloading hook pro nejdůležitější komponenty
+// Preload lowest-priority components after mount
 function usePreloadComponents() {
   useEffect(() => {
-    // Předem načteme komponenty po načtení stránky
     const timer = setTimeout(() => {
-      // Toto spustí předběžné načtení komponent v pozadí
       import('./components/WhatIDo');
       import('./components/investice');
       import('./components/ServiceGrid');
-    }, 1000); // Počkat 1 vteřinu po načtení stránky
-    
+    }, 1000);
     return () => clearTimeout(timer);
   }, []);
 }
 
+// Dynamic imports with ssr:false to shrink SSR payload, plus skeleton fallback
+const WhatIDo = dynamic(() => import('./components/WhatIDo'), {
+  ssr: false,
+  loading: () => <Skeleton height={400} />,
+});
+const InvestmentSection = dynamic(() => import('./components/investice'), {
+  ssr: false,
+  loading: () => <Skeleton height={400} />,
+});
+const ServicesGrid = dynamic(() => import('./components/ServiceGrid'), {
+  ssr: false,
+  loading: () => <Skeleton height={400} />,
+});
+const WhyTrustMe = dynamic(() => import('./components/WhyTrustMe'), {
+  ssr: false,
+  loading: () => <Skeleton height={400} />,
+});
+const ProjectsSection = dynamic(() => import('./components/Project'), {
+  ssr: false,
+  loading: () => <Skeleton height={400} />,
+});
+const SkillsSection = dynamic(() => import('./components/SkillSection'), {
+  ssr: false,
+  loading: () => <Skeleton height={400} />,
+});
+const Footer = dynamic(() => import('./components/Footer'), {
+  ssr: false,
+  loading: () => <Skeleton height={200} />,
+});
+
 export default function Home() {
-  // Použijeme preloading hook
   usePreloadComponents();
-  
-  // Přidáme smooth scroll
+
+  // Smooth-scroll styling
   useEffect(() => {
     document.documentElement.style.scrollBehavior = 'smooth';
     return () => {
@@ -135,35 +121,32 @@ export default function Home() {
 
   return (
     <>
-      <SpeedInsights />
+      {/* Only run SpeedInsights in dev for profiling */}
+      {process.env.NODE_ENV !== 'production' && <SpeedInsights />}
       <Navbar />
       <HeroSection />
-      
-      {/* První komponenty mají priority true pro okamžité načtení */}
+
+      {/* Eagerly load first two sections */}
       <LazyComponent priority height={500}>
         <WhatIDo />
       </LazyComponent>
-      
       <LazyComponent priority height={400}>
-        <InvestmentSection/>
+        <InvestmentSection />
       </LazyComponent>
-      
+
+      {/* Remaining sections lazy-load on scroll */}
       <LazyComponent height={500}>
         <ServicesGrid />
       </LazyComponent>
-      
       <LazyComponent height={400}>
         <WhyTrustMe />
       </LazyComponent>
-      
       <LazyComponent height={500}>
         <ProjectsSection />
       </LazyComponent>
-      
       <LazyComponent height={400}>
         <SkillsSection />
       </LazyComponent>
-      
       <LazyComponent height={200}>
         <Footer />
       </LazyComponent>

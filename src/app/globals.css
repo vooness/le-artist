@@ -146,3 +146,6 @@ html, body {
 }
 
 
+/* Tailwind plugin nebo ručně: */
+.tap-manipulation { touch-action: manipulation; }
+.contain-panel { contain: layout style paint; }
