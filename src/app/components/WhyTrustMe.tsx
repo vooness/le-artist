@@ -67,7 +67,7 @@ const stats = [
     iconColor: "#FF7E00" 
   },
   { 
-    value: "50+", 
+    value: "150+", 
     label: "Úspěšných projektů", 
     color: "#3B82F6",
     shadowColor: "rgba(59, 130, 246, 0.5)",
@@ -76,7 +76,7 @@ const stats = [
     iconColor: "#3B82F6"
   },
   { 
-    value: "5+", 
+    value: "10+", 
     label: "Let zkušeností", 
     color: "#10B981",
     shadowColor: "rgba(16, 185, 129, 0.5)",
