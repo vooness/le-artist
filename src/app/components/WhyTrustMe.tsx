@@ -140,6 +140,25 @@ const WhyTrustMeSection: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const statsRef = useRef<HTMLDivElement>(null);
   const [statsVisible, setStatsVisible] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  
+  // Detekce mobilního zařízení
+  useEffect(() => {
+    if (!isClient()) return;
+    
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    // Inicializace při načtení
+    checkMobile();
+    
+    // Přidání listeneru pro změnu velikosti okna
+    window.addEventListener('resize', checkMobile);
+    
+    // Cleanup
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   
   // Nastavíme prvky jako viditelné po montáži komponenty a sledování pro statistiky
   useEffect(() => {
@@ -175,27 +194,47 @@ const WhyTrustMeSection: React.FC = () => {
     <section className="relative bg-[#0c1425] text-white py-24 px-4 sm:px-6 lg:px-8 overflow-hidden -mt-[2px]">
       <ParticlesBackground />
       
-      {/* Futuristické pozadí a efekty */}
+      {/* Optimalizované pozadí a efekty pro desktop i mobil */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Digitální mřížka */}
         <div className="absolute inset-0 opacity-[0.03]" style={{
           backgroundImage: 
             `linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
              linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px)`,
-          backgroundSize: '60px 60px'
+          backgroundSize: isMobile ? '30px 30px' : '60px 60px'
         }} />
         
-        {/* Futuristické pruhy na pozadí */}
-        <div className="absolute inset-0 opacity-[0.02]" style={{
+        {/* Futuristické pruhy na pozadí - silnější a viditelnější na mobilu */}
+        <div className="absolute inset-0 opacity-[0.05]" style={{
           backgroundImage: 
-            `linear-gradient(135deg, transparent 0%, rgba(59, 130, 246, 0.1) 20%, transparent 30%),
-             linear-gradient(45deg, transparent 40%, rgba(255, 100, 50, 0.1) 60%, transparent 70%)`,
+            `linear-gradient(135deg, transparent 0%, rgba(59, 130, 246, 0.2) 20%, transparent 30%),
+             linear-gradient(45deg, transparent 40%, rgba(255, 100, 50, 0.2) 60%, transparent 70%)`,
           backgroundSize: '100% 100%'
         }} />
         
-        {/* Světelné spoty */}
-        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-orange-500/10 blur-[150px] rounded-full"></div>
-        <div className="absolute bottom-[-15%] left-[-10%] w-[600px] h-[600px] bg-blue-600/10 blur-[180px] rounded-full"></div>
+        {/* Světelné spoty - větší a výraznější pro všechna zařízení */}
+        <div 
+          className="absolute w-full h-full" 
+          style={{
+            background: `
+              radial-gradient(circle at 85% -5%, rgba(255, 126, 0, 0.2) 0%, rgba(255, 126, 0, 0) 45%),
+              radial-gradient(circle at 15% 110%, rgba(59, 130, 246, 0.2) 0%, rgba(59, 130, 246, 0) 45%)
+            `,
+            opacity: 1,
+          }}
+        />
+        
+        {/* Extra světelné efekty pro mobil */}
+        {isMobile && (
+          <>
+            <div className="absolute top-0 right-0 w-full h-64 opacity-20" style={{
+              background: `radial-gradient(circle at 80% 10%, rgba(255, 126, 0, 0.3) 0%, transparent 70%)`
+            }}></div>
+            <div className="absolute bottom-0 left-0 w-full h-64 opacity-20" style={{
+              background: `radial-gradient(circle at 20% 90%, rgba(59, 130, 246, 0.3) 0%, transparent 70%)`
+            }}></div>
+          </>
+        )}
       </div>
       
       <div className="max-w-7xl mx-auto relative z-10">
@@ -258,8 +297,8 @@ const WhyTrustMeSection: React.FC = () => {
                 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                 style={{ transitionDelay: `${index * 100}ms` }}
               >
-                {/* Futuristické pozadí karty */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${reason.color} opacity-50`}></div>
+                {/* Futuristické pozadí karty - vylepšené pro lepší viditelnost na mobilech */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${reason.color} opacity-70`}></div>
                 
                 {/* Svítící okraje */}
                 <div className="absolute inset-0 rounded-xl p-[1px] bg-transparent z-0 overflow-hidden">
@@ -270,36 +309,39 @@ const WhyTrustMeSection: React.FC = () => {
                 <div className="absolute top-0 right-0 w-8 h-8 border-t-[1px] border-r-[1px] border-white/20 rounded-tr-xl"></div>
                 <div className="absolute bottom-0 left-0 w-8 h-8 border-b-[1px] border-l-[1px] border-white/20 rounded-bl-xl"></div>
                 
-                {/* Animovaný kruhový efekt za ikonou */}
+                {/* Animovaný kruhový efekt za ikonou - silnější pro lepší viditelnost */}
                 <div className="absolute top-8 left-8">
-                  <div className="w-16 h-16 rounded-full opacity-30 pulse-slow" style={{ background: `radial-gradient(circle, ${reason.accent}40 0%, transparent 70%)` }}></div>
+                  <div className="w-16 h-16 rounded-full opacity-60 pulse-slow" style={{ background: `radial-gradient(circle, ${reason.accent}80 0%, transparent 70%)` }}></div>
                 </div>
                 
                 {/* Obsahová část */}
                 <div className="relative z-10 p-8 backdrop-blur-sm h-full flex flex-col">
-                  {/* Ikona s futuristickým podsvícením */}
+                  {/* Ikona s futuristickým podsvícením - silnější podsvícení */}
                   <div className="relative mb-6 w-12 h-12 flex items-center justify-center z-20">
                     <div className="absolute inset-0 bg-[#0f172a] rounded-lg"></div>
-                    <div className={`absolute inset-0 rounded-lg opacity-70`} style={{ 
-                      boxShadow: `0 0 20px 1px ${reason.accent}40` 
+                    <div className={`absolute inset-0 rounded-lg opacity-90`} style={{ 
+                      boxShadow: `0 0 20px 3px ${reason.accent}70` 
                     }}></div>
                     <div className="relative z-10 text-3xl" style={{ color: reason.accent }}>
                       {reason.icon}
                     </div>
                   </div>
                   
-                  {/* Oddělovač s gradientem */}
+                  {/* Oddělovač s gradientem - silnější */}
                   <div className="h-[2px] w-12 mb-4 rounded-full" style={{ 
-                    background: `linear-gradient(to right, ${reason.accent}80, transparent)` 
+                    background: `linear-gradient(to right, ${reason.accent}, transparent)` 
                   }}></div>
                   
                   {/* Text */}
                   <h3 className="text-xl font-bold mb-4">{reason.title}</h3>
                   <p className="text-gray-300 text-sm leading-relaxed">{reason.description}</p>
                   
-                  {/* Futuristický prvek v pravém dolním rohu */}
+                  {/* Futuristický prvek v pravém dolním rohu - silnější */}
                   <div className="absolute bottom-3 right-3 w-4 h-4">
-                    <div className="w-full h-full rounded-full pulse-slow" style={{ background: reason.accent }}></div>
+                    <div className="w-full h-full rounded-full pulse-slow opacity-80" style={{ 
+                      background: reason.accent,
+                      boxShadow: `0 0 10px 2px ${reason.accent}80`
+                    }}></div>
                   </div>
                 </div>
               </div>
@@ -314,18 +356,26 @@ const WhyTrustMeSection: React.FC = () => {
         >
           {/* Dekorativní elementy celé sekce statistik */}
           <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-1">
-            <div className="w-full h-full bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
+            <div className="w-full h-full bg-gradient-to-r from-transparent via-blue-500/70 to-transparent"></div>
           </div>
           
           <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 w-16 h-1">
-            <div className="w-full h-full bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
+            <div className="w-full h-full bg-gradient-to-r from-transparent via-blue-500/70 to-transparent"></div>
           </div>
           
           {/* Mřížka na pozadí celé sekce */}
-          <div className="absolute inset-0 opacity-20" style={{
+          <div className="absolute inset-0 opacity-30" style={{
             backgroundImage: `radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px)`,
             backgroundSize: '20px 20px',
             backgroundPosition: '0 0'
+          }}></div>
+          
+          {/* Extra světelné efekty pro statistiky */}
+          <div className="absolute inset-0 opacity-40" style={{
+            background: `
+              radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 40%),
+              radial-gradient(circle at 80% 80%, rgba(255, 126, 0, 0.15) 0%, transparent 40%)
+            `
           }}></div>
           
           {/* Terminálový mock screen s průhledným pozadím */}
@@ -343,8 +393,8 @@ const WhyTrustMeSection: React.FC = () => {
             </div>
             
             {/* Virtuální UI elementy pro tech vzhled */}
-            <div className="absolute top-8 left-4 w-20 h-1 bg-gradient-to-r from-blue-500/30 to-transparent"></div>
-            <div className="absolute top-8 right-4 w-20 h-1 bg-gradient-to-l from-blue-500/30 to-transparent"></div>
+            <div className="absolute top-8 left-4 w-20 h-1 bg-gradient-to-r from-blue-500/60 to-transparent"></div>
+            <div className="absolute top-8 right-4 w-20 h-1 bg-gradient-to-l from-blue-500/60 to-transparent"></div>
             
             {/* Hlavní obsahová část */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-6">
@@ -360,20 +410,25 @@ const WhyTrustMeSection: React.FC = () => {
                   }}
                 >
                   {/* Tech mřížka pozadí */}
-                  <div className="absolute inset-0 opacity-10" style={{
-                    backgroundImage: `radial-gradient(${stat.color}30 1px, transparent 1px)`,
+                  <div className="absolute inset-0 opacity-20" style={{
+                    backgroundImage: `radial-gradient(${stat.color}60 1px, transparent 1px)`,
                     backgroundSize: '15px 15px',
                     backgroundPosition: '0 0'
                   }}></div>
                   
+                  {/* Vylepšené záření pro lepší viditelnost na mobilech */}
+                  <div className="absolute inset-0 opacity-30" style={{
+                    background: `radial-gradient(circle at center, ${stat.color}40 0%, transparent 70%)`
+                  }}></div>
+                  
                   {/* Skenovací linie efekt */}
                   <div className="absolute inset-0 overflow-hidden">
-                    <div className={`absolute h-[1px] w-full bg-gradient-to-r from-transparent via-${stat.iconColor} to-transparent transform translate-y-0 ${
+                    <div className={`absolute h-[1px] w-full bg-gradient-to-r from-transparent via-${stat.color} to-transparent transform translate-y-0 ${
                       statsVisible ? 'animate-scanning-line' : ''
-                    }`}></div>
+                    }`} style={{ opacity: 0.7 }}></div>
                   </div>
                   
-                  {/* UI dekorativní prvky karet */}
+                  {/* UI dekorativní prvky karet - silnější a viditelnější */}
                   <div className="absolute top-0 left-0 w-8 h-8">
                     <div className="absolute top-0 left-0 w-[1px] h-4" style={{ background: `linear-gradient(to bottom, ${stat.color}, transparent)` }}></div>
                     <div className="absolute top-0 left-0 w-4 h-[1px]" style={{ background: `linear-gradient(to right, ${stat.color}, transparent)` }}></div>
@@ -409,7 +464,10 @@ const WhyTrustMeSection: React.FC = () => {
                     
                     {/* Diamond marker jako oddělovač */}
                     <div className="flex justify-center items-center mb-3">
-                      <div className="w-2 h-2 transform rotate-45" style={{ backgroundColor: stat.color }}></div>
+                      <div className="w-2 h-2 transform rotate-45" style={{ 
+                        backgroundColor: stat.color,
+                        boxShadow: `0 0 8px ${stat.color}`
+                      }}></div>
                     </div>
                     
                     {/* Titulek statistiky */}
@@ -425,7 +483,7 @@ const WhyTrustMeSection: React.FC = () => {
                     </div>
                     
                     {/* Binární kód na pozadí */}
-                    <div className="absolute inset-0 overflow-hidden opacity-5 pointer-events-none">
+                    <div className="absolute inset-0 overflow-hidden opacity-10 pointer-events-none">
                       {Array.from({ length: 8 }).map((_, i) => (
                         <div
                           key={i}
@@ -460,8 +518,8 @@ const WhyTrustMeSection: React.FC = () => {
       {/* CSS pro animace */}
       <style jsx global>{`
         @keyframes pulse-slow {
-          0%, 100% { opacity: 0.4; transform: scale(1); }
-          50% { opacity: 0.8; transform: scale(1.1); }
+          0%, 100% { opacity: 0.6; transform: scale(1); }
+          50% { opacity: 1; transform: scale(1.1); }
         }
         .pulse-slow {
           animation: pulse-slow 3s infinite ease-in-out;
@@ -477,11 +535,22 @@ const WhyTrustMeSection: React.FC = () => {
         
         @keyframes scanning-line {
           0% { transform: translateY(0); opacity: 0.8; }
-          50% { opacity: 0.3; }
+          50% { opacity: 0.5; }
           100% { transform: translateY(100%); opacity: 0.8; }
         }
         .animate-scanning-line {
           animation: scanning-line 4s infinite linear;
+        }
+        
+        /* Přidáno pro lepší podporu mobilních zařízení */
+        @media (max-width: 768px) {
+          .pulse-slow {
+            animation-duration: 2.5s;
+          }
+          
+          .animate-scanning-line {
+            opacity: 0.9;
+          }
         }
       `}</style>
     </section>

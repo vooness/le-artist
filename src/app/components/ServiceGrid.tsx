@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Monitor, Edit, Video, CheckCircle2, Info } from "lucide-react";
 
@@ -59,45 +59,183 @@ const services: Service[] = [
   },
 ];
 
-// Optimalizovaný ServiceCard bez animací pro mobilní zařízení
+// ServiceCard s vylepšenými animacemi pro desktop a animací při scrollování
 const ServiceCard: React.FC<{ service: Service, index: number }> = ({ service, index }) => {
   const router = useRouter();
+  const [isDesktop, setIsDesktop] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+  
+  // Detekce desktop zařízení
+  useEffect(() => {
+    setIsDesktop(window.innerWidth >= 1024);
+    
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+  
+  // Detekce když je karta v viewportu pro scrollovací animace
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          // Odebrat observer po zobrazení
+          if (cardRef.current) {
+            observer.unobserve(cardRef.current);
+          }
+        }
+      },
+      { threshold: 0.15 } // Spustí se, když je 15% prvku viditelné
+    );
+    
+    if (cardRef.current) {
+      observer.observe(cardRef.current);
+    }
+    
+    return () => {
+      if (cardRef.current) {
+        observer.unobserve(cardRef.current);
+      }
+    };
+  }, []);
   
   return (
-    <div className="w-full max-w-sm group relative overflow-hidden">
+    <div 
+      ref={cardRef}
+      className={`w-full max-w-sm group relative overflow-visible 
+        ${isVisible ? 'animate-card-reveal' : 'opacity-0 translate-y-16'}`}
+      style={{ 
+        transitionProperty: 'opacity, transform',
+        transitionDuration: '0.8s',
+        transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)',
+        transitionDelay: `${index * 0.15}s`,
+      }}
+    >
+      {/* Kódový tag nad kartou (pouze na desktopu) */}
+      {isDesktop && (
+        <div 
+          className="absolute top-[-20px] left-4 text-xs font-mono opacity-30 z-20"
+          style={{ color: service.color }}
+        >
+          {`<${service.title.toLowerCase()} />`}
+        </div>
+      )}
+      
       {/* Základní kontejner */}
-      <div className="relative bg-slate-800/60 backdrop-blur-lg rounded-xl border border-white/10 shadow-lg
-        hover:shadow-[0_0_15px_rgba(249,115,22,0.3)] transition-all duration-300 overflow-hidden">
-        
-        {/* Jednoduché statické okraje */}
-        <div className="absolute inset-0">
-          <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-orange-500/30 to-transparent"></div>
-          <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-orange-500/30 to-transparent"></div>
-          <div className="absolute left-0 top-0 h-full w-px bg-gradient-to-b from-transparent via-orange-500/30 to-transparent"></div>
-          <div className="absolute right-0 top-0 h-full w-px bg-gradient-to-b from-transparent via-orange-500/30 to-transparent"></div>
+      <div 
+        className={`relative bg-slate-800/60 backdrop-blur-lg rounded-xl border border-white/10 shadow-lg
+          transition-all duration-500 overflow-hidden
+          ${isDesktop ? 'hover:shadow-xl' : ''}`}
+        style={{
+          boxShadow: isDesktop ? `0 6px 20px ${service.color}15` : 'none',
+        }}
+      >
+        {/* Vnitřní ohraničení s gradientem */}
+        <div className="absolute inset-0 rounded-xl overflow-hidden">
+          {isDesktop && (
+            <div 
+              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+              style={{
+                background: `linear-gradient(120deg, transparent, ${service.color}10, transparent)`
+              }}
+            />
+          )}
         </div>
         
-        {/* Statické rohové akcenty */}
-        <div className="absolute top-0 right-0 w-8 h-8 border-t-[1px] border-r-[1px] border-white/20 rounded-tr-xl"></div>
-        <div className="absolute bottom-0 left-0 w-8 h-8 border-b-[1px] border-l-[1px] border-white/20 rounded-bl-xl"></div>
+        {/* Animované ohraničení pro desktop */}
+        {isDesktop && (
+          <div className="absolute inset-0 rounded-xl overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"/>
+            <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"/>
+            
+            {/* Animovaný border */}
+            <div className="absolute inset-0 rounded-xl border border-white/0 group-hover:border-white/20 transition-colors duration-500"></div>
+            
+            {/* Rohové akcenty */}
+            <div className="absolute top-0 right-0 w-16 h-16 overflow-hidden">
+              <div 
+                className="absolute top-0 right-0 w-3 h-3 border-t border-r rounded-tr-lg origin-top-right scale-0 group-hover:scale-100 transition-transform duration-500"
+                style={{ borderColor: service.color, transitionDelay: '200ms' }}
+              />
+            </div>
+            <div className="absolute bottom-0 left-0 w-16 h-16 overflow-hidden">
+              <div 
+                className="absolute bottom-0 left-0 w-3 h-3 border-b border-l rounded-bl-lg origin-bottom-left scale-0 group-hover:scale-100 transition-transform duration-500"
+                style={{ borderColor: service.color, transitionDelay: '200ms' }}
+              />
+            </div>
+          </div>
+        )}
+        
+        {/* Gradient overlay pro desktop */}
+        {isDesktop && (
+          <div className="absolute inset-0 rounded-xl overflow-hidden pointer-events-none">
+            <div 
+              className="absolute -right-full top-0 w-full h-full bg-gradient-to-l from-transparent via-white/5 to-transparent group-hover:right-0 opacity-0 group-hover:opacity-100 transition-all duration-1000"
+              style={{ 
+                transition: 'right 1s ease-in-out, opacity 1s ease-in-out',
+              }}
+            />
+          </div>
+        )}
         
         {/* Obsah */}
         <div className="p-6 sm:p-8 relative z-10">
           {/* Ikona a nadpis */}
           <div className="flex justify-center items-center mb-6">
-            <div className="relative mr-4" style={{ color: service.color }}>
+            <div 
+              className={`relative mr-4 ${isDesktop ? 'group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500' : ''}`} 
+              style={{ color: service.color }}
+            >
               {service.icon}
+              
+              {/* Světelný kruh kolem ikony (pouze na desktopu) */}
+              {isDesktop && (
+                <div 
+                  className="absolute inset-0 -m-1 rounded-full opacity-0 group-hover:opacity-50 transition-opacity duration-500"
+                  style={{ 
+                    background: `radial-gradient(circle, ${service.color}40 0%, transparent 70%)`,
+                    transform: 'scale(1.5)',
+                  }}
+                />
+              )}
             </div>
-            <h3 className="text-2xl sm:text-3xl font-bold relative" style={{ color: service.color }}>
+            <h3 
+              className={`text-2xl sm:text-3xl font-bold relative ${isDesktop ? 'transition-all duration-500' : ''}`} 
+              style={{ 
+                color: service.color,
+              }}
+            >
               {service.title}
+              
+              {/* Podtržení nadpisu (pouze na desktopu) */}
+              {isDesktop && (
+                <div 
+                  className="absolute -bottom-1 left-0 h-[2px] w-0 group-hover:w-full transition-all duration-500 ease-out"
+                  style={{ 
+                    background: `linear-gradient(to right, ${service.color}, transparent)`,
+                  }}
+                />
+              )}
             </h3>
           </div>
           
           {/* Popis */}
           <div className="mb-6">
             <p className="text-gray-300 text-sm leading-relaxed">{service.description}</p>
-            <div className="mt-4 h-px w-2/3 mx-auto" 
-                 style={{ background: `linear-gradient(to right, transparent, ${service.color}40, transparent)` }}></div>
+            <div 
+              className={`mt-4 h-[1px] mx-auto transition-all duration-700 ease-in-out ${isDesktop ? 'w-1/3 group-hover:w-2/3' : 'w-1/2'}`} 
+              style={{ 
+                background: `linear-gradient(to right, transparent, ${service.color}40, transparent)`,
+              }}
+            />
           </div>
           
           {/* Checklisty */}
@@ -105,102 +243,353 @@ const ServiceCard: React.FC<{ service: Service, index: number }> = ({ service, i
             {service.checkmarks.map((check, idx) => (
               <li 
                 key={idx} 
-                className="flex items-start text-gray-300 text-sm"
+                className={`flex items-start text-gray-300 text-sm transition-all ${
+                  isDesktop ? 'duration-300' : ''
+                }`}
+                style={{ 
+                  ...(isDesktop && { transitionDelay: `${idx * 50}ms`, transitionDuration: '300ms' })
+                }}
               >
                 <div className="flex-shrink-0 mr-3">
-                  <CheckCircle2 className="w-5 h-5 text-green-500" />
+                  <CheckCircle2 
+                    className={`w-5 h-5 text-green-500 ${
+                      isDesktop ? 'group-hover:text-green-400 transition-all duration-300' : ''
+                    }`} 
+                    style={{
+                      transform: isDesktop ? 'scale(1)' : 'none',
+                      transition: isDesktop ? 'transform 0.3s ease' : 'none',
+                    }}
+                    onMouseEnter={isDesktop ? (e) => {
+                      (e.target as HTMLElement).style.transform = 'scale(1.2)';
+                    } : undefined}
+                    onMouseLeave={isDesktop ? (e) => {
+                      (e.target as HTMLElement).style.transform = 'scale(1)';
+                    } : undefined}
+                  />
                 </div>
-                <span>{check}</span>
+                <span className={isDesktop ? 'group-hover:text-white transition-colors duration-300' : ''}>
+                  {check}
+                </span>
               </li>
             ))}
           </ul>
           
-          {/* CTA tlačítko */}
+          {/* CTA tlačítko s výraznějším efektem */}
           <div className="mt-6 pt-4 border-t border-gray-700/50">
             <button
               onClick={() => router.push("/sluzby")}
-              className="w-full flex items-center justify-center text-white bg-slate-700/90 hover:bg-slate-700 
-                        transition-colors px-4 py-2 rounded-lg border border-white/10 text-sm"
+              className={`w-full relative flex items-center justify-center text-white 
+                         px-4 py-3 rounded-lg text-sm overflow-hidden
+                         ${isDesktop ? 'hover:text-white transition-all duration-300' : ''}`}
               style={{ 
-                boxShadow: `0 0 10px ${service.color}30`
+                background: 'rgba(30, 41, 59, 0.8)',
+                boxShadow: `0 4px 10px ${service.color}20`,
+                border: '1px solid rgba(255,255,255,0.1)',
               }}
             >
-              <Info className="w-4 h-4 mr-2" style={{ color: service.color }} />
-              <span>Více informací</span>
+              {/* Ikona a text */}
+              <Info 
+                className={`w-4 h-4 mr-2 relative z-10 ${isDesktop ? 'transition-transform duration-300' : ''}`} 
+                style={{ 
+                  color: service.color,
+                  transform: 'translateX(0)'
+                }}
+                onMouseEnter={isDesktop ? (e) => {
+                  const button = (e.target as HTMLElement).closest('button');
+                  if (button) {
+                    button.style.background = `linear-gradient(90deg, ${service.color}20, rgba(30, 41, 59, 0.9))`;
+                    button.style.boxShadow = `0 4px 15px ${service.color}40`;
+                    button.style.borderColor = `${service.color}30`;
+                    (e.target as HTMLElement).style.transform = 'translateX(-3px)';
+                  }
+                } : undefined}
+                onMouseLeave={isDesktop ? (e) => {
+                  const button = (e.target as HTMLElement).closest('button');
+                  if (button) {
+                    button.style.background = 'rgba(30, 41, 59, 0.8)';
+                    button.style.boxShadow = `0 4px 10px ${service.color}20`;
+                    button.style.borderColor = 'rgba(255,255,255,0.1)';
+                    (e.target as HTMLElement).style.transform = 'translateX(0)';
+                  }
+                } : undefined}
+              />
+              <span 
+                className="relative z-10 font-medium"
+                style={{ 
+                  textShadow: isDesktop ? '0 0 0px rgba(255,255,255,0)' : 'none',
+                  transition: isDesktop ? 'text-shadow 0.3s ease' : 'none',
+                }}
+                onMouseEnter={isDesktop ? (e) => {
+                  (e.target as HTMLElement).style.textShadow = '0 0 8px rgba(255,255,255,0.5)';
+                } : undefined}
+                onMouseLeave={isDesktop ? (e) => {
+                  (e.target as HTMLElement).style.textShadow = '0 0 0px rgba(255,255,255,0)';
+                } : undefined}
+              >
+                Více informací
+              </span>
+              
+              {/* Border glow effect na hover */}
+              {isDesktop && (
+                <div 
+                  className="absolute inset-0 rounded-lg opacity-0 pointer-events-none"
+                  style={{
+                    border: `1px solid ${service.color}`,
+                    boxShadow: `0 0 8px ${service.color}40, inset 0 0 10px ${service.color}20`,
+                    transition: 'opacity 0.3s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.target as HTMLElement).style.opacity = '1';
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.target as HTMLElement).style.opacity = '0';
+                  }}
+                />
+              )}
             </button>
           </div>
         </div>
       </div>
       
-      {/* Statické rohové akcenty */}
-      <div 
-        className="absolute -bottom-2 -right-2 w-5 h-5 border-b-2 border-r-2 rounded-br-lg opacity-50"
-        style={{ borderColor: service.color }}
-      />
-      <div 
-        className="absolute -top-2 -left-2 w-5 h-5 border-t-2 border-l-2 rounded-tl-lg opacity-50"
-        style={{ borderColor: service.color }}
-      />
-    </div>
-  );
-};
-
-// Velmi jednoduché statické pozadí
-const StaticBackground: React.FC = () => {
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-40">
-      <div className="absolute inset-0 bg-slate-900/20"></div>
-    </div>
-  );
-};
-
-// Optimalizovaná hlavní komponenta
-const ServicesGrid: React.FC = () => {
-  const [isMobile, setIsMobile] = useState(false);
-  
-  // Detekce mobilních zařízení - pouze při prvním načtení
-  useEffect(() => {
-    setIsMobile(window.innerWidth < 768);
-  }, []);
-  
-  return (
-    <div className="max-w-7xl mx-auto px-4 mt-8 sm:mt-12 relative py-10 sm:py-16">
-      {/* Základní pozadí */}
-      <StaticBackground />
-      
-      {/* Jednoduchý nadpis */}
-      <h2 className="text-3xl sm:text-4xl md:text-5xl text-center text-white font-extrabold tracking-tight relative inline-block mb-6 sm:mb-10">
-        Rychlý přehled 
-        <div
-          className="absolute left-1/3 -translate-x-1/2 bottom-[-10px] h-[5px] w-2/3 bg-gradient-to-r from-[#F97316] to-yellow-500 rounded-full"
+      {/* Stínový efekt pod kartou */}
+      {isDesktop && (
+        <div 
+          className="absolute -z-10 bottom-0 left-1/2 w-4/5 h-1 -translate-x-1/2 rounded-full blur-md opacity-0 group-hover:opacity-60 transition-opacity duration-500"
+          style={{ 
+            background: service.color,
+            boxShadow: `0 5px 20px 5px ${service.color}50`,
+          }}
         />
-      </h2>
+      )}
+    </div>
+  );
+};
+
+// Vylepšené dynamické pozadí s opravenými gradienty
+const BackgroundAnimation: React.FC<{ isDesktop: boolean }> = ({ isDesktop }) => {
+  if (!isDesktop) {
+    // Pro mobilní zařízení - statické pozadí
+    return (
+      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-40">
+        <div className="absolute inset-0 bg-slate-900/20"></div>
+      </div>
+    );
+  }
+  
+  // Pro desktop - vylepšené pozadí s opravenými gradienty
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Gradienty v pozadí */}
+      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-slate-900/10 to-transparent opacity-40"></div>
+      <div className="absolute bottom-0 left-0 w-full h-full bg-gradient-to-t from-slate-900/20 to-transparent opacity-30"></div>
       
-      {/* Značky pod nadpisem */}
-      <div className="flex justify-center mb-8 sm:mb-12">
-        <div className="flex items-center space-x-2 text-xs font-mono text-orange-500/60">
-          <span>{'//'}</span>
-          <div className="h-px w-8 bg-orange-500/40" />
-          <span className="tracking-wider">SLUŽBY & MOŽNOSTI</span>
-          <div className="h-px w-8 bg-orange-500/40" />
-          <span>{'//'}</span>
+      {/* Rozšířené a opravené světelné gradienty, které nebudou useknuté */}
+      <div
+        className="absolute top-0 left-0 w-[70%] h-[70%] rounded-full blur-[150px] opacity-10"
+        style={{
+          background: 'radial-gradient(circle, rgba(249,115,22,0.2) 0%, rgba(249,115,22,0) 70%)',
+          transform: 'translate(-20%, -20%)',
+        }}
+      />
+      
+      <div
+        className="absolute top-[30%] right-0 w-[70%] h-[70%] rounded-full blur-[150px] opacity-10"
+        style={{
+          background: 'radial-gradient(circle, rgba(56,189,248,0.15) 0%, rgba(56,189,248,0) 70%)',
+          transform: 'translate(20%, -30%)',
+        }}
+      />
+      
+      <div
+        className="absolute bottom-0 right-[20%] w-[100%] h-[100%] rounded-full blur-[150px] opacity-10"
+        style={{
+          background: 'radial-gradient(circle, rgba(236,72,153,0.15) 0%, rgba(236,72,153,0) 70%)',
+          transform: 'translate(0%, 20%)',
+        }}
+      />
+      
+      {/* Jemný overlay kódového vzoru */}
+      <div className="absolute inset-0 opacity-[0.015] font-mono text-[0.6rem] text-white overflow-hidden select-none">
+        <div className="absolute -left-20 top-10 transform -rotate-3 opacity-50">
+          {`// Core functions
+import { services } from './data';
+export const renderServices = () => {
+  return services.map(service => (
+    <ServiceCard data={service} />
+  ));
+};`}
         </div>
       </div>
       
-      {/* Optimalizovaný grid - meně mezer pro mobilní zařízení */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-center gap-4 md:gap-8">
-        {services.map((service, i) => (
-          <ServiceCard 
-            key={i} 
-            service={service} 
-            index={i} 
-          />
-        ))}
+      {/* Jemná mřížka */}
+      <div 
+        className="absolute inset-0 opacity-5"
+        style={{
+          backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px)',
+          backgroundSize: '40px 40px'
+        }}
+      ></div>
+    </div>
+  );
+};
+
+// Modernější a jemnější nadpis - zarovnaný vlevo
+const CodeDesignerTitle: React.FC<{ isVisible: boolean }> = ({ isVisible }) => {
+  return (
+    <div className={`flex flex-col items-start text-left mb-12 relative ${
+      isVisible ? 'animate-title-reveal' : 'opacity-0'
+    }`}>
+      {/* Jemnější kódový element nad nadpisem */}
+      <div className="flex items-center text-xs font-mono text-orange-500/60 mb-1">
+        <span className="tracking-wider opacity-70">{'<>'} IMPORT SERVICES {'</>'}</span>
       </div>
       
-      {/* Jednoduchý dekorativní prvek */}
-      <div className="flex justify-center mt-8 sm:mt-12">
-        <div className="w-32 h-px bg-gradient-to-r from-transparent via-orange-500/20 to-transparent" />
+      {/* Hlavní nadpis */}
+      <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white relative">
+        Rychlý přehled
+        <div 
+          className="absolute -bottom-2 left-0 h-1 w-1/2 bg-gradient-to-r from-[#F97316] to-transparent"
+          style={{ 
+            borderRadius: '0 2px 2px 0' 
+          }}
+        />
+      </h2>
+      
+      {/* Stylizované tagy pod nadpisem */}
+      <div className="flex items-center space-x-3 mt-4 ml-1">
+        <div className="flex items-center text-xs font-mono text-orange-500/70">
+          <span>//</span>
+          <span className="ml-1 tracking-wider">SLUŽBY</span>
+        </div>
+        <div className="h-px w-4 bg-orange-500/40" />
+        <div className="flex items-center text-xs font-mono text-blue-400/70">
+          <span>&</span>
+        </div>
+        <div className="h-px w-4 bg-orange-500/40" />
+        <div className="flex items-center text-xs font-mono text-orange-500/70">
+          <span className="tracking-wider">MOŽNOSTI</span>
+          <span className="ml-1">//</span>
+        </div>
+      </div>
+      
+      {/* Jemný kódový element v pozadí */}
+      <div className="absolute -bottom-8 right-0 font-mono text-[0.6rem] opacity-20 text-orange-500/30">
+        {`// ${new Date().getFullYear()}`}
+      </div>
+    </div>
+  );
+};
+
+// Hlavní komponenta
+const ServicesGrid: React.FC = () => {
+  const [isDesktop, setIsDesktop] = useState(false);
+  const [titleVisible, setTitleVisible] = useState(false);
+  const titleRef = useRef<HTMLDivElement>(null);
+  
+  // Detekce desktop zařízení a nastavení
+  useEffect(() => {
+    const checkDesktop = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+    
+    checkDesktop();
+    window.addEventListener('resize', checkDesktop);
+    
+    // Přidání animačních stylů
+    const style = document.createElement('style');
+    style.innerHTML = `
+      @keyframes card-reveal {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      
+      @keyframes title-reveal {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      
+      @keyframes fade-in {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      
+      .animate-card-reveal {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      
+      .animate-title-reveal {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      
+      .animate-fade-in {
+        animation: fade-in 0.8s forwards;
+      }
+    `;
+    document.head.appendChild(style);
+    
+    return () => {
+      document.head.removeChild(style);
+      window.removeEventListener('resize', checkDesktop);
+    };
+  }, []);
+  
+  // Observer pro nadpis
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setTitleVisible(true);
+          if (titleRef.current) {
+            observer.unobserve(titleRef.current);
+          }
+        }
+      },
+      { threshold: 0.1 }
+    );
+    
+    if (titleRef.current) {
+      observer.observe(titleRef.current);
+    }
+    
+    return () => {
+      if (titleRef.current) {
+        observer.unobserve(titleRef.current);
+      }
+    };
+  }, []);
+  
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-16 relative">
+      {/* Vylepšené pozadí s opravenými gradienty */}
+      <BackgroundAnimation isDesktop={isDesktop} />
+      
+      {/* Kontejner s paddingem */}
+      <div className="relative z-10">
+        {/* Nadpis - zarovnaný vlevo */}
+        <div ref={titleRef} className="mb-12">
+          <CodeDesignerTitle isVisible={titleVisible} />
+        </div>
+        
+        {/* Grid služeb */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-center gap-4 md:gap-8">
+          {services.map((service, i) => (
+            <ServiceCard 
+              key={i} 
+              service={service} 
+              index={i} 
+            />
+          ))}
+        </div>
+        
+        {/* Jemnější kódový dekorativní prvek */}
+        <div className="flex justify-end mt-8 sm:mt-10">
+          <div className="flex items-center text-xs font-mono text-orange-500/30 opacity-0 animate-fade-in" style={{ animationDelay: '1.5s' }}>
+            <span>// END SERVICES</span>
+            <div className="h-px w-10 bg-orange-500/20 ml-2" />
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -758,8 +758,8 @@ const ProjectsSection: React.FC = () => {
         )}
         
         {/* Dekorativní kruhy - méně a menší na mobilu */}
-        <div className={`absolute top-1/4 left-1/4 rounded-full bg-orange-500/5 blur-${isMobile ? '2xl' : '3xl'}`} style={{ width: isMobile ? '150px' : '384px', height: isMobile ? '150px' : '384px' }}></div>
-        <div className={`absolute bottom-1/4 right-1/4 rounded-full bg-blue-500/5 blur-${isMobile ? '2xl' : '3xl'}`} style={{ width: isMobile ? '100px' : '256px', height: isMobile ? '100px' : '256px' }}></div>
+        <div className={`absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 opacity-70-${isMobile ? '2xl' : '3xl'}`} style={{ width: isMobile ? '150px' : '384px', height: isMobile ? '150px' : '384px' }}></div>
+        <div className={`absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 opacity-70-${isMobile ? '2xl' : '3xl'}`} style={{ width: isMobile ? '100px' : '256px', height: isMobile ? '100px' : '256px' }}></div>
         
         {/* Futuristické nody - pouze na desktopu */}
         {!isMobile && [...Array(5)].map((_, i) => (

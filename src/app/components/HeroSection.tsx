@@ -157,7 +157,7 @@ export const HeroSection: React.FC = () => {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.4 }}
             >
-              CREATIVE DEVELOPER
+              GRAFICKÉ STUDIO
             </motion.span>
             <motion.div 
               className="h-px w-12 bg-orange-500/40"
@@ -437,9 +437,9 @@ export const HeroSection: React.FC = () => {
             className="grid grid-cols-2 gap-6 text-center mt-12 lg:mt-36 xl:grid-cols-4 w-full max-w-5xl"
           >
             {[
-              { value: 12, label: "let praxe" },
+              { value: 10, label: "let praxe" },
               { value: 150, label: "Hotových projektů" },
-              { value: 40, label: "Použité technologie" },
+              { value: 10, label: "Použité technologie" },
               { value: 5000, label: "Dodaných návrhů" }
             ].map((stat, index) => (
               <div key={index} className="relative group">

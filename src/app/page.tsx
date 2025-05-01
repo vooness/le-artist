@@ -73,6 +73,7 @@ function usePreloadComponents() {
       import('./components/WhatIDo');
       import('./components/investice');
       import('./components/ServiceGrid');
+      import('./components/Comparison'); // Preload nové komponenty
     }, 1000);
     return () => clearTimeout(timer);
   }, []);
@@ -92,6 +93,11 @@ const ServicesGrid = dynamic(() => import('./components/ServiceGrid'), {
   loading: () => <Skeleton height={400} />,
 });
 const WhyTrustMe = dynamic(() => import('./components/WhyTrustMe'), {
+  ssr: false,
+  loading: () => <Skeleton height={400} />,
+});
+// Nová komponenta Comparison
+const ComparisonSection = dynamic(() => import('./components/Comparison'), {
   ssr: false,
   loading: () => <Skeleton height={400} />,
 });
@@ -140,6 +146,10 @@ export default function Home() {
       </LazyComponent>
       <LazyComponent height={400}>
         <WhyTrustMe />
+      </LazyComponent>
+      {/* Přidání nové komponenty Comparison hned po WhyTrustMe */}
+      <LazyComponent height={400}>
+        <ComparisonSection />
       </LazyComponent>
       <LazyComponent height={500}>
         <ProjectsSection />
