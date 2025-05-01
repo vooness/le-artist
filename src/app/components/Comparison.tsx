@@ -9,20 +9,42 @@ const Comparison: React.FC = () => {
   const [hoverPriceCard, setHoverPriceCard] = useState<string | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
   
-  // Animační stavy
+  // Animační stavy - adding default value to ensure content displays even if observer fails
   const [animationProgress, setAnimationProgress] = useState(0);
   
-  // Detekce viditelnosti sekce a postupná animace
+  // Force content visibility after a timeout as fallback for mobile
   useEffect(() => {
+    // Immediate check to set initial state
+    if (typeof window !== 'undefined') {
+      const sectionElement = sectionRef.current;
+      if (sectionElement) {
+        const rect = sectionElement.getBoundingClientRect();
+        const isInViewport = rect.top < window.innerHeight && rect.bottom >= 0;
+        if (isInViewport) {
+          setIsVisible(true);
+          setAnimationProgress(1);
+        }
+      }
+    }
+    
+    // Fallback for mobile - force visibility after 1 second
+    const fallbackTimer = setTimeout(() => {
+      if (!isVisible) {
+        setIsVisible(true);
+        setAnimationProgress(1);
+      }
+    }, 1000);
+    
+    // Main intersection observer
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
           
-          // Postupná animace
+          // Gradual animation but faster for mobile
           let progress = 0;
           const interval = setInterval(() => {
-            progress += 0.02;
+            progress += 0.04; // Faster animation
             if (progress >= 1) {
               clearInterval(interval);
               progress = 1;
@@ -34,15 +56,33 @@ const Comparison: React.FC = () => {
           return () => clearInterval(interval);
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.1 } // Lower threshold for mobile
     );
     
     if (sectionRef.current) observer.observe(sectionRef.current);
     
     return () => {
       if (sectionRef.current) observer.unobserve(sectionRef.current);
+      clearTimeout(fallbackTimer);
     };
-  }, []);
+  }, [isVisible]);
+  
+  // Manual scroll handler for mobile devices
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!isVisible && sectionRef.current) {
+        const rect = sectionRef.current.getBoundingClientRect();
+        const isInViewport = rect.top < window.innerHeight && rect.bottom >= 0;
+        if (isInViewport) {
+          setIsVisible(true);
+          setAnimationProgress(1);
+        }
+      }
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isVisible]);
   
   // Data pro porovnání
   const keyDifferences = [
@@ -81,7 +121,7 @@ const Comparison: React.FC = () => {
   const savingsAmount = pricingComparison.agency.totalCost - pricingComparison.freelancer.totalCost;
   const savingsPercentage = Math.round((savingsAmount / pricingComparison.agency.totalCost) * 100);
   
-  // Animovaný counter
+  // Simplified Counter for better mobile performance
   interface CounterProps {
     value: number;
     startAt?: number;
@@ -92,10 +132,14 @@ const Comparison: React.FC = () => {
     const [count, setCount] = useState<number>(startAt);
     
     useEffect(() => {
-      if (!isVisible) return;
+      if (!isVisible) {
+        setCount(value); // Immediately show final value on mobile
+        return;
+      }
       
       let start = startAt;
-      const step = (value - startAt) / 40; // 40 kroků animace
+      const totalSteps = 20; // Reduced steps for mobile
+      const step = (value - startAt) / totalSteps;
       
       const timer = setInterval(() => {
         start += step;
@@ -105,7 +149,7 @@ const Comparison: React.FC = () => {
         } else {
           setCount(Math.floor(start));
         }
-      }, 25);
+      }, 35); // Slightly slower animation
       
       return () => clearInterval(timer);
     }, [value, startAt, isVisible]);
@@ -117,58 +161,43 @@ const Comparison: React.FC = () => {
     <section 
       id="comparison" 
       ref={sectionRef}
-      className="py-20 md:py-32 relative bg-[#020410] overflow-hidden"
+      className="py-16 md:py-32 relative bg-[#020410] overflow-hidden"
     >
-      {/* Futuristické pozadí s komplexním vzorem */}
+      {/* Simplified background for mobile */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        {/* Základní mřížka */}
+        {/* Základní mřížka - optimized for mobile */}
         <div 
           className="absolute inset-0 opacity-10" 
           style={{ 
             backgroundImage: `
               linear-gradient(to right, rgba(59, 130, 246, 0.1) 1px, transparent 1px),
-              linear-gradient(to bottom, rgba(59, 130, 246, 0.1) 1px, transparent 1px),
-              radial-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px)
+              linear-gradient(to bottom, rgba(59, 130, 246, 0.1) 1px, transparent 1px)
             `,
-            backgroundSize: '40px 40px, 40px 40px, 80px 80px',
-            backgroundPosition: '0 0, 0 0, 20px 20px'
+            backgroundSize: '40px 40px'
           }}
         ></div>
         
-        {/* Světelné přímky simulující datové proudy - pouze pro desktop */}
+        {/* Světelné přímky - reduced for mobile */}
         <div className="hidden md:block">
           <div className="absolute top-0 left-1/3 w-0.5 h-full bg-gradient-to-b from-blue-500/0 via-blue-500/10 to-blue-500/0"></div>
           <div className="absolute top-0 right-1/4 w-0.5 h-full bg-gradient-to-b from-orange-500/0 via-orange-500/10 to-orange-500/0"></div>
-          <div className="absolute top-1/4 left-0 w-full h-0.5 bg-gradient-to-r from-blue-500/0 via-blue-500/10 to-blue-500/0"></div>
-          <div className="absolute top-3/4 left-0 w-full h-0.5 bg-gradient-to-r from-orange-500/0 via-orange-500/10 to-orange-500/0"></div>
         </div>
         
-        {/* Pohyblivé částice simulované jako statické body - pro desktop i mobil */}
-        <div className="absolute top-[10%] left-[20%] w-1 h-1 rounded-full bg-orange-500/30 animate-pulse"></div>
-        <div className="absolute top-[30%] right-[10%] w-1 h-1 rounded-full bg-blue-500/30 animate-pulse"></div>
-        <div className="absolute bottom-[20%] left-[15%] w-1 h-1 rounded-full bg-orange-500/30 animate-pulse"></div>
-        <div className="absolute bottom-[40%] right-[25%] w-1 h-1 rounded-full bg-blue-500/30 animate-pulse"></div>
+        {/* Simplified particles for mobile */}
+        <div className="absolute top-[10%] left-[20%] w-1 h-1 rounded-full bg-orange-500/30"></div>
+        <div className="absolute bottom-[20%] right-[15%] w-1 h-1 rounded-full bg-blue-500/30"></div>
         
-        {/* Záření pro vizuální efekt */}
-        <div className="absolute top-0 left-1/4 w-64 h-64 bg-orange-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl"></div>
-        
-        {/* Kybernetické okraje */}
-        <div className="absolute top-0 left-0 w-20 h-1 bg-gradient-to-r from-orange-500/40 to-transparent"></div>
-        <div className="absolute top-0 left-0 w-1 h-20 bg-gradient-to-b from-orange-500/40 to-transparent"></div>
-        <div className="absolute top-0 right-0 w-20 h-1 bg-gradient-to-l from-orange-500/40 to-transparent"></div>
-        <div className="absolute top-0 right-0 w-1 h-20 bg-gradient-to-b from-orange-500/40 to-transparent"></div>
-        <div className="absolute bottom-0 left-0 w-20 h-1 bg-gradient-to-r from-orange-500/40 to-transparent"></div>
-        <div className="absolute bottom-0 left-0 w-1 h-20 bg-gradient-to-t from-orange-500/40 to-transparent"></div>
-        <div className="absolute bottom-0 right-0 w-20 h-1 bg-gradient-to-l from-orange-500/40 to-transparent"></div>
-        <div className="absolute bottom-0 right-0 w-1 h-20 bg-gradient-to-t from-orange-500/40 to-transparent"></div>
+        {/* Reduced blur effects for mobile */}
+        <div className="absolute top-0 left-1/4 w-32 h-32 bg-orange-500/5 rounded-full blur-xl"></div>
+        <div className="absolute bottom-0 right-1/4 w-32 h-32 bg-blue-500/5 rounded-full blur-xl"></div>
       </div>
       
+      {/* Main content container */}
       <div className="container mx-auto px-4 relative z-10">
-        {/* Stylizovaný nadpis */}
+        {/* Stylizovaný nadpis - with fallback visibility */}
         <div 
-          className={`mb-20 text-center transition-all duration-1000 transform ${
-            animationProgress > 0 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+          className={`mb-16 md:mb-20 text-center transition-all duration-700 ${
+            animationProgress > 0 ? 'opacity-100 scale-100' : 'opacity-100 scale-100'
           }`}
         >
           {/* Nadpisový blok s futuristickým stylem */}
@@ -184,7 +213,7 @@ const Comparison: React.FC = () => {
             </div>
           </div>
           
-          <h2 className="text-4xl md:text-6xl font-bold mb-6 text-white tracking-tight relative">
+          <h2 className="text-3xl md:text-6xl font-bold mb-6 text-white tracking-tight relative">
             <span className="relative">
               <span className="text-orange-500">1 expert</span>
               <span className="absolute -top-1 left-0 w-full h-px bg-orange-500/20"></span>
@@ -200,7 +229,7 @@ const Comparison: React.FC = () => {
             </span>
           </h2>
           
-          <div className="flex justify-center mb-8">
+          <div className="flex justify-center mb-6">
             <div className="flex items-center text-sm text-gray-400 space-x-4 bg-black/20 px-4 py-1 rounded-full border border-gray-800">
               <span className="flex items-center space-x-1">
                 <span className="w-1.5 h-1.5 bg-orange-500 rounded-full"></span>
@@ -220,27 +249,24 @@ const Comparison: React.FC = () => {
               Za práci každého z nich musíte zaplatit. <span className="text-orange-500 font-medium">Já zvládnu všechny tyto role sám</span> — 
               a vy platíte pouze jednoho člověka.
             </p>
-            
-            {/* Dekorativní prvky */}
-            <div className="absolute -left-4 top-1/2 transform -translate-y-1/2 w-px h-12 bg-gradient-to-b from-transparent via-orange-500/40 to-transparent"></div>
-            <div className="absolute -right-4 top-1/2 transform -translate-y-1/2 w-px h-12 bg-gradient-to-b from-transparent via-orange-500/40 to-transparent"></div>
           </div>
         </div>
         
-        {/* KLÍČOVÉ ROZDÍLY - FUTURISTICKÉ KARTY */}
-        <div className="relative mb-24 max-w-5xl mx-auto">
+        {/* KLÍČOVÉ ROZDÍLY - MOBILE OPTIMIZED */}
+        <div className="relative mb-16 md:mb-24 max-w-5xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {keyDifferences.map((diff, index) => (
               <div 
                 key={index}
-                className={`transition-all duration-700 transform ${
-                  animationProgress > 0.2 + (index * 0.1) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+                className={`transition-all duration-500 transform ${
+                  animationProgress > 0.2 || isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
                 }`}
+                style={{ transitionDelay: `${index * 100}ms` }}
                 onMouseEnter={() => setHoverCard(index)}
                 onMouseLeave={() => setHoverCard(null)}
               >
                 <div 
-                  className={`relative bg-black/60 border border-gray-800 hover:border-orange-500/50 rounded-lg overflow-hidden transition-all duration-500 ${
+                  className={`relative bg-black/60 border border-gray-800 hover:border-orange-500/50 rounded-lg overflow-hidden transition-all duration-300 ${
                     hoverCard === index ? 'scale-[1.02] shadow-xl shadow-orange-500/10' : ''
                   }`}
                 >
@@ -264,7 +290,7 @@ const Comparison: React.FC = () => {
                       <div className="text-xl font-bold text-white">{diff.title}</div>
                     </div>
                     
-                    <div className="text-xs text-gray-500 font-mono">
+                    <div className="text-xs text-gray-500 font-mono hidden md:block">
                       comparison_{index + 1}.js
                     </div>
                   </div>
@@ -273,9 +299,7 @@ const Comparison: React.FC = () => {
                     {/* Freelancer */}
                     <div className="mb-6">
                       <div className="flex items-center mb-3">
-                        <div className={`w-8 h-8 flex items-center justify-center rounded-full bg-black border border-green-500/30 mr-3 transition-all duration-300 ${
-                          hoverCard === index ? 'scale-110' : ''
-                        }`}>
+                        <div className="w-8 h-8 flex items-center justify-center rounded-full bg-black border border-green-500/30 mr-3">
                           <UserPlus size={16} className="text-green-400" />
                         </div>
                         <h4 className="text-base font-bold text-white">Expert</h4>
@@ -286,8 +310,8 @@ const Comparison: React.FC = () => {
                       <p className="text-white mb-3">{diff.freelancer}</p>
                       <div className="relative h-2 bg-black w-full rounded-full overflow-hidden">
                         <div 
-                          className="absolute top-0 left-0 h-full bg-gradient-to-r from-green-500 to-cyan-500 rounded-full transition-all duration-1000 ease-out"
-                          style={{ width: isVisible ? `${diff.freelancerPercentage}%` : '0%' }}
+                          className="absolute top-0 left-0 h-full bg-gradient-to-r from-green-500 to-cyan-500 rounded-full transition-all duration-700 ease-out"
+                          style={{ width: `${diff.freelancerPercentage}%` }}
                         ></div>
                       </div>
                     </div>
@@ -295,9 +319,7 @@ const Comparison: React.FC = () => {
                     {/* Agentura */}
                     <div className="pt-3 border-t border-gray-800/50">
                       <div className="flex items-center mb-3">
-                        <div className={`w-8 h-8 flex items-center justify-center rounded-full bg-black border border-blue-500/30 mr-3 transition-all duration-300 ${
-                          hoverCard === index ? 'scale-110' : ''
-                        }`}>
+                        <div className="w-8 h-8 flex items-center justify-center rounded-full bg-black border border-blue-500/30 mr-3">
                           <Users size={16} className="text-blue-400" />
                         </div>
                         <h4 className="text-base font-bold text-white">Agentura</h4>
@@ -308,8 +330,8 @@ const Comparison: React.FC = () => {
                       <p className="text-white mb-3">{diff.agency}</p>
                       <div className="relative h-2 bg-black w-full rounded-full overflow-hidden">
                         <div 
-                          className="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full transition-all duration-1000 ease-out"
-                          style={{ width: isVisible ? `${diff.agencyPercentage}%` : '0%' }}
+                          className="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full transition-all duration-700 ease-out"
+                          style={{ width: `${diff.agencyPercentage}%` }}
                         ></div>
                       </div>
                     </div>
@@ -320,35 +342,28 @@ const Comparison: React.FC = () => {
           </div>
         </div>
         
-        {/* CENOVÉ SROVNÁNÍ - VYLEPŠENÝ FUTURISTICKÝ DESIGN */}
+        {/* CENOVÉ SROVNÁNÍ - OPTIMIZED FOR MOBILE */}
         <div 
-          className={`relative mb-24 max-w-5xl mx-auto transition-all duration-1000 transform ${
-            animationProgress > 0.4 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+          className={`relative mb-16 md:mb-24 max-w-5xl mx-auto transition-all duration-700 transform ${
+            animationProgress > 0.4 || isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}
-          style={{ transitionDelay: '300ms' }}
+          style={{ transitionDelay: '200ms' }}
         >
-          <div className="relative bg-gradient-to-br from-black/80 via-black/90 to-black/80 border border-gray-800 rounded-xl overflow-hidden shadow-2xl">
-            {/* Pozadí s hexagonálním vzorem */}
-            <div className="absolute inset-0 opacity-5" style={{ 
+          <div className="relative bg-gradient-to-br from-black/80 via-black/90 to-black/80 border border-gray-800 rounded-xl overflow-hidden shadow-lg md:shadow-2xl">
+            {/* Simplified hexagonal pattern for mobile */}
+            <div className="absolute inset-0 opacity-5 hidden md:block" style={{ 
               backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l25.980762 15v30L30 60 4.01923788 45V15z' fill='%23f97316' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E")`,
               backgroundSize: '60px 60px'
             }}></div>
             
             {/* Futuristické okraje */}
-            <div className="absolute top-0 left-0 w-5 h-5 border-t-2 border-l-2 border-orange-500"></div>
-            <div className="absolute top-0 right-0 w-5 h-5 border-t-2 border-r-2 border-orange-500"></div>
-            <div className="absolute bottom-0 left-0 w-5 h-5 border-b-2 border-l-2 border-orange-500"></div>
-            <div className="absolute bottom-0 right-0 w-5 h-5 border-b-2 border-r-2 border-orange-500"></div>
-            
-            {/* Světelné efekty */}
-            <div className="absolute top-0 right-1/4 w-32 h-32 bg-orange-500/10 blur-3xl rounded-full"></div>
-            <div className="absolute bottom-0 left-1/4 w-32 h-32 bg-blue-500/10 blur-3xl rounded-full"></div>
-            
-            {/* Diagonální světelný pruh */}
-            <div className="absolute -inset-x-full -inset-y-full rotate-45 transform translate-x-1/4 translate-y-1/2 bg-gradient-to-tr from-transparent via-orange-500/5 to-transparent pointer-events-none"></div>
+            <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-orange-500"></div>
+            <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-orange-500"></div>
+            <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-orange-500"></div>
+            <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-orange-500"></div>
             
             {/* Nadpis */}
-            <div className="pt-8 pb-4 text-center relative">
+            <div className="pt-6 md:pt-8 pb-4 text-center relative">
               <div className="inline-flex items-center justify-center px-4 py-2 bg-black/40 rounded-lg border border-orange-500/30 mb-2">
                 <DollarSign size={18} className="text-orange-500 mr-2" />
                 <h3 className="text-xl font-bold text-white font-mono">CENOVÉ SROVNÁNÍ</h3>
@@ -356,86 +371,72 @@ const Comparison: React.FC = () => {
               
               <div className="w-32 h-px mx-auto bg-gradient-to-r from-transparent via-orange-500/50 to-transparent my-4"></div>
               
-              <p className="text-white/80 max-w-2xl mx-auto px-4">
+              <p className="text-white/80 max-w-2xl mx-auto px-4 text-sm md:text-base">
                 Porovnání ceny typického webového projektu při spolupráci s expertem nebo s agenturou
               </p>
             </div>
             
-            {/* Cenové karty - nový futuristický design */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-6">
+            {/* Cenové karty - optimized for mobile */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 px-4 md:px-6 pb-4">
               {/* Karta experta */}
               <div 
-                className={`relative rounded-xl overflow-hidden transition-all duration-300 ${
-                  hoverPriceCard === 'expert' ? 'scale-[1.02] z-10' : ''
-                }`}
+                className="relative rounded-xl overflow-hidden"
                 onMouseEnter={() => setHoverPriceCard('expert')}
                 onMouseLeave={() => setHoverPriceCard(null)}
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-green-900/30 via-black/90 to-green-900/20 pointer-events-none"></div>
-                
-                {/* Záhlavi karty */}
                 <div className="relative border border-green-500/30 rounded-xl overflow-hidden backdrop-blur-sm">
                   {/* Světelné efekty */}
                   <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-500/0 via-green-500/40 to-green-500/0"></div>
                   
-                  <div className="p-5 relative">
+                  <div className="p-4 md:p-5 relative">
                     {/* Nadpis karty */}
                     <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-3">
-                        <div className="p-2 bg-black/50 rounded-lg border border-green-500/30">
-                          <UserPlus size={24} className="text-green-400" />
+                      <div className="flex items-center space-x-2 md:space-x-3">
+                        <div className="p-1.5 md:p-2 bg-black/50 rounded-lg border border-green-500/30">
+                          <UserPlus size={20} className="text-green-400" />
                         </div>
-                        <h4 className="text-2xl font-bold text-white tracking-wide">Expert</h4>
+                        <h4 className="text-xl md:text-2xl font-bold text-white tracking-wide">Expert</h4>
                       </div>
                       
                       <div className="flex items-center space-x-1">
-                        <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                        <span className="w-2 h-2 bg-green-500 rounded-full"></span>
                         <span className="text-xs font-mono text-green-400">ONLINE</span>
                       </div>
                     </div>
                     
                     {/* Cena s pulzujícím efektem */}
-                    <div className="relative mx-auto text-center py-6 px-4 rounded-lg bg-black/30 border border-green-500/20 mb-6">
-                      <div className="absolute inset-0 overflow-hidden">
-                        <div className="absolute -inset-x-full -inset-y-full rotate-45 transform translate-x-1/2 translate-y-1/2 bg-gradient-to-tr from-transparent via-green-500/5 to-transparent pointer-events-none"></div>
-                      </div>
-                      
-                      <div className="text-3xl font-bold text-white mb-1">
+                    <div className="relative mx-auto text-center py-4 md:py-6 px-4 rounded-lg bg-black/30 border border-green-500/20 mb-4 md:mb-6">
+                      <div className="text-2xl md:text-3xl font-bold text-white mb-1">
                         <span className="text-green-400">{pricingComparison.freelancer.hourlyRate} Kč</span>
                         <span className="text-sm font-normal text-gray-400">/hod</span>
                       </div>
                       
-                      <div className="text-lg text-white">
+                      <div className="text-base md:text-lg text-white">
                         Celkem <span className="font-bold text-green-400">{pricingComparison.freelancer.totalCost.toLocaleString()} Kč</span>
                       </div>
-                      
-                      <div className="absolute -top-1 -left-1 w-2 h-2 border-t border-l border-green-500"></div>
-                      <div className="absolute -top-1 -right-1 w-2 h-2 border-t border-r border-green-500"></div>
-                      <div className="absolute -bottom-1 -left-1 w-2 h-2 border-b border-l border-green-500"></div>
-                      <div className="absolute -bottom-1 -right-1 w-2 h-2 border-b border-r border-green-500"></div>
                     </div>
                     
-                    {/* Seznam výhod */}
-                    <div className="space-y-3">
-                      <div className="flex items-start space-x-3">
+                    {/* Seznam výhod - simplified for mobile */}
+                    <div className="space-y-2 md:space-y-3">
+                      <div className="flex items-start space-x-2 md:space-x-3">
                         <div className="flex-shrink-0 w-5 h-5 rounded-full bg-black flex items-center justify-center mt-0.5 border border-green-500/30">
                           <CheckCircle size={12} className="text-green-400" />
                         </div>
                         <div>
-                          <p className="text-white">Přímá komunikace bez prostředníků</p>
+                          <p className="text-white text-sm md:text-base">Přímá komunikace bez prostředníků</p>
                         </div>
                       </div>
                       
-                      <div className="flex items-start space-x-3">
+                      <div className="flex items-start space-x-2 md:space-x-3">
                         <div className="flex-shrink-0 w-5 h-5 rounded-full bg-black flex items-center justify-center mt-0.5 border border-green-500/30">
                           <CheckCircle size={12} className="text-green-400" />
                         </div>
                         <div>
-                          <p className="text-white">Účtujete si pouze hodiny experta</p>
+                          <p className="text-white text-sm md:text-base">Účtujete si pouze hodiny experta</p>
                         </div>
                       </div>
                       
-                      <div className="flex items-start space-x-3">
+                      <div className="md:flex items-start space-x-2 md:space-x-3 hidden">
                         <div className="flex-shrink-0 w-5 h-5 rounded-full bg-black flex items-center justify-center mt-0.5 border border-green-500/30">
                           <CheckCircle size={12} className="text-green-400" />
                         </div>
@@ -444,7 +445,7 @@ const Comparison: React.FC = () => {
                         </div>
                       </div>
                       
-                      <div className="flex items-start space-x-3">
+                      <div className="md:flex items-start space-x-2 md:space-x-3 hidden">
                         <div className="flex-shrink-0 w-5 h-5 rounded-full bg-black flex items-center justify-center mt-0.5 border border-green-500/30">
                           <CheckCircle size={12} className="text-green-400" />
                         </div>
@@ -455,10 +456,10 @@ const Comparison: React.FC = () => {
                     </div>
                     
                     {/* Doplňující informace */}
-                    <div className="mt-6 pt-4 border-t border-green-500/10">
+                    <div className="mt-4 md:mt-6 pt-3 border-t border-green-500/10">
                       <div className="flex items-center justify-between text-sm">
-                        <div className="text-gray-400 font-mono">Počet hodin: {pricingComparison.freelancer.hours}h</div>
-                        <div className="px-2 py-1 bg-black/50 rounded-md border border-green-500/20 text-green-400 font-mono">PREFERRED</div>
+                        <div className="text-gray-400 font-mono text-xs md:text-sm">Počet hodin: {pricingComparison.freelancer.hours}h</div>
+                        <div className="px-2 py-1 bg-black/50 rounded-md border border-green-500/20 text-green-400 font-mono text-xs">PREFERRED</div>
                       </div>
                     </div>
                   </div>
@@ -467,44 +468,35 @@ const Comparison: React.FC = () => {
               
               {/* Karta agentury */}
               <div 
-                className={`relative rounded-xl overflow-hidden transition-all duration-300 ${
-                  hoverPriceCard === 'agency' ? 'scale-[1.02] z-10' : ''
-                }`}
+                className="relative rounded-xl overflow-hidden"
                 onMouseEnter={() => setHoverPriceCard('agency')}
                 onMouseLeave={() => setHoverPriceCard(null)}
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-900/30 via-black/90 to-blue-900/20 pointer-events-none"></div>
-                
-                {/* Záhlavi karty */}
                 <div className="relative border border-blue-500/30 rounded-xl overflow-hidden backdrop-blur-sm">
                   {/* Světelné efekty */}
                   <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500/0 via-blue-500/40 to-blue-500/0"></div>
                   
-                  <div className="p-5 relative">
+                  <div className="p-4 md:p-5 relative">
                     {/* Nadpis karty */}
                     <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-3">
-                        <div className="p-2 bg-black/50 rounded-lg border border-blue-500/30">
-                          <Users size={24} className="text-blue-400" />
+                      <div className="flex items-center space-x-2 md:space-x-3">
+                        <div className="p-1.5 md:p-2 bg-black/50 rounded-lg border border-blue-500/30">
+                          <Users size={20} className="text-blue-400" />
                         </div>
-                        <h4 className="text-2xl font-bold text-white tracking-wide">Agentura</h4>
+                        <h4 className="text-xl md:text-2xl font-bold text-white tracking-wide">Agentura</h4>
                       </div>
                       
                       <div className="text-xs font-mono text-blue-400 px-1.5 py-0.5 border border-blue-500/20 rounded bg-black/40">corporate</div>
                     </div>
                     
                     {/* Cena s pulzujícím efektem */}
-                    <div className="relative mx-auto text-center py-6 px-4 rounded-lg bg-black/30 border border-blue-500/20 mb-6">
-                      <div className="absolute inset-0 overflow-hidden">
-                        <div className="absolute -inset-x-full -inset-y-full rotate-45 transform translate-x-1/2 translate-y-1/2 bg-gradient-to-tr from-transparent via-blue-500/5 to-transparent pointer-events-none"></div>
-                      </div>
-                      
-                      <div className="text-3xl font-bold text-white mb-1">
+                    <div className="relative mx-auto text-center py-4 md:py-6 px-4 rounded-lg bg-black/30 border border-blue-500/20 mb-4 md:mb-6">
+                      <div className="text-2xl md:text-3xl font-bold text-white mb-1">
                         <span className="text-blue-400">{pricingComparison.agency.hourlyRate} Kč</span>
                         <span className="text-sm font-normal text-gray-400">/hod</span>
                       </div>
                       
-                      <div className="text-lg text-white">
+                      <div className="text-base md:text-lg text-white">
                         Celkem <span className="font-bold text-blue-400">{pricingComparison.agency.totalCost.toLocaleString()} Kč</span>
                       </div>
                       
@@ -514,27 +506,27 @@ const Comparison: React.FC = () => {
                       <div className="absolute -bottom-1 -right-1 w-2 h-2 border-b border-r border-blue-500"></div>
                     </div>
                     
-                    {/* Seznam nevýhod */}
-                    <div className="space-y-3">
-                      <div className="flex items-start space-x-3">
+                    {/* Seznam nevýhod - simplified for mobile */}
+                    <div className="space-y-2 md:space-y-3">
+                      <div className="flex items-start space-x-2 md:space-x-3">
                         <div className="flex-shrink-0 w-5 h-5 rounded-full bg-black flex items-center justify-center mt-0.5 border border-blue-500/30">
                           <span className="text-blue-400 text-xs">!</span>
                         </div>
                         <div>
-                          <p className="text-white">Komunikace přes account a projektové manažery</p>
+                          <p className="text-white text-sm md:text-base">Komunikace přes account a projektové manažery</p>
                         </div>
                       </div>
                       
-                      <div className="flex items-start space-x-3">
+                      <div className="flex items-start space-x-2 md:space-x-3">
                         <div className="flex-shrink-0 w-5 h-5 rounded-full bg-black flex items-center justify-center mt-0.5 border border-blue-500/30">
                           <span className="text-blue-400 text-xs">!</span>
                         </div>
                         <div>
-                          <p className="text-white">Platíte za režii, kanceláře a marketing</p>
+                          <p className="text-white text-sm md:text-base">Platíte za režii, kanceláře a marketing</p>
                         </div>
                       </div>
                       
-                      <div className="flex items-start space-x-3">
+                      <div className="md:flex items-start space-x-2 md:space-x-3 hidden">
                         <div className="flex-shrink-0 w-5 h-5 rounded-full bg-black flex items-center justify-center mt-0.5 border border-blue-500/30">
                           <span className="text-blue-400 text-xs">!</span>
                         </div>
@@ -543,7 +535,7 @@ const Comparison: React.FC = () => {
                         </div>
                       </div>
                       
-                      <div className="flex items-start space-x-3">
+                      <div className="md:flex items-start space-x-2 md:space-x-3 hidden">
                         <div className="flex-shrink-0 w-5 h-5 rounded-full bg-black flex items-center justify-center mt-0.5 border border-blue-500/30">
                           <span className="text-blue-400 text-xs">!</span>
                         </div>
@@ -554,10 +546,10 @@ const Comparison: React.FC = () => {
                     </div>
                     
                     {/* Doplňující informace */}
-                    <div className="mt-6 pt-4 border-t border-blue-500/10">
+                    <div className="mt-4 md:mt-6 pt-3 border-t border-blue-500/10">
                       <div className="flex items-center justify-between text-sm">
-                        <div className="text-gray-400 font-mono">Počet hodin: {pricingComparison.agency.hours}h</div>
-                        <div className="px-2 py-1 bg-black/50 rounded-md border border-blue-500/20 text-blue-400 font-mono">ENTERPRISE</div>
+                        <div className="text-gray-400 font-mono text-xs md:text-sm">Počet hodin: {pricingComparison.agency.hours}h</div>
+                        <div className="px-2 py-1 bg-black/50 rounded-md border border-blue-500/20 text-blue-400 font-mono text-xs">ENTERPRISE</div>
                       </div>
                     </div>
                   </div>
@@ -565,48 +557,53 @@ const Comparison: React.FC = () => {
               </div>
             </div>
             
-            {/* Srovnání úspory - pokročilý futuristický design */}
-            <div className="p-6 relative">
-              <div className="bg-gradient-to-r from-black/60 via-black/40 to-black/60 border border-orange-500/20 rounded-xl p-6 overflow-hidden">
-                {/* Hexagonální pattern v pozadí */}
-                <div className="absolute inset-0 opacity-5" style={{ 
-                  backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l25.980762 15v30L30 60 4.01923788 45V15z' fill='%23f97316' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E")`,
-                  backgroundSize: '30px 30px'
-                }}></div>
-                
-                {/* Světelné efekty */}
-                <div className="absolute top-0 right-1/4 w-32 h-32 bg-orange-500/5 blur-3xl rounded-full"></div>
-                <div className="absolute bottom-0 left-1/4 w-32 h-32 bg-orange-500/5 blur-3xl rounded-full"></div>
-                
+            {/* Srovnání úspory - MOBILE OPTIMIZED */}
+            <div className="px-4 md:px-6 pb-6 relative">
+              <div className="bg-gradient-to-r from-black/60 via-black/40 to-black/60 border border-orange-500/20 rounded-xl p-4 md:p-6 overflow-hidden">
                 <div className="relative">
-                  <div className="text-center mb-6">
-                    <div className="inline-flex items-center justify-center px-4 py-1.5 bg-black/50 rounded-lg border border-orange-500/30 mb-2">
-                      <Sparkles size={16} className="text-orange-500 mr-2" />
-                      <h3 className="text-lg font-bold text-white">UŠETŘÍTE S EXPERTEM</h3>
+                  <div className="text-center mb-4 md:mb-6">
+                    <div className="inline-flex items-center justify-center px-3 py-1 md:px-4 md:py-1.5 bg-black/50 rounded-lg border border-orange-500/30 mb-2">
+                      <Sparkles size={14} className="text-orange-500 mr-2" />
+                      <h3 className="text-base md:text-lg font-bold text-white">UŠETŘÍTE S EXPERTEM</h3>
                     </div>
                   </div>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                  {/* Mobile-responsive grid */}
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-6 items-center">
                     {/* Částka úspory */}
-                    <div className="bg-black/50 rounded-xl border border-orange-500/20 p-5 text-center relative group">
-                      <div className="absolute inset-0 bg-gradient-to-br from-orange-600/5 via-transparent to-orange-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      
-                      <div className="absolute -top-1 -left-1 w-2 h-2 border-t border-l border-orange-500"></div>
-                      <div className="absolute -top-1 -right-1 w-2 h-2 border-t border-r border-orange-500"></div>
-                      <div className="absolute -bottom-1 -left-1 w-2 h-2 border-b border-l border-orange-500"></div>
-                      <div className="absolute -bottom-1 -right-1 w-2 h-2 border-b border-r border-orange-500"></div>
-                      
-                      <h4 className="text-white/80 text-sm font-mono mb-1">CELKOVÁ ÚSPORA</h4>
-                      <div className="text-3xl md:text-4xl font-bold text-orange-500 font-mono relative">
+                    <div className="bg-black/50 rounded-xl border border-orange-500/20 p-3 md:p-5 text-center relative">
+                      <h4 className="text-white/80 text-xs md:text-sm font-mono mb-1">CELKOVÁ ÚSPORA</h4>
+                      <div className="text-2xl md:text-4xl font-bold text-orange-500 font-mono relative">
                         <span className="relative">
-                          {isVisible ? <Counter value={savingsAmount} /> : 0} Kč
+                          <Counter value={savingsAmount} /> Kč
                           <span className="absolute -bottom-1 left-0 w-full h-px bg-orange-500/30"></span>
                         </span>
                       </div>
                     </div>
                     
-                    {/* Grafické znázornění */}
-                    <div className="relative">
+                    {/* Mobile-optimized simplified chart */}
+                    <div className="bg-black/50 rounded-xl border border-gray-800 p-3 md:hidden">
+                      <div className="flex justify-between items-end h-16 px-3">
+                        <div className="w-6 bg-gradient-to-t from-green-500/80 to-green-500/30 h-5 rounded-t-sm relative">
+                          <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 text-xs text-white whitespace-nowrap">
+                            Expert
+                          </div>
+                        </div>
+                        <div className="w-8 h-px bg-orange-500/30 flex-grow mx-2"></div>
+                        <div className="w-6 bg-gradient-to-t from-blue-500/80 to-blue-500/30 h-14 rounded-t-sm relative">
+                          <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 text-xs text-white whitespace-nowrap">
+                            Agentura
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex justify-between mt-2 px-1 text-xs text-gray-400 font-mono">
+                        <div>{pricingComparison.freelancer.totalCost.toLocaleString().substring(0,2)}k</div>
+                        <div>{pricingComparison.agency.totalCost.toLocaleString().substring(0,2)}k</div>
+                      </div>
+                    </div>
+                    
+                    {/* Grafické znázornění for Desktop */}
+                    <div className="relative hidden md:block">
                       {/* Futuristický graf srovnání */}
                       <div className="w-full h-32 relative bg-black/50 rounded-xl border border-gray-800 overflow-hidden">
                         {/* Expert bar */}
@@ -653,38 +650,23 @@ const Comparison: React.FC = () => {
                     </div>
                     
                     {/* Procentuální úspora s kruhovým diagramem */}
-                    <div className="bg-black/50 rounded-xl border border-orange-500/20 p-5 text-center relative group">
-                      <div className="absolute inset-0 bg-gradient-to-br from-orange-600/5 via-transparent to-orange-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div className="bg-black/50 rounded-xl border border-orange-500/20 p-3 md:p-5 text-center relative">
+                      <h4 className="text-white/80 text-xs md:text-sm font-mono mb-2">PROCENTUÁLNÍ ÚSPORA</h4>
                       
-                      <div className="absolute -top-1 -left-1 w-2 h-2 border-t border-l border-orange-500"></div>
-                      <div className="absolute -top-1 -right-1 w-2 h-2 border-t border-r border-orange-500"></div>
-                      <div className="absolute -bottom-1 -left-1 w-2 h-2 border-b border-l border-orange-500"></div>
-                      <div className="absolute -bottom-1 -right-1 w-2 h-2 border-b border-r border-orange-500"></div>
-                      
-                      <h4 className="text-white/80 text-sm font-mono mb-3">PROCENTUÁLNÍ ÚSPORA</h4>
-                      
-                      {/* Pokročilý kruhový graf */}
-                      <div className="relative w-24 h-24 mx-auto">
+                      {/* Simplified donut chart for mobile */}
+                      <div className="relative w-16 h-16 md:w-24 md:h-24 mx-auto">
                         <svg viewBox="0 0 100 100" className="w-full h-full">
-                          <defs>
-                            <linearGradient id="circleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                              <stop offset="0%" stopColor="#f97316" stopOpacity="0.8" />
-                              <stop offset="100%" stopColor="#c2410c" stopOpacity="0.8" />
-                            </linearGradient>
-                          </defs>
+                          <circle cx="50" cy="50" r="45" fill="none" stroke="#1e293b" strokeWidth="8" />
                           
-                          {/* Pozadí kruhu */}
-                          <circle cx="50" cy="50" r="45" fill="none" stroke="#1e293b" strokeWidth="6" />
-                          
-                          {/* Progress arc */}
+                          {/* Progress arc - simplified animation for mobile */}
                           <circle 
                             cx="50" 
                             cy="50" 
                             r="45" 
                             fill="none" 
-                            stroke="url(#circleGradient)" 
-                            strokeWidth="6"
-                            strokeDasharray={`${(isVisible ? savingsPercentage : 0) * 2.83} 1000`}
+                            stroke="#f97316" 
+                            strokeWidth="8"
+                            strokeDasharray={`${savingsPercentage * 2.83} 1000`}
                             strokeDashoffset="0"
                             transform="rotate(-90 50 50)"
                             strokeLinecap="round"
@@ -700,40 +682,34 @@ const Comparison: React.FC = () => {
                             fill="white"
                             fontFamily="monospace"
                           >
-                            {isVisible ? savingsPercentage : 0}%
+                            {savingsPercentage}%
                           </text>
                         </svg>
-                        
-                        {/* Dekorativní částice kolem kruhu */}
-                        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-orange-500 rounded-full"></div>
-                        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-orange-500 rounded-full"></div>
-                        <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-1 bg-orange-500 rounded-full"></div>
-                        <div className="absolute right-0 top-1/2 transform -translate-y-1/2 w-1 h-1 bg-orange-500 rounded-full"></div>
                       </div>
                     </div>
                   </div>
                   
-                  {/* Lišta s výhodami */}
-                  <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <div className="flex items-center space-x-2 bg-black/50 p-2 rounded-lg border border-gray-800 group hover:border-orange-500/30 transition-colors duration-300">
-                      <div className="w-8 h-8 flex items-center justify-center rounded-full bg-black border border-orange-500/30 group-hover:scale-110 transition-transform duration-300">
+                  {/* Lišta s výhodami - simplified for mobile */}
+                  <div className="mt-4 md:mt-6 grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div className="flex items-center space-x-2 bg-black/50 p-2 rounded-lg border border-gray-800">
+                      <div className="w-8 h-8 flex items-center justify-center rounded-full bg-black border border-orange-500/30">
                         <Clock size={16} className="text-orange-500" />
                       </div>
-                      <p className="text-white text-sm">Rychlejší dodání finálního projektu</p>
+                      <p className="text-white text-sm">Rychlejší dodání projektu</p>
                     </div>
                     
-                    <div className="flex items-center space-x-2 bg-black/50 p-2 rounded-lg border border-gray-800 group hover:border-orange-500/30 transition-colors duration-300">
-                      <div className="w-8 h-8 flex items-center justify-center rounded-full bg-black border border-orange-500/30 group-hover:scale-110 transition-transform duration-300">
+                    <div className="hidden md:flex items-center space-x-2 bg-black/50 p-2 rounded-lg border border-gray-800">
+                      <div className="w-8 h-8 flex items-center justify-center rounded-full bg-black border border-orange-500/30">
                         <Cpu size={16} className="text-orange-500" />
                       </div>
                       <p className="text-white text-sm">Práce s nejnovějšími technologiemi</p>
                     </div>
                     
-                    <div className="flex items-center space-x-2 bg-black/50 p-2 rounded-lg border border-gray-800 group hover:border-orange-500/30 transition-colors duration-300">
-                      <div className="w-8 h-8 flex items-center justify-center rounded-full bg-black border border-orange-500/30 group-hover:scale-110 transition-transform duration-300">
+                    <div className="flex items-center space-x-2 bg-black/50 p-2 rounded-lg border border-gray-800">
+                      <div className="w-8 h-8 flex items-center justify-center rounded-full bg-black border border-orange-500/30">
                         <DollarSign size={16} className="text-orange-500" />
                       </div>
-                      <p className="text-white text-sm">Výrazná úspora nákladů pro váš projekt</p>
+                      <p className="text-white text-sm">Výrazná úspora nákladů</p>
                     </div>
                   </div>
                 </div>
@@ -742,16 +718,16 @@ const Comparison: React.FC = () => {
           </div>
         </div>
         
-        {/* CTA S FUTURISTICKÝM DESIGNEM */}
+        {/* CTA S FUTURISTICKÝM DESIGNEM - MOBILE OPTIMIZED */}
         <div 
-          className={`mt-20 text-center transition-all duration-1000 transform ${
-            animationProgress > 0.6 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+          className={`mt-12 md:mt-20 text-center transition-all duration-700 transform ${
+            animationProgress > 0.6 || isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}
-          style={{ transitionDelay: '600ms' }}
+          style={{ transitionDelay: '300ms' }}
         >
           <a 
-            href="#kontakt" 
-            className="group relative inline-flex items-center justify-center px-10 py-4 overflow-hidden font-bold text-white rounded-lg border border-orange-500/50 bg-black/60 transition-all duration-300 hover:shadow-lg hover:shadow-orange-500/20"
+            href="/kontakt" 
+            className="group relative inline-flex items-center justify-center px-6 md:px-10 py-3 md:py-4 overflow-hidden font-bold text-white rounded-lg border border-orange-500/50 bg-black/60 transition-all duration-300 hover:shadow-lg hover:shadow-orange-500/20"
           >
             {/* Futuristické okraje tlačítka */}
             <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-orange-500"></div>
@@ -759,13 +735,9 @@ const Comparison: React.FC = () => {
             <div className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-orange-500"></div>
             <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-orange-500"></div>
             
-            {/* Animovaný efekt při hover */}
-            <span className="absolute inset-0 w-full h-full bg-gradient-to-br from-orange-600/20 to-orange-700/20 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></span>
-            <span className="absolute left-0 w-8 h-32 -ml-2 transition-all duration-300 origin-left transform -rotate-12 bg-orange-300/10 opacity-0 group-hover:opacity-100 group-hover:w-full"></span>
-            
             <span className="relative flex items-center">
-              <Terminal size={20} className="mr-2 group-hover:rotate-6 transition-transform duration-300" />
-              <span className="font-mono tracking-wider">KONTAKTOVAT_EXPERTA</span>
+              <Terminal size={18} className="mr-2" />
+              <span className="font-mono tracking-wider text-sm md:text-base">KONTAKTOVAT_EXPERTA</span>
             </span>
             
             {/* Blikající animace na tlačítku */}
@@ -773,9 +745,9 @@ const Comparison: React.FC = () => {
           </a>
           
           <div className="flex justify-center mt-4">
-            <div className="flex items-center space-x-2 text-sm text-white bg-black/40 px-3 py-1 rounded-full border border-gray-800">
-              <DollarSign size={14} className="text-orange-500" />
-              <span className="font-mono text-gray-300">Profesionální výsledky za zlomek ceny agentury</span>
+            <div className="flex items-center space-x-2 text-xs md:text-sm text-white bg-black/40 px-3 py-1 rounded-full border border-gray-800">
+              <DollarSign size={12} className="text-orange-500" />
+              <span className="font-mono text-gray-300">Profesionální výsledky za zlomek ceny</span>
             </div>
           </div>
         </div>
