@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Monitor, Edit, Video, CheckCircle2, Info } from "lucide-react";
+import { Monitor, Edit, Video, CheckCircle2, ArrowRight } from "lucide-react";
 
 // Definice typů pro service
 interface Service {
@@ -239,7 +239,7 @@ const ServiceCard: React.FC<{ service: Service, index: number }> = ({ service, i
           </div>
           
           {/* Checklisty */}
-          <ul className="space-y-3 mt-6">
+          <ul className="space-y-3 mt-6 mb-8">
             {service.checkmarks.map((check, idx) => (
               <li 
                 key={idx} 
@@ -259,12 +259,6 @@ const ServiceCard: React.FC<{ service: Service, index: number }> = ({ service, i
                       transform: isDesktop ? 'scale(1)' : 'none',
                       transition: isDesktop ? 'transform 0.3s ease' : 'none',
                     }}
-                    onMouseEnter={isDesktop ? (e) => {
-                      (e.target as HTMLElement).style.transform = 'scale(1.2)';
-                    } : undefined}
-                    onMouseLeave={isDesktop ? (e) => {
-                      (e.target as HTMLElement).style.transform = 'scale(1)';
-                    } : undefined}
                   />
                 </div>
                 <span className={isDesktop ? 'group-hover:text-white transition-colors duration-300' : ''}>
@@ -274,80 +268,53 @@ const ServiceCard: React.FC<{ service: Service, index: number }> = ({ service, i
             ))}
           </ul>
           
-          {/* CTA tlačítko s výraznějším efektem */}
-          <div className="mt-6 pt-4 border-t border-gray-700/50">
-            <button
-              onClick={() => router.push("/sluzby")}
-              className={`w-full relative flex items-center justify-center text-white 
-                         px-4 py-3 rounded-lg text-sm overflow-hidden
-                         ${isDesktop ? 'hover:text-white transition-all duration-300' : ''}`}
-              style={{ 
-                background: 'rgba(30, 41, 59, 0.8)',
-                boxShadow: `0 4px 10px ${service.color}20`,
-                border: '1px solid rgba(255,255,255,0.1)',
+          {/* Nové vylepšené CTA tlačítko */}
+          <button
+            onClick={() => router.push("/sluzby")}
+            className="w-full relative group/btn overflow-hidden rounded-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+            style={{
+              background: `linear-gradient(135deg, ${service.color}15, ${service.color}10)`,
+              border: `1px solid ${service.color}30`,
+            }}
+          >
+            {/* Gradient pozadí při hoveru */}
+            <div 
+              className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"
+              style={{
+                background: `linear-gradient(135deg, ${service.color}25, ${service.color}15)`,
               }}
-            >
-              {/* Ikona a text */}
-              <Info 
-                className={`w-4 h-4 mr-2 relative z-10 ${isDesktop ? 'transition-transform duration-300' : ''}`} 
-                style={{ 
-                  color: service.color,
-                  transform: 'translateX(0)'
-                }}
-                onMouseEnter={isDesktop ? (e) => {
-                  const button = (e.target as HTMLElement).closest('button');
-                  if (button) {
-                    button.style.background = `linear-gradient(90deg, ${service.color}20, rgba(30, 41, 59, 0.9))`;
-                    button.style.boxShadow = `0 4px 15px ${service.color}40`;
-                    button.style.borderColor = `${service.color}30`;
-                    (e.target as HTMLElement).style.transform = 'translateX(-3px)';
-                  }
-                } : undefined}
-                onMouseLeave={isDesktop ? (e) => {
-                  const button = (e.target as HTMLElement).closest('button');
-                  if (button) {
-                    button.style.background = 'rgba(30, 41, 59, 0.8)';
-                    button.style.boxShadow = `0 4px 10px ${service.color}20`;
-                    button.style.borderColor = 'rgba(255,255,255,0.1)';
-                    (e.target as HTMLElement).style.transform = 'translateX(0)';
-                  }
-                } : undefined}
-              />
+            />
+            
+            {/* Shine efekt */}
+            <div 
+              className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700 ease-in-out"
+              style={{
+                background: `linear-gradient(90deg, transparent, ${service.color}30, transparent)`,
+              }}
+            />
+            
+            {/* Obsah tlačítka */}
+            <div className="relative z-10 flex items-center justify-center px-6 py-4">
               <span 
-                className="relative z-10 font-medium"
-                style={{ 
-                  textShadow: isDesktop ? '0 0 0px rgba(255,255,255,0)' : 'none',
-                  transition: isDesktop ? 'text-shadow 0.3s ease' : 'none',
+                className="font-semibold text-white mr-3 transition-colors duration-300"
+                style={{
+                  textShadow: `0 0 10px ${service.color}40`,
                 }}
-                onMouseEnter={isDesktop ? (e) => {
-                  (e.target as HTMLElement).style.textShadow = '0 0 8px rgba(255,255,255,0.5)';
-                } : undefined}
-                onMouseLeave={isDesktop ? (e) => {
-                  (e.target as HTMLElement).style.textShadow = '0 0 0px rgba(255,255,255,0)';
-                } : undefined}
               >
                 Více informací
               </span>
-              
-              {/* Border glow effect na hover */}
-              {isDesktop && (
-                <div 
-                  className="absolute inset-0 rounded-lg opacity-0 pointer-events-none"
-                  style={{
-                    border: `1px solid ${service.color}`,
-                    boxShadow: `0 0 8px ${service.color}40, inset 0 0 10px ${service.color}20`,
-                    transition: 'opacity 0.3s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    (e.target as HTMLElement).style.opacity = '1';
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.target as HTMLElement).style.opacity = '0';
-                  }}
-                />
-              )}
-            </button>
-          </div>
+              <ArrowRight 
+                className="w-5 h-5 transition-all duration-300 group-hover/btn:translate-x-1 group-hover/btn:scale-110"
+                style={{ color: service.color }}
+              />
+            </div>
+            
+            {/* Dolní accent linka */}
+            <div 
+              className="absolute bottom-0 left-0 h-[2px] w-0 group-hover/btn:w-full transition-all duration-500 ease-out"
+              style={{ background: service.color }}
+            />
+          </button>
         </div>
       </div>
       

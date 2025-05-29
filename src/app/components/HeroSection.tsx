@@ -218,10 +218,10 @@ export const HeroSection: React.FC = () => {
               
               <div className="relative">
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight">
-                  Vytvořím vám{' '}
+                  Kreativní{' '}
                   <div className="inline-block relative">
                     <span className="bg-gradient-to-r from-orange-500 to-yellow-500 text-transparent bg-clip-text">
-                      webové stránky
+                      grafické studio
                     </span>
                     <motion.div
                       initial={{ scaleX: 0 }}
@@ -281,7 +281,7 @@ export const HeroSection: React.FC = () => {
                     <span className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000"></span>
                   </span>
                   <span className="relative z-10 flex items-center">
-                    Chci svůj web!
+                    Více informací
                     <motion.svg 
                       className="ml-2 w-5 h-5" 
                       fill="none" 
@@ -315,10 +315,10 @@ export const HeroSection: React.FC = () => {
               
               <div className="relative">
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight">
-                  Vytvořím vám{' '}
+                  Kreativní{' '}
                   <span className="inline-block relative">
                     <span className="bg-gradient-to-r from-orange-500 to-yellow-500 text-transparent bg-clip-text">
-                      webové stránky
+                     grafické studio
                     </span>
                   </span>
                 </h1>
@@ -334,7 +334,7 @@ export const HeroSection: React.FC = () => {
                   className="relative group px-6 py-3 bg-orange-500 text-white font-medium rounded-full overflow-hidden"
                 >
                   <span className="relative z-10 flex items-center">
-                    Chci svůj web!
+                    Více informací
                     <svg 
                       className="ml-2 w-5 h-5" 
                       fill="none" 

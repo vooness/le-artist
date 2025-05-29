@@ -67,36 +67,7 @@ const OnlineCoursesPage = () => {
             </div>
           </div>
           
-          {/* Typy kurzů */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-            <CourseTypeCard 
-              icon={<Palette className="w-6 h-6" />}
-              title="Grafický design"
-              description="Kurzy zaměřené na tvorbu grafických materiálů pro tisk i web."
-              color="#F97316"
-            />
-            
-            <CourseTypeCard 
-              icon={<Video className="w-6 h-6" />}
-              title="Video editing"
-              description="Od základů střihu až po pokročilé techniky vizuálních efektů."
-              color="#38BDF8"
-            />
-            
-            <CourseTypeCard 
-              icon={<Monitor className="w-6 h-6" />}
-              title="Webdesign s AI"
-              description="Moderní přístupy k web designu s využitím umělé inteligence."
-              color="#F97316"
-            />
-            
-            <CourseTypeCard 
-              icon={<ShoppingCart className="w-6 h-6" />}
-              title="Shoptet e-shop"
-              description="Komplexní kurz tvorby a správy e-shopu na platformě Shoptet."
-              color="#38BDF8"
-            />
-          </div>
+          
         </div>
         
         {/* Přepínací záložky */}

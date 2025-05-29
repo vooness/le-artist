@@ -776,46 +776,46 @@ const ProjectsSection: React.FC = () => {
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
-        {/* Nově přidaný odkaz "Zpátky na hlavní stránku" - bez animací na mobilu */}
-        <div className="mb-8 sm:mb-12">
-          {isMobile ? (
-            <a
-              href="/"
-              className="inline-flex items-center text-orange-400 hover:text-orange-300 transition-colors group"
-            >
-              <svg 
-                className="w-4 h-4 sm:w-5 sm:h-5 mr-2" 
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
-              <span className="font-medium text-sm sm:text-base">Zpátky na hlavní stránku</span>
-            </a>
-          ) : (
-            <motion.a
-              href="/"
-              className="inline-flex items-center text-orange-400 hover:text-orange-300 transition-colors group"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.4 }}
-            >
-              <svg 
-                className="w-5 h-5 mr-2 transform transition-transform group-hover:-translate-x-1" 
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
-              <span className="font-medium">Zpátky na hlavní stránku</span>
-            </motion.a>
-          )}
-        </div>
-
         {/* Section Header */}
         <div className="text-center mb-12 sm:mb-20 mt-8 sm:mt-12">
+          {/* Nově přidaný odkaz "Zpátky na hlavní stránku" - umístěn nad nadpisem */}
+          <div className=" text-left mb-8 sm:mb-12">
+            {isMobile ? (
+              <a
+                href="/"
+                className="inline-flex items-center text-orange-400 hover:text-orange-300 transition-colors group text-sm"
+              >
+                <svg 
+                  className="w-4 h-4 mr-2 flex-shrink-0" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                <span className="font-medium">Zpátky na hlavní stránku</span>
+              </a>
+            ) : (
+              <motion.a
+                href="/"
+                className="inline-flex items-center text-orange-400 hover:text-orange-300 transition-colors group"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4 }}
+              >
+                <svg 
+                  className="w-5 h-5 mr-2 transform transition-transform group-hover:-translate-x-1" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                <span className="font-medium">Zpátky na hlavní stránku</span>
+              </motion.a>
+            )}
+          </div>
+
           <FuturisticSectionTitle isMobile={isMobile}>Moje Projekty</FuturisticSectionTitle>
           
           {isMobile ? (

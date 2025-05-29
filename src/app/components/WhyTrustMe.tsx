@@ -260,7 +260,7 @@ const WhyTrustMeSection: React.FC = () => {
             </div>
             
             {/* Hlavní nadpis */}
-            <h2 className="text-4xl md:text-5xl font-black tracking-wide text-white relative inline-block">
+            <h2 className="text-4xl md:text-5xl font-bold tracking-wide text-white relative inline-block">
               <span className="tracking-wide">Proč Mi Důvěřovat?</span>
               
               {/* Futuristický podtržený efekt */}

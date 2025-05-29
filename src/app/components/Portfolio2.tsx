@@ -169,8 +169,97 @@ const PlayStationCard: React.FC<PlayStationCardProps> = ({ image, alt, index }) 
         />
       </div>
       
-      
+      {/* Animovaný gradient highlight při hoveru */}
+      {isHovered && (
+        <motion.div 
+          className="absolute inset-0 bg-gradient-to-r from-orange-600/5 to-orange-400/5 pointer-events-none"
+          animate={{ opacity: [0, 1, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        />
+      )}
+    </motion.div>
+  );
+};
 
+// Komponenta pro e-shop bannery s automatickou velikostí podle obrázku
+interface EshopBannerCardProps {
+  image: string;
+  alt: string;
+  index: number;
+}
+
+const EshopBannerCard: React.FC<EshopBannerCardProps> = ({ image, alt, index }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  
+  return (
+    <motion.div
+      className="relative bg-slate-900/80 rounded-lg overflow-hidden backdrop-blur-sm group"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.05 * index }}
+      whileHover={{ scale: 1.02, y: -3 }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {/* Pulzující okraj při hoveru */}
+      <AnimatePresence>
+        {isHovered && (
+          <motion.div 
+            className="absolute inset-0 rounded-lg z-0"
+            initial={{ opacity: 0 }}
+            animate={{ 
+              opacity: 1,
+              boxShadow: ['0 0 0 1px rgba(249, 115, 22, 0.3)', '0 0 0 2px rgba(249, 115, 22, 0.6)', '0 0 0 1px rgba(249, 115, 22, 0.3)']
+            }}
+            exit={{ opacity: 0 }}
+            transition={{ 
+              duration: 1.5,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+        )}
+      </AnimatePresence>
+      
+      {/* Futuristické rohy */}
+      <div className="absolute top-0 left-0 w-5 h-5 border-t-2 border-l-2 border-orange-500 opacity-80 z-10"></div>
+      <div className="absolute top-0 right-0 w-5 h-5 border-t-2 border-r-2 border-orange-500 opacity-80 z-10"></div>
+      <div className="absolute bottom-0 left-0 w-5 h-5 border-b-2 border-l-2 border-orange-500 opacity-80 z-10"></div>
+      <div className="absolute bottom-0 right-0 w-5 h-5 border-b-2 border-r-2 border-orange-500 opacity-80 z-10"></div>
+      
+      {/* Číslování s lepším designem pro e-shop bannery */}
+      <div className="absolute top-3 left-3 bg-slate-800/90 border border-orange-500/50 text-orange-400 text-xs font-mono px-2 py-1 rounded-md z-20 backdrop-blur-sm flex items-center space-x-1">
+        <span className="text-orange-500/60">SHOP</span>
+        <span className="font-bold">{String(index + 1).padStart(2, '0')}</span>
+      </div>
+      
+      {/* Skenující efekt - aktivní při hoveru */}
+      {isHovered && (
+        <motion.div
+          className="absolute left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-orange-500/60 to-transparent z-10"
+          initial={{ top: "-10%" }}
+          animate={{ top: ["0%", "100%"] }}
+          transition={{ 
+            duration: 1.5, 
+            repeat: Infinity, 
+            ease: "linear"
+          }}
+        />
+      )}
+      
+      {/* Obrázek s automatickou velikostí */}
+      <div className="relative">
+        <Image
+          src={image}
+          alt={alt}
+          width={1200}  // Maximální šířka
+          height={600}  // Bude se automaticky přizpůsobit podle poměru obrázku
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
+          className="object-contain w-full h-auto transition-transform duration-700 group-hover:scale-105"
+          style={{ maxWidth: '100%', height: 'auto' }}
+        />
+      </div>
+      
       {/* Animovaný gradient highlight při hoveru */}
       {isHovered && (
         <motion.div 
@@ -297,8 +386,6 @@ const FuturisticVideo: React.FC<FuturisticVideoProps> = ({ src, title, index }) 
         </motion.div>
       </div>
       
-      
-      
       {/* Samotné video */}
       <video
         ref={videoRef}
@@ -355,8 +442,28 @@ const Portfolio2: React.FC = () => {
       {/* Přidáme komponentu s částicemi */}
       <ParticlesBackground />
       
-      
-
+      <div className="max-w-7xl mx-auto relative z-10">
+        {/* Nově přidaný odkaz "Zpátky na hlavní stránku" - opraveno pro mobil */}
+        <div className="mb-6 sm:mb-12 px-4 sm:px-6 lg:px-8">
+          <motion.a
+            href="/"
+            className="inline-flex items-center text-orange-400 hover:text-orange-300 transition-colors group"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4 }}
+          >
+            <svg 
+              className="w-5 h-5 mr-2 transform transition-transform group-hover:-translate-x-1" 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            <span className="font-medium">Zpátky na hlavní stránku</span>
+          </motion.a>
+        </div>
+      </div>
 
       {/* PlayStation Store Graphics Section - Změněno na Grid 3x4 */}
       <motion.div 
@@ -365,7 +472,7 @@ const Portfolio2: React.FC = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
-        <div className="text-center mb-16 ">
+        <div className="text-center mb-16">
           <FuturisticSectionTitle highlight>PlayStation Store grafika</FuturisticSectionTitle>
           <p className="mt-6 text-gray-400 max-w-3xl mx-auto">
             Grafické návrhy připravené pro PlayStation Store, optimalizované pro různé rozlišení obrazovky a platformy.
@@ -414,6 +521,35 @@ const Portfolio2: React.FC = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
             </svg>
           </motion.button>
+        </div>
+      </motion.div>
+
+      {/* Bannery pro e-shop Section */}
+      <motion.div 
+        className="max-w-7xl mx-auto mt-32 mb-24 relative z-10"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+      >
+        <div className="text-center mb-16">
+          <FuturisticSectionTitle highlight>Bannery pro e-shop</FuturisticSectionTitle>
+          <p className="mt-6 text-gray-400 max-w-3xl mx-auto">
+            Profesionální bannery navržené speciálně pro e-shopy, optimalizované pro konverze a prodej.
+          </p>
+        </div>
+        
+        {/* Grid layout pro bannery - automatická velikost podle obrázku */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+          <EshopBannerCard 
+            image="/imgs/kolagen.png" 
+            alt="Kolagen e-shop banner" 
+            index={0}
+          />
+          <EshopBannerCard 
+            image="/imgs/malate.png" 
+            alt="Malate e-shop banner" 
+            index={1}
+          />
         </div>
       </motion.div>
 
@@ -584,10 +720,6 @@ const Portfolio2: React.FC = () => {
           </div>
         
       </motion.div>
-      
-     
-      
-      
     </section>
   );
 };

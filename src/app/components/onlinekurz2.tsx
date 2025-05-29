@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { CourseCard } from "./onlinekurz1";
 
-// Component pro obsah záložky MSVP kurzů
+// Component pro obsah záložky MSVP kurzů - bez vrchních 4 karet
 export const MSVPCoursesContent = ({ isTab = false }) => {
   return (
     <>
@@ -27,10 +27,11 @@ export const MSVPCoursesContent = ({ isTab = false }) => {
             <div className="flex items-start mb-4">
               <Euro className="w-6 h-6 text-blue-400 mr-3 mt-1 flex-shrink-0" />
               <div>
-                <h3 className="text-xl font-bold text-white mb-2">MSVP EU Sponzorované kurzy</h3>
+                <h3 className="text-xl font-bold text-white mb-2">MSVP EU Kurzy</h3>
                 <p className="text-gray-300">
-                  Kurzy pro jednotlivce nabízené v rámci programu Ministerstva školství, mládeže a tělovýchovy 
-                  s podporou Evropské unie. Cílem je zvýšit kvalifikaci a konkurenceschopnost na trhu práce.
+                  Kurzy pro jednotlivce nabízené za výhodnou cenu 2 300 Kč (10% z celkové ceny 23 000 Kč). 
+                  Určeno pro zvýšení kvalifikace a konkurenceschopnosti na trhu práce. 
+                  Kurz se spustí při minimálním počtu 3 účastníků.
                 </p>
               </div>
             </div>
@@ -107,7 +108,8 @@ export const BusinessCoursesContent = ({ isTab = false }) => {
                 <h3 className="text-xl font-bold text-white mb-2">Kurzy pro firmy</h3>
                 <p className="text-gray-300">
                   Specializované kurzy pro zvýšení kvalifikace zaměstnanců. Kurzy lze přizpůsobit 
-                  potřebám vaší firmy a mohou se konat přímo ve vašich prostorách nebo online.
+                  potřebám vaší firmy a mohou se konat přímo ve vašich prostorách nebo online. 
+                  Kurzy už od 1 účastníka - flexibilní časování (po práci nebo 2 hodiny denně během práce).
                 </p>
               </div>
             </div>
@@ -126,7 +128,8 @@ export const BusinessCoursesContent = ({ isTab = false }) => {
             "Nastavení produktů a kategorií",
             "Marketingové nástroje Shoptetu",
             "Integrace s firemními systémy",
-            "Certifikát pro zaměstnance"
+            "Certifikát pro zaměstnance",
+            "Kurz už od 1 účastníka"
           ]}
           color="#F97316"
           icon={<ShoppingCart className="w-6 h-6" />}
@@ -142,7 +145,8 @@ export const BusinessCoursesContent = ({ isTab = false }) => {
             "Design marketingových materiálů",
             "Správa brand manuálu",
             "Praktická cvičení na míru",
-            "Certifikát pro zaměstnance"
+            "Certifikát pro zaměstnance",
+            "Kurz už od 1 účastníka"
           ]}
           color="#38BDF8"
           icon={<Palette className="w-6 h-6" />}
@@ -158,7 +162,8 @@ export const BusinessCoursesContent = ({ isTab = false }) => {
             "Produkce firemních videí",
             "Editace a post-produkce",
             "Optimalizace pro sociální sítě",
-            "Certifikát pro zaměstnance"
+            "Certifikát pro zaměstnance",
+            "Kurz už od 1 účastníka"
           ]}
           color="#F97316"
           icon={<Video className="w-6 h-6" />}
@@ -174,10 +179,45 @@ export const BusinessCoursesContent = ({ isTab = false }) => {
             "Využití AI pro marketingový obsah",
             "UX/UI principy pro konverze",
             "Praktické workshopy na reálných projektech",
-            "Certifikát pro zaměstnance"
+            "Certifikát pro zaměstnance",
+            "Kurz už od 1 účastníka"
           ]}
           color="#38BDF8"
           icon={<Monitor className="w-6 h-6" />}
+        />
+        
+        <CourseCard
+          title="Základní kurz umělé inteligence"
+          price="od 16 000 Kč"
+          isMsvp={false}
+          duration="20 hodin / 2.5 dne"
+          features={[
+            "Úvod do AI a strojového učení",
+            "Praktické využití AI v praxi",
+            "ChatGPT, Claude a další nástroje",
+            "Automatizace úloh pomocí AI",
+            "Certifikát pro zaměstnance",
+            "Kurz už od 1 účastníka"
+          ]}
+          color="#EC4899"
+          icon={<Monitor className="w-6 h-6" />}
+        />
+        
+        <CourseCard
+          title="AI nástroje pro efektivitu práce"
+          price="od 14 000 Kč"
+          isMsvp={false}
+          duration="16 hodin / 2 dny"
+          features={[
+            "AI asistenti pro produktivitu",
+            "Automatizace opakujících se úkolů",
+            "AI nástroje pro tvorbu obsahu",
+            "Optimalizace workflow s AI",
+            "Certifikát pro zaměstnance",
+            "Kurz už od 1 účastníka"
+          ]}
+          color="#10B981"
+          icon={<Layout className="w-6 h-6" />}
         />
       </div>
     </>
@@ -198,9 +238,9 @@ export const MSVPCoursesInfo = () => {
           <div>
             <h4 className="font-bold text-white mb-1">Pro koho jsou určeny?</h4>
             <p className="text-sm text-gray-300">
-              Kurzy jsou určeny jednotlivcům, kteří si chtějí zvýšit kvalifikaci, 
-              nezaměstnaným, osobám na rodičovské dovolené, nebo těm, 
-              kteří hledají nové uplatnění na trhu práce.
+              Kurzy jsou určeny jednotlivcům, kteří si chtějí zvýšit kvalifikaci za výhodnou cenu. 
+              Kurz stojí 2 300 Kč (pouze 10% z celkové ceny 23 000 Kč) a spustí se při 
+              minimálním počtu 3 účastníků.
             </p>
           </div>
         </div>
@@ -389,7 +429,7 @@ export const CoursesFAQ = () => {
         <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-6">
           <h3 className="text-xl font-bold text-white mb-3">Lze kurz přizpůsobit na míru naší firmě?</h3>
           <p className="text-gray-300">
-            Ano, firemní kurzy jsou vždy přizpůsobeny potřebám a specifikům vaší společnosti. 
+            Ano, firemní kurzy jsou vždy přizpůsobeny potřebám a specifikám vaší společnosti. 
             Před zahájením provedeme analýzu potřeb, seznámíme se s vašimi procesy a projekty, 
             abychom mohli vytvořit školení, které přinese maximální užitek právě vašemu týmu. 
             Nabízíme také možnost individuálních konzultací po skončení kurzu.
