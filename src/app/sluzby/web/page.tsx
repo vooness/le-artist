@@ -1,6 +1,7 @@
 import Navbar from "../../components/Navbar";
  import WebServicesPage from "../../components/web";
  import Footer from "../../components/Footer";
+ import InvestmentSection from "@/app/components/investice";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -84,6 +85,9 @@ export default function Home() {
     <>
       <Navbar />
       <WebServicesPage />
+      
+        <InvestmentSection />
+      
       <Footer />
     </>
   );

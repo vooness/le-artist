@@ -56,7 +56,7 @@ export const HeroSection: React.FC = () => {
   }, []);
 
   return (
-    <section className="relative bg-[#0c1320] text-white py-12 sm:py-20 lg:py-28 flex flex-col items-center justify-center overflow-hidden px-6 sm:px-8 lg:px-20 min-h-screen">
+    <section className="relative bg-[#0f172a] text-white py-12 sm:py-20 lg:py-28 flex flex-col items-center justify-center overflow-hidden px-6 sm:px-8 lg:px-20 min-h-screen">
       {isClient && !isMobile && <ParticlesBackground />}
      
       <div className="absolute inset-0 z-0">
@@ -92,7 +92,6 @@ export const HeroSection: React.FC = () => {
                   opacity: [0.1, 0.5, 0.1],
                   scale: [1, 1.5, 1]
                 }}
-                // ŘEŠENÍ: Použití oddělených vlastností místo zkrácené syntaxe
                 transition={{
                   duration: position.duration,
                   repeat: Infinity,
@@ -117,7 +116,6 @@ export const HeroSection: React.FC = () => {
                   opacity: [0.1, 0.3, 0.1],
                   scaleX: 1
                 }}
-                // ŘEŠENÍ: Oddělené vlastnosti místo objektů s vnořenými objekty
                 transition={{
                   opacity: {
                     duration: 4,
@@ -141,7 +139,6 @@ export const HeroSection: React.FC = () => {
             className="flex items-center justify-center space-x-2 text-xs font-mono text-orange-500/70 mb-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            // ŘEŠENÍ: Používat pouze duration, ne kompletní transition objekt
             transition={{ duration: 0.8 }}
           >
             <span></span>
@@ -149,7 +146,6 @@ export const HeroSection: React.FC = () => {
               className="h-px w-12 bg-orange-500/40"
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
-              // ŘEŠENÍ: Používat jednotlivé vlastnosti přímo
               transition={{ duration: 0.8, delay: 0.2 }}
             />
             <motion.span
@@ -171,7 +167,7 @@ export const HeroSection: React.FC = () => {
           <div className="flex items-center justify-center space-x-2 text-xs font-mono text-orange-500/70 mb-4">
             <span></span>
             <div className="h-px w-12 bg-orange-500/40"></div>
-            <span>CREATIVE DEVELOPER</span>
+            <span>GRAFICKÉ STUDIO</span>
             <div className="h-px w-12 bg-orange-500/40"></div>
             <span></span>
           </div>
@@ -218,24 +214,80 @@ export const HeroSection: React.FC = () => {
               
               <div className="relative">
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight">
-                  Kreativní{' '}
+                  <motion.span
+                    animate={{ 
+                      textShadow: [
+                        "0 0 0px rgba(249, 115, 22, 0)",
+                        "0 0 10px rgba(249, 115, 22, 0.3)",
+                        "0 0 20px rgba(249, 115, 22, 0.2)",
+                        "0 0 30px rgba(249, 115, 22, 0.4)"
+                      ]
+                    }}
+                    transition={{
+                      duration: 2,
+                      ease: "easeInOut"
+                    }}
+                  >
+                    Kreativní
+                  </motion.span>{' '}
                   <div className="inline-block relative">
-                    <span className="bg-gradient-to-r from-orange-500 to-yellow-500 text-transparent bg-clip-text">
+                    <motion.span 
+                      className="bg-gradient-to-r from-orange-500 to-yellow-500 text-transparent bg-clip-text"
+                      animate={{
+                        backgroundPosition: ["0% 50%", "100% 50%"]
+                      }}
+                      transition={{
+                        duration: 2,
+                        ease: "easeInOut"
+                      }}
+                      style={{
+                        backgroundSize: "200% 200%"
+                      }}
+                    >
                       grafické studio
-                    </span>
+                    </motion.span>
                     <motion.div
                       initial={{ scaleX: 0 }}
-                      animate={{ scaleX: 1 }}
-                      // ŘEŠENÍ: Zjednodušený transition objekt bez vnořených vlastností
+                      animate={{ 
+                        scaleX: 1,
+                        opacity: 1
+                      }}
                       transition={{ 
-                        duration: 1,
-                        ease: 'easeOut',
+                        duration: 1.5,
+                        ease: 'easeInOut',
                         delay: 0.5 
                       }}
                       className="absolute left-0 bottom-[-5px] h-1 w-full bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full origin-center"
                     />
                   </div>
                 </h1>
+                
+                {/* Obrázek logo4.svg pouze na mobilních zařízeních - ZVĚTŠENÉ */}
+                {isMobile && (
+                  <motion.div
+                    className="flex justify-center mt-8"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 1.2 }}
+                  >
+                    <motion.img
+                      src="/imgs/logo4.svg"
+                      alt="Logo"
+                      className="w-64 h-64 sm:w-72 sm:h-72"
+                      animate={{
+                        rotate: [0, 5, -5, 0],
+                        scale: [1, 1.05, 1]
+                      }}
+                      transition={{
+                        duration: 6,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }}
+                      width={256}
+                      height={256}
+                    />
+                  </motion.div>
+                )}
                 
                 {/* Only render corner decorations on desktop */}
                 {!isMobile && (
@@ -290,7 +342,6 @@ export const HeroSection: React.FC = () => {
                       xmlns="http://www.w3.org/2000/svg"
                       initial={{ x: 0 }}
                       animate={{ x: [0, 5, 0] }}
-                      // ŘEŠENÍ: Zjednodušit transition objekt
                       transition={{ 
                         duration: 1.5, 
                         repeat: Infinity, 
@@ -322,6 +373,19 @@ export const HeroSection: React.FC = () => {
                     </span>
                   </span>
                 </h1>
+                
+                {/* Obrázek logo4.svg pouze na mobilních zařízeních - statická verze ZVĚTŠENÁ */}
+                {typeof window !== "undefined" && window.innerWidth < 1024 && (
+                  <div className="flex justify-center mt-8">
+                    <img
+                      src="/imgs/logo4.svg"
+                      alt="Logo"
+                      className="w-64 h-64 sm:w-72 sm:h-72"
+                      width={256}
+                      height={256}
+                    />
+                  </div>
+                )}
               </div>
               
               <p className="text-sm sm:text-base lg:text-lg text-gray-400 max-w-md sm:max-w-lg mx-auto lg:mx-0 mt-6">
@@ -358,7 +422,6 @@ export const HeroSection: React.FC = () => {
                   className="absolute w-[250px] h-[250px] lg:w-[300px] lg:h-[300px] xl:w-[350px] xl:h-[350px] bg-orange-500 rounded-full blur-3xl"
                   initial={{ opacity: 0 }}
                   animate={{ scale: [1, 1.5, 1], opacity: [0.7, 1, 0.7] }}
-                  // ŘEŠENÍ: Rozdělit složitý transition objekt na jednotlivé vlastnosti
                   transition={{ 
                     duration: 4,
                     repeat: Infinity,
@@ -371,7 +434,6 @@ export const HeroSection: React.FC = () => {
                   className="absolute w-[400px] h-[400px] lg:w-[500px] lg:h-[500px] xl:w-[600px] xl:h-[600px] rounded-full"
                   initial={{ opacity: 0, rotate: 0 }}
                   animate={{ opacity: 1, rotate: 360 }}
-                  // ŘEŠENÍ: Zjednodušit transition
                   transition={{ 
                     duration: 12,
                     repeat: Infinity,
@@ -414,7 +476,6 @@ export const HeroSection: React.FC = () => {
                         scale: [1, 1.5, 1],
                         opacity: [0.4, 0.8, 0.4]
                       }}
-                      // ŘEŠENÍ: Zjednodušit transition objekt
                       transition={{
                         duration: 2,
                         repeat: Infinity,

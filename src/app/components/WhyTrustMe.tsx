@@ -98,6 +98,24 @@ const isClient = () => {
   return typeof window !== 'undefined';
 };
 
+// Deterministický generátor binárního kódu
+const generateBinaryCode = (index: number, statIndex: number) => {
+  // Použijeme seed založený na indexu pro deterministické hodnoty
+  const seed1 = Math.sin(index * 12.9898 + statIndex * 78.233) * 43758.5453;
+  const seed2 = Math.sin(index * 93.9898 + statIndex * 47.233) * 43758.5453;
+  const seed3 = Math.sin(index * 67.9898 + statIndex * 31.233) * 43758.5453;
+  
+  const top = Math.abs(seed1 - Math.floor(seed1)) * 100;
+  const left = Math.abs(seed2 - Math.floor(seed2)) * 100;
+  const opacity = Math.abs(seed3 - Math.floor(seed3)) * 0.5 + 0.5;
+  
+  const bit1 = Math.abs(seed1 - Math.floor(seed1)) > 0.5 ? '1' : '0';
+  const bit2 = Math.abs(seed2 - Math.floor(seed2)) > 0.5 ? '1' : '0';
+  const bit3 = Math.abs(seed3 - Math.floor(seed3)) > 0.5 ? '1' : '0';
+  
+  return { top, left, opacity, bits: bit1 + bit2 + bit3 };
+};
+
 // Komponenta pro animované počítadlo s TypeScript typováním
 const CountUpAnimation: React.FC<CountUpAnimationProps> = ({ value, duration = 2000, isVisible }) => {
   const [displayValue, setDisplayValue] = useState("0");
@@ -191,8 +209,12 @@ const WhyTrustMeSection: React.FC = () => {
   }, []);
 
   return (
-    <section className="relative bg-[#0c1425] text-white py-24 px-4 sm:px-6 lg:px-8 overflow-hidden -mt-[2px]">
-      <ParticlesBackground />
+    <section className="relative bg-[#0f172a] text-white py-24 px-4 sm:px-6 lg:px-8 overflow-hidden isolate">
+      {/* Překrytí pro čisté pozadí */}
+      <div className="absolute inset-0 bg-[#0f172a] z-0"></div>
+      <div suppressHydrationWarning>
+        <ParticlesBackground />
+      </div>
       
       {/* Optimalizované pozadí a efekty pro desktop i mobil */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -211,33 +233,9 @@ const WhyTrustMeSection: React.FC = () => {
              linear-gradient(45deg, transparent 40%, rgba(255, 100, 50, 0.2) 60%, transparent 70%)`,
           backgroundSize: '100% 100%'
         }} />
-        
-        {/* Světelné spoty - větší a výraznější pro všechna zařízení */}
-        <div 
-          className="absolute w-full h-full" 
-          style={{
-            background: `
-              radial-gradient(circle at 85% -5%, rgba(255, 126, 0, 0.2) 0%, rgba(255, 126, 0, 0) 45%),
-              radial-gradient(circle at 15% 110%, rgba(59, 130, 246, 0.2) 0%, rgba(59, 130, 246, 0) 45%)
-            `,
-            opacity: 1,
-          }}
-        />
-        
-        {/* Extra světelné efekty pro mobil */}
-        {isMobile && (
-          <>
-            <div className="absolute top-0 right-0 w-full h-64 opacity-20" style={{
-              background: `radial-gradient(circle at 80% 10%, rgba(255, 126, 0, 0.3) 0%, transparent 70%)`
-            }}></div>
-            <div className="absolute bottom-0 left-0 w-full h-64 opacity-20" style={{
-              background: `radial-gradient(circle at 20% 90%, rgba(59, 130, 246, 0.3) 0%, transparent 70%)`
-            }}></div>
-          </>
-        )}
       </div>
       
-      <div className="max-w-7xl mx-auto relative z-10">
+      <div className="max-w-7xl mx-auto relative z-[10] overflow-hidden">
         {/* Vylepšený futuristický nadpis sekce */}
         <div className="text-center mb-16 relative z-10">
           {/* Futuristický nadpis */}
@@ -267,16 +265,6 @@ const WhyTrustMeSection: React.FC = () => {
               <div className="relative h-1 mt-3 overflow-hidden">
                 <div className={`absolute inset-0 bg-gradient-to-r from-orange-500 via-orange-400 to-yellow-500 transition-transform duration-1500 ${isVisible ? 'translate-x-0' : '-translate-x-full'}`}></div>
                 <div className={`absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/80 to-transparent -translate-x-full ${isVisible ? 'animate-shimmer' : ''}`}></div>
-              </div>
-              
-              {/* Drobná tech dekorace */}
-              <div className={`absolute -bottom-3 left-0 w-3 h-3 transition-all duration-1000 delay-700 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
-                <div className="w-full h-[1px] bg-orange-500/70"></div>
-                <div className="h-full w-[1px] bg-orange-500/70"></div>
-              </div>
-              <div className={`absolute -bottom-3 right-0 w-3 h-3 transition-all duration-1000 delay-700 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
-                <div className="w-full h-[1px] bg-orange-500/70"></div>
-                <div className="absolute right-0 h-full w-[1px] bg-orange-500/70"></div>
               </div>
             </h2>
           </div>
@@ -368,14 +356,6 @@ const WhyTrustMeSection: React.FC = () => {
             backgroundImage: `radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px)`,
             backgroundSize: '20px 20px',
             backgroundPosition: '0 0'
-          }}></div>
-          
-          {/* Extra světelné efekty pro statistiky */}
-          <div className="absolute inset-0 opacity-40" style={{
-            background: `
-              radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 40%),
-              radial-gradient(circle at 80% 80%, rgba(255, 126, 0, 0.15) 0%, transparent 40%)
-            `
           }}></div>
           
           {/* Terminálový mock screen s průhledným pozadím */}
@@ -482,24 +462,25 @@ const WhyTrustMeSection: React.FC = () => {
                       {stat.description}
                     </div>
                     
-                    {/* Binární kód na pozadí */}
-                    <div className="absolute inset-0 overflow-hidden opacity-10 pointer-events-none">
-                      {Array.from({ length: 8 }).map((_, i) => (
-                        <div
-                          key={i}
-                          className="absolute text-[10px] font-mono"
-                          style={{
-                            top: `${Math.random() * 100}%`,
-                            left: `${Math.random() * 100}%`,
-                            color: stat.color,
-                            opacity: Math.random() * 0.5 + 0.5
-                          }}
-                        >
-                          {Math.random() > 0.5 ? '1' : '0'}
-                          {Math.random() > 0.5 ? '1' : '0'}
-                          {Math.random() > 0.5 ? '1' : '0'}
-                        </div>
-                      ))}
+                    {/* OPRAVENÝ binární kód na pozadí - deterministický */}
+                    <div className="absolute inset-0 overflow-hidden opacity-10 pointer-events-none" suppressHydrationWarning>
+                      {Array.from({ length: 8 }).map((_, i) => {
+                        const binaryData = generateBinaryCode(i, index);
+                        return (
+                          <div
+                            key={i}
+                            className="absolute text-[10px] font-mono"
+                            style={{
+                              top: `${binaryData.top}%`,
+                              left: `${binaryData.left}%`,
+                              color: stat.color,
+                              opacity: binaryData.opacity
+                            }}
+                          >
+                            {binaryData.bits}
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
@@ -540,6 +521,31 @@ const WhyTrustMeSection: React.FC = () => {
         }
         .animate-scanning-line {
           animation: scanning-line 4s infinite linear;
+        }
+        
+        /* Radikální blokování všech glow efektů */
+        section {
+          contain: layout style paint;
+          box-shadow: none !important;
+          filter: none !important;
+          border-left: 20px solid #0f172a !important;
+          margin-left: -20px !important;
+        }
+        
+        /* Potlačení všech oranžových efektů */
+        section::before,
+        section::after {
+          display: none !important;
+        }
+        
+        /* Blokování konkrétních oranžových barev */
+        section * {
+          box-shadow: none !important;
+        }
+        
+        /* Izolace sekce pro prevenci bleedingu */
+        section {
+          contain: layout style paint;
         }
         
         /* Přidáno pro lepší podporu mobilních zařízení */

@@ -345,7 +345,7 @@ const AboutMeSection: React.FC = () => {
   if (!isMounted) {
     return (
       <section id="about-me" className="relative py-16 md:py-24 px-4 md:px-6 bg-[#0f172a] text-white overflow-hidden">
-        <div className="container mx-auto max-w-7xl relative z-10">
+        <div className="container mx-auto max-w-7xl relative z-10 mt-12">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white">
               O mně
@@ -377,29 +377,59 @@ const AboutMeSection: React.FC = () => {
         />
       )}
       
-      {/* Barevné oblasti na pozadí */}
-      <div className="absolute top-0 left-0 w-full h-full">
-        <div className={`absolute -top-40 -left-40 w-80 h-80 bg-orange-600/5 rounded-full ${isMobile ? 'blur-2xl' : 'blur-3xl'}`}></div>
-        <div className={`absolute top-1/3 right-1/4 w-96 h-96 bg-blue-600/5 rounded-full ${isMobile ? 'blur-2xl' : 'blur-3xl'}`}></div>
-      </div>
+      {/* Barevné oblasti na pozadí - pouze desktop */}
+      {!isMobile && (
+        <div className="absolute top-0 left-0 w-full h-full">
+          <div className="absolute -top-40 -left-40 w-80 h-80 bg-orange-600/5 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-blue-600/5 rounded-full blur-3xl"></div>
+        </div>
+      )}
 
       <div className="container mx-auto max-w-7xl relative z-10">
-        {/* Hlavní nadpis */}
-        <div className="flex items-center justify-center mb-12">
-          <div className="flex space-x-1.5 mr-4">
-            {[...Array(3)].map((_, i) => (
-              <div
-                key={`header-dot-${i}`}
-                className="w-2 h-2 rounded-full bg-orange-500"
-                style={{ opacity: 0.8 }}
-              />
-            ))}
-          </div>
-          <div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white relative inline-block">
-              O mně
-              <div className="absolute left-0 bottom-[-5px] h-[5px] bg-gradient-to-r from-orange-500 to-orange-400 w-full rounded-full" />
+        {/* Zpátky na hlavní stránku - responsive pozicionování */}
+        <div className="mb-8 mt-10 md:mt-8">
+          <a 
+            href="/" 
+            className="inline-flex items-center text-orange-500 hover:text-orange-400 transition-colors duration-200 text-sm md:text-base"
+          >
+            <svg className="w-4 h-4 md:w-5 md:h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Zpátky na hlavní stránku
+          </a>
+        </div>
+
+        {/* Hlavní nadpis ve stylu "Moje Projekty" - responsive velikosti */}
+        <div className="text-center mb-12 md:mb-16">
+          <div className="relative inline-block">
+            {/* Tech dekorace kolem nadpisu - pouze na desktop */}
+            {!isMobile && (
+              <div className="absolute -left-8 -right-8 -top-8 -bottom-8 flex items-center justify-center pointer-events-none">
+                <div className="absolute top-0 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-orange-500/70 to-transparent"></div>
+                <div className="absolute bottom-0 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-orange-500/70 to-transparent"></div>
+                
+                <div className="absolute left-0 top-1/2 -translate-y-1/2">
+                  <div className="w-4 h-4 border-l-2 border-t-2 border-orange-500/60"></div>
+                  <div className="w-4 h-4 border-l-2 border-b-2 border-orange-500/60 absolute top-6"></div>
+                </div>
+                <div className="absolute right-0 top-1/2 -translate-y-1/2">
+                  <div className="w-4 h-4 border-r-2 border-t-2 border-orange-500/60"></div>
+                  <div className="w-4 h-4 border-r-2 border-b-2 border-orange-500/60 absolute top-6"></div>
+                </div>
+              </div>
+            )}
+            
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-wide text-white relative inline-block">
+              <span className="tracking-wide">O mně</span>
+              <div className="relative h-1 mt-2 md:mt-3 overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-orange-500 via-orange-400 to-yellow-500"></div>
+              </div>
             </h2>
+            
+            {/* Popisek pod nadpisem */}
+            <div className="mt-3 md:mt-4 text-orange-500/70 text-xs md:text-sm font-mono tracking-widest">
+              OSOBNÍ PROFIL
+            </div>
           </div>
         </div>
 

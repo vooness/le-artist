@@ -71,7 +71,7 @@ function usePreloadComponents() {
   useEffect(() => {
     const timer = setTimeout(() => {
       import('./components/WhatIDo');
-      import('./components/investice');
+      
       import('./components/ServiceGrid');
       import('./components/Comparison'); // Preload nové komponenty
     }, 1000);
@@ -84,18 +84,12 @@ const WhatIDo = dynamic(() => import('./components/WhatIDo'), {
   ssr: false,
   loading: () => <Skeleton height={400} />,
 });
-const InvestmentSection = dynamic(() => import('./components/investice'), {
-  ssr: false,
-  loading: () => <Skeleton height={400} />,
-});
+
 const ServicesGrid = dynamic(() => import('./components/ServiceGrid'), {
   ssr: false,
   loading: () => <Skeleton height={400} />,
 });
-const WhyTrustMe = dynamic(() => import('./components/WhyTrustMe'), {
-  ssr: false,
-  loading: () => <Skeleton height={400} />,
-});
+
 // Nová komponenta Comparison
 const ComparisonSection = dynamic(() => import('./components/Comparison'), {
   ssr: false,
@@ -105,10 +99,7 @@ const ProjectsSection = dynamic(() => import('./components/Project'), {
   ssr: false,
   loading: () => <Skeleton height={400} />,
 });
-const SkillsSection = dynamic(() => import('./components/SkillSection'), {
-  ssr: false,
-  loading: () => <Skeleton height={400} />,
-});
+
 const Footer = dynamic(() => import('./components/Footer'), {
   ssr: false,
   loading: () => <Skeleton height={200} />,
@@ -136,17 +127,13 @@ export default function Home() {
       <LazyComponent priority height={500}>
         <WhatIDo />
       </LazyComponent>
-      <LazyComponent priority height={400}>
-        <InvestmentSection />
-      </LazyComponent>
+      
 
       {/* Remaining sections lazy-load on scroll */}
       <LazyComponent height={500}>
         <ServicesGrid />
       </LazyComponent>
-      <LazyComponent height={400}>
-        <WhyTrustMe />
-      </LazyComponent>
+     
       {/* Přidání nové komponenty Comparison hned po WhyTrustMe */}
       <LazyComponent height={400}>
         <ComparisonSection />
@@ -154,9 +141,7 @@ export default function Home() {
       <LazyComponent height={500}>
         <ProjectsSection />
       </LazyComponent>
-      <LazyComponent height={400}>
-        <SkillsSection />
-      </LazyComponent>
+      
       <LazyComponent height={200}>
         <Footer />
       </LazyComponent>

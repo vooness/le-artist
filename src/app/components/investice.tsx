@@ -374,7 +374,7 @@ const InvestmentSection = () => {
                 { value: "24/7", label: "Technická podpora & údržba" }
               ].map((stat, idx) => (
                 <div key={idx} className="relative rounded-md overflow-hidden group hover:-translate-y-1 transition-all duration-300">
-                  <div className="absolute inset-0 bg-[#0f1629] opacity-90"></div>
+                  <div className="absolute inset-0 bg-[#111827]/70 "></div>
                   <div className="absolute inset-0 border border-white/10"></div>
                   
                   {/* Tech corner - jen na desktopu */}

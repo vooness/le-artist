@@ -79,8 +79,7 @@ export default function Home() {
       {/* Navbar Component */}
       <Navbar />
 
-      {/* How It Works Section */}
-      <HowItWorks />
+      
 
       {/* Footer Component */}
       <Footer />

@@ -515,59 +515,62 @@ const InteractiveServicesPage: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            {/* Balíčky služeb */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-              <PricingPackage
-                title="Základní cvičení"
-                price="od 5 000 Kč"
-                features={[
-                  "HTML5 interaktivní obsah",
-                  "Jednoduchý design",
-                  "Kvízy a testové otázky",
-                  "Drag & drop aktivity",
-                  "Responzivní layout",
-                  "2 revize zdarma",
-                  "Dodání do 7 dnů"
-                ]}
-                color="#818CF8"
-                icon={<Puzzle className="w-6 h-6" />}
-              />
-              
-              <PricingPackage
-                title="Standardní e-learning"
-                price="od 12 000 Kč"
-                features={[
-                  "Pokročilé interaktivní prvky",
-                  "Vlastní grafický design",
-                  "Animované přechody",
-                  "Propracovanější scénář",
-                  "SCORM export",
-                  "Multimediální obsah",
-                  "3 revize zdarma",
-                  "Dodání do 14 dnů"
-                ]}
-                color="#818CF8"
-                icon={<ActivitySquare className="w-6 h-6" />}
-                popular={true}
-              />
-              
-              <PricingPackage
-                title="Articulate Storyline 360"
-                price="od 20 000 Kč"
-                features={[
-                  "Plně profesionální řešení",
-                  "Pokročilé interakce a simulace",
-                  "Komplexní scénář a personalizace",
-                  "Sofistikované hodnocení",
-                  "Pokročilé sledování výsledků",
-                  "Videotutoriály pro instruktory",
-                  "Neomezené revize po dobu vývoje",
-                  "Dodání do 21 dnů"
-                ]}
-                color="#818CF8"
-                icon={<Layers className="w-6 h-6" />}
-              />
-            </div>
+ {/* Balíčky služeb */}
+<div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+  <PricingPackage
+    title="H5P Základní"
+    price="od 3 000 Kč"
+    features={[
+      "H5P interaktivní kvízy",
+      "5-15 otázek různých typů",
+      "Responzivní design",
+      "Základní hodnocení",
+      "Okamžitá zpětná vazba",
+      "Export do HTML",
+      "1 revize zdarma",
+      "Dodání do 3-5 dnů"
+    ]}
+    color="#818CF8"
+    icon={<Puzzle className="w-6 h-6" />}
+  />
+  
+  <PricingPackage
+    title="H5P Pokročilý"
+    price="od 8 000 Kč"
+    features={[
+      "Komplexní H5P moduly",
+      "20-50 interaktivních prvků",
+      "Pokročilé typy úloh",
+      "Vlastní branding a design",
+      "Detailní statistiky",
+      "SCORM 1.2/2004 export", 
+      "2 revize zdarma",
+      "Dodání do 7-10 dnů"
+    ]}
+    color="#818CF8"
+    icon={<ActivitySquare className="w-6 h-6" />}
+    popular={true}
+  />
+  
+  <PricingPackage
+    title="Articulate 360 Premium"
+    price="od 15 000 Kč"
+    features={[
+      "Articulate Storyline 360",
+      "1 kompletní modul (10-20 slidů)",
+      "15-30 interaktivních otázek/aktivit",
+      "Pokročilé simulace a scénáře",
+      "Komplexní hodnocení a větve",
+      "Personalizované cesty učení",
+      "Analytics a detailní reporting",
+      "Neomezené revize během vývoje",
+      "Dodání do 14-21 dnů"
+    ]}
+    color="#818CF8"
+    icon={<Layers className="w-6 h-6" />}
+  />
+</div>
+
             
             {/* Technologie */}
             <div className="mb-12">

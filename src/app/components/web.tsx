@@ -399,7 +399,7 @@ const WebServicesPage: React.FC = () => {
             <div className="px-6 py-3 rounded-lg border border-orange-500 bg-orange-500/10 backdrop-blur-sm flex items-center">
               <Clock className="w-5 h-5 text-orange-500 mr-3" />
               <span className="text-white font-medium">Hodinová sazba od</span>
-              <span className="text-orange-500 text-xl font-bold ml-2">1000 Kč</span>
+              <span className="text-orange-500 text-xl font-bold ml-2">900 Kč</span>
             </div>
           </div>
           

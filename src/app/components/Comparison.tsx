@@ -205,15 +205,13 @@ const Comparison: React.FC = () => {
             className="group relative inline-flex items-center"
           >
             <div className="absolute -inset-1 bg-gradient-to-r from-orange-600 to-orange-500 rounded-full blur opacity-70 group-hover:opacity-100 transition duration-200"></div>
-            <div className="relative flex flex-col sm:flex-row items-center px-6 sm:px-8 py-3 sm:py-4 bg-[#0c1320] rounded-full border border-orange-500/50 group-hover:border-orange-400 transition-colors">
-              <div className="flex items-center">
-                <Terminal className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400 sm:mr-2" />
-                <span className="text-white font-semibold text-sm sm:text-base ml-2 sm:ml-0">
-                  Chci ušetřit 
-                </span>
-              </div>
+            <div className="relative flex items-center px-6 sm:px-8 py-3 sm:py-4 bg-[#0c1320] rounded-full border border-orange-500/50 group-hover:border-orange-400 transition-colors">
+              <Terminal className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400 mr-2" />
+              <span className="text-white font-semibold text-sm sm:text-base">
+                Chci ušetřit 
+              </span>
               <svg
-                className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400 mt-1 sm:mt-0 sm:ml-2 group-hover:translate-x-1 transition-transform"
+                className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400 ml-2 group-hover:translate-x-1 transition-transform"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
