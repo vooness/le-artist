@@ -1,11 +1,48 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaPaperPlane, FaEnvelope, FaPhone, FaIdCard, FaUser, FaArrowLeft } from "react-icons/fa";
 import Image from "next/image";
 
 type FieldName = "name" | "email" | "subject" | "message";
+
+// Čisté pozadí bez gradientních prvků (stejné jako ServicesGrid)
+const BackgroundAnimation: React.FC<{ isDesktop: boolean }> = ({ isDesktop }) => {
+  if (!isDesktop) {
+    // Pro mobilní zařízení - bez pozadí
+    return null;
+  }
+  
+  // Pro desktop - pouze jemná mřížka a kódový vzor
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Jemný overlay kódového vzoru */}
+      <div className="absolute inset-0 opacity-[0.015] font-mono text-[0.6rem] text-white overflow-hidden select-none">
+        <div className="absolute -left-20 top-10 transform -rotate-3 opacity-50">
+          {`// Contact form
+const formData = {
+  name: '',
+  email: '',
+  message: ''
+};
+export const submitForm = async () => {
+  // Handle form submission
+};`}
+        </div>
+      </div>
+      
+      {/* Jemná mřížka */}
+      <div 
+        className="absolute inset-0 opacity-5"
+        style={{
+          backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px)',
+          backgroundSize: '40px 40px'
+        }}
+      ></div>
+    </div>
+  );
+};
 
 const ContactForm: React.FC = () => {
   const [formState, setFormState] = useState({
@@ -18,6 +55,21 @@ const ContactForm: React.FC = () => {
   const [focusedField, setFocusedField] = useState<FieldName | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
+  
+  // Detekce desktop zařízení
+  useEffect(() => {
+    setIsDesktop(window.innerWidth >= 1024);
+    
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
@@ -50,33 +102,10 @@ const ContactForm: React.FC = () => {
   return (
     <section
       id="kontakt"
-      className="relative py-24 bg-[#0A0F23] text-white min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative py-24 bg-[#0f172a] text-white min-h-screen flex items-center justify-center overflow-hidden"
     >
-      {/* Tech background effect */}
-      <div className="absolute inset-0 z-0">
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{
-            backgroundSize: "50px 50px",
-            backgroundImage:
-              "linear-gradient(to right, rgba(30,64,175,0.05) 1px, transparent 1px), " +
-              "linear-gradient(to bottom, rgba(30,64,175,0.05) 1px, transparent 1px)",
-          }}
-        />
-        <motion.div
-          className="absolute left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-orange-500/30 to-transparent"
-          initial={{ top: "-10%" }}
-          animate={{ top: ["0%", "100%", "0%"] }}
-          transition={{ 
-            duration: 15, 
-            repeat: Infinity, 
-            ease: "linear",
-            repeatDelay: 1
-          }}
-        />
-        <div className="absolute top-1/3 left-1/3 w-[400px] h-[400px] rounded-full bg-orange-500/5 blur-[100px]" />
-        <div className="absolute bottom-1/3 right-1/3 w-[350px] h-[350px] rounded-full bg-blue-500/5 blur-[80px]" />
-      </div>
+      {/* Čisté pozadí bez gradientních prvků */}
+      <BackgroundAnimation isDesktop={isDesktop} />
 
       <div className="max-w-5xl w-full px-6 lg:px-8 z-10 relative">
         {/* Zpět na hlavní stránku odkaz */}
@@ -153,7 +182,7 @@ const ContactForm: React.FC = () => {
                 <div className="absolute -top-2 -right-2 w-6 h-6 border-t-2 border-r-2 border-orange-500" />
                 <div className="absolute -bottom-2 -left-2 w-6 h-6 border-b-2 border-l-2 border-orange-500" />
                 <div className="absolute -bottom-2 -right-2 w-6 h-6 border-b-2 border-r-2 border-orange-500" />
-                <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg p-4 relative overflow-hidden">
+                <div className="bg-slate-800/60 backdrop-blur-lg rounded-lg p-4 relative overflow-hidden">
                   <div className="relative z-10">
                     <Image
                       src="/imgs/kontakt.svg"
@@ -187,13 +216,13 @@ const ContactForm: React.FC = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.2 + idx * 0.1 }}
                 whileHover={{ scale: 1.02, boxShadow: "0 0 15px rgba(249, 115, 22, 0.2)" }}
-                className="relative bg-gradient-to-br from-gray-800/80 to-gray-900/80 rounded-lg p-4 border border-gray-700/50 overflow-hidden group"
+                className="relative bg-slate-800/60 backdrop-blur-lg rounded-lg p-4 border border-white/10 overflow-hidden group"
               >
                 <div className="absolute inset-0 bg-orange-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="absolute top-0 left-0 w-4 h-4 border-t border-l border-orange-500/40" />
                 <div className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-orange-500/40" />
                 <div className="flex items-center">
-                  <div className="mr-4 p-3 bg-gradient-to-br from-orange-600/20 to-orange-500/10 rounded-lg text-orange-500">
+                  <div className="mr-4 p-3 bg-orange-600/20 rounded-lg text-orange-500">
                     {item.icon}
                   </div>
                   <div>
@@ -210,7 +239,7 @@ const ContactForm: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.5 }}
-            className="relative bg-gradient-to-br from-gray-800/90 to-gray-900/90 rounded-lg p-6 shadow-lg space-y-5 border border-gray-700/50 overflow-hidden"
+            className="relative bg-slate-800/60 backdrop-blur-lg rounded-lg p-6 shadow-lg space-y-5 border border-white/10 overflow-hidden"
             onSubmit={handleSubmit}
           >
             <div className="absolute top-0 left-0 w-12 h-12 border-t-2 border-l-2 border-orange-500/30" />
@@ -239,7 +268,7 @@ const ContactForm: React.FC = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="absolute inset-0 bg-gradient-to-br from-gray-800/95 to-gray-900/95 flex flex-col items-center justify-center z-50"
+                  className="absolute inset-0 bg-slate-800/95 backdrop-blur-lg flex flex-col items-center justify-center z-50"
                 >
                   <motion.div 
                     initial={{ scale: 0 }}
@@ -442,11 +471,6 @@ const ContactForm: React.FC = () => {
             </motion.div>
           </motion.form>
         </div>
-        
-        {/* Dekorativní prvky v pozadí */}
-        <div className="absolute top-[20%] left-[5%] w-2 h-2 bg-orange-500/50 rounded-full" style={{ boxShadow: '0 0 15px rgba(249, 115, 22, 0.5)' }} />
-        <div className="absolute top-[70%] right-[10%] w-3 h-3 bg-orange-500/40 rounded-full" style={{ boxShadow: '0 0 20px rgba(249, 115, 22, 0.4)' }} />
-        <div className="absolute bottom-[15%] left-[25%] w-1 h-1 bg-blue-500/60 rounded-full" style={{ boxShadow: '0 0 15px rgba(59, 130, 246, 0.6)' }} />
       </div>
     </section>
   );

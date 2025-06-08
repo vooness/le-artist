@@ -27,9 +27,9 @@ const Comparison: React.FC = () => {
   return (
     <section 
       ref={sectionRef}
-      className="py-16 lg:py-24 relative bg-[#0c1320] text-white overflow-hidden"
+      className="py-16 lg:py-24 relative bg-[#0f172a] text-white overflow-hidden"
     >
-      {/* Background pattern matching your existing style - hidden on mobile */}
+      {/* Background pattern - clean version without gradient orbs */}
       <div className="absolute inset-0 z-0 hidden lg:block">
         <div
           className="pointer-events-none absolute inset-0 flex justify-center"
@@ -44,10 +44,6 @@ const Comparison: React.FC = () => {
             margin: "0 auto",
           }}
         />
-        
-        {/* Gradient orbs matching your style - desktop only */}
-        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-orange-500/10 rounded-full blur-[100px]" />
-        <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-blue-500/10 rounded-full blur-[80px]" />
       </div>
       
       <div className="container mx-auto px-4 sm:px-6 relative z-10 max-w-6xl">
@@ -205,7 +201,7 @@ const Comparison: React.FC = () => {
             className="group relative inline-flex items-center"
           >
             <div className="absolute -inset-1 bg-gradient-to-r from-orange-600 to-orange-500 rounded-full blur opacity-70 group-hover:opacity-100 transition duration-200"></div>
-            <div className="relative flex items-center px-6 sm:px-8 py-3 sm:py-4 bg-[#0c1320] rounded-full border border-orange-500/50 group-hover:border-orange-400 transition-colors">
+            <div className="relative flex items-center px-6 sm:px-8 py-3 sm:py-4 bg-[#0f172a] rounded-full border border-orange-500/50 group-hover:border-orange-400 transition-colors">
               <Terminal className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400 mr-2" />
               <span className="text-white font-semibold text-sm sm:text-base">
                 Chci ušetřit 

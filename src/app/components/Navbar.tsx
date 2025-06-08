@@ -185,7 +185,7 @@ const Navbar: React.FC = () => {
       <AnimatePresence mode="wait">
         {isOpen && (
           <motion.div
-            className="fixed top-0 right-0 h-full w-80 bg-[#0f172a]/95 backdrop-blur-md z-40 lg:hidden shadow-2xl border-l border-orange-500/20"
+            className="fixed top-0 right-0 h-full w-80 bg-[#0f172a] backdrop-blur-md z-40 lg:hidden shadow-2xl border-l border-orange-500/20"
             initial={{ 
               x: "100%",
               opacity: 0

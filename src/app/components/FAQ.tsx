@@ -433,17 +433,11 @@ const FuturisticFAQ: React.FC<FuturisticFAQProps> = ({
         <div className="text-center mb-12">
           <div className="relative inline-block">
             <div className="absolute -left-8 -right-8 -top-8 -bottom-8 flex items-center justify-center pointer-events-none">
-              <div className="absolute top-0 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-orange-500/70 to-transparent"></div>
+              
               <div className="absolute bottom-0 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-orange-500/70 to-transparent"></div>
               
-              <div className="absolute left-0 top-1/2 -translate-y-1/2">
-                <div className="w-4 h-4 border-l-2 border-t-2 border-orange-500/60"></div>
-                <div className="w-4 h-4 border-l-2 border-b-2 border-orange-500/60 absolute top-6"></div>
-              </div>
-              <div className="absolute right-0 top-1/2 -translate-y-1/2">
-                <div className="w-4 h-4 border-r-2 border-t-2 border-orange-500/60"></div>
-                <div className="w-4 h-4 border-r-2 border-b-2 border-orange-500/60 absolute top-6"></div>
-              </div>
+              
+              
             </div>
             
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-wide text-white relative inline-block">

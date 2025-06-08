@@ -206,7 +206,7 @@ const IntroSection: React.FC = () => {
     >
       {!isMobileOrTablet && <ParticlesBackground />}
 
-      {/* Futuristické pozadí - pouze desktop */}
+      {/* Čisté pozadí - pouze grid pattern */}
       {!isMobileOrTablet && (
         <div className="absolute inset-0 hidden lg:block">
           {/* Grid pattern */}
@@ -218,9 +218,6 @@ const IntroSection: React.FC = () => {
               backgroundSize: "100px 100px",
             }}
           />
-          {/* Gradient orbs */}
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-orange-500/10 rounded-full blur-[120px]" />
-          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-500/10 rounded-full blur-[100px]" />
         </div>
       )}
 

@@ -332,49 +332,16 @@ const ServiceCard: React.FC<{ service: Service, index: number }> = ({ service, i
   );
 };
 
-// Vylepšené dynamické pozadí s opravenými gradienty
+// Čisté pozadí bez gradientních prvků
 const BackgroundAnimation: React.FC<{ isDesktop: boolean }> = ({ isDesktop }) => {
   if (!isDesktop) {
-    // Pro mobilní zařízení - statické pozadí
-    return (
-      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-40">
-        <div className="absolute inset-0 bg-slate-900/20"></div>
-      </div>
-    );
+    // Pro mobilní zařízení - bez pozadí
+    return null;
   }
   
-  // Pro desktop - vylepšené pozadí s opravenými gradienty
+  // Pro desktop - pouze jemná mřížka a kódový vzor
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {/* Gradienty v pozadí */}
-      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-slate-900/10 to-transparent opacity-40"></div>
-      <div className="absolute bottom-0 left-0 w-full h-full bg-gradient-to-t from-slate-900/20 to-transparent opacity-30"></div>
-      
-      {/* Rozšířené a opravené světelné gradienty, které nebudou useknuté */}
-      <div
-        className="absolute top-0 left-0 w-[70%] h-[70%] rounded-full blur-[150px] opacity-10"
-        style={{
-          background: 'radial-gradient(circle, rgba(249,115,22,0.2) 0%, rgba(249,115,22,0) 70%)',
-          transform: 'translate(-20%, -20%)',
-        }}
-      />
-      
-      <div
-        className="absolute top-[30%] right-0 w-[70%] h-[70%] rounded-full blur-[150px] opacity-10"
-        style={{
-          background: 'radial-gradient(circle, rgba(56,189,248,0.15) 0%, rgba(56,189,248,0) 70%)',
-          transform: 'translate(20%, -30%)',
-        }}
-      />
-      
-      <div
-        className="absolute bottom-0 right-[20%] w-[100%] h-[100%] rounded-full blur-[150px] opacity-10"
-        style={{
-          background: 'radial-gradient(circle, rgba(236,72,153,0.15) 0%, rgba(236,72,153,0) 70%)',
-          transform: 'translate(0%, 20%)',
-        }}
-      />
-      
       {/* Jemný overlay kódového vzoru */}
       <div className="absolute inset-0 opacity-[0.015] font-mono text-[0.6rem] text-white overflow-hidden select-none">
         <div className="absolute -left-20 top-10 transform -rotate-3 opacity-50">
@@ -528,37 +495,39 @@ const ServicesGrid: React.FC = () => {
   }, []);
   
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-16 relative">
-      {/* Vylepšené pozadí s opravenými gradienty */}
+    <section className="relative py-16 lg:py-24 bg-[#0f172a] text-white overflow-hidden">
+      {/* Čisté pozadí bez gradientních prvků */}
       <BackgroundAnimation isDesktop={isDesktop} />
       
-      {/* Kontejner s paddingem */}
-      <div className="relative z-10">
-        {/* Nadpis - zarovnaný vlevo */}
-        <div ref={titleRef} className="mb-12">
-          <CodeDesignerTitle isVisible={titleVisible} />
-        </div>
-        
-        {/* Grid služeb */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-center gap-4 md:gap-8">
-          {services.map((service, i) => (
-            <ServiceCard 
-              key={i} 
-              service={service} 
-              index={i} 
-            />
-          ))}
-        </div>
-        
-        {/* Jemnější kódový dekorativní prvek */}
-        <div className="flex justify-end mt-8 sm:mt-10">
-          <div className="flex items-center text-xs font-mono text-orange-500/30 opacity-0 animate-fade-in" style={{ animationDelay: '1.5s' }}>
-            <span>// END SERVICES</span>
-            <div className="h-px w-10 bg-orange-500/20 ml-2" />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        {/* Kontejner s paddingem */}
+        <div className="relative z-10">
+          {/* Nadpis - zarovnaný vlevo */}
+          <div ref={titleRef} className="mb-12">
+            <CodeDesignerTitle isVisible={titleVisible} />
+          </div>
+          
+          {/* Grid služeb */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-center gap-4 md:gap-8">
+            {services.map((service, i) => (
+              <ServiceCard 
+                key={i} 
+                service={service} 
+                index={i} 
+              />
+            ))}
+          </div>
+          
+          {/* Jemnější kódový dekorativní prvek */}
+          <div className="flex justify-end mt-8 sm:mt-10">
+            <div className="flex items-center text-xs font-mono text-orange-500/30 opacity-0 animate-fade-in" style={{ animationDelay: '1.5s' }}>
+              <span>// END SERVICES</span>
+              <div className="h-px w-10 bg-orange-500/20 ml-2" />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
