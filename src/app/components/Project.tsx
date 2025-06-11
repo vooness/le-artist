@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useRef } from "react"
 import Link from "next/link"
 
 /// Příklady projektů
@@ -17,7 +17,7 @@ const projects = [
     title: "Království zdraví e-shop",
     description: "Komplexní úprava Shoptet šablony, rozšíření funkcionalit a stylů pro e-shop Království zdraví. Vytvořeno několik vlastních modulů a přizpůsobení pro zlepšení uživatelského zážitku.",
     category: "E-commerce úpravy",
-    technologies: ["Shoptet", "CSS/SCSS", "JavaScript", "HTML5", ],
+    technologies: ["Shoptet", "CSS/SCSS", "JavaScript", "HTML5"],
     image: "/imgs/kz.png",
     result: "43% nárůst objednávek, 28% prodloužení času stráveného na stránce"
   },
@@ -70,11 +70,17 @@ const ProjectsSection = () => {
   // State pro postupné zobrazení prvků
   const [isVisible, setIsVisible] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
-  
+  const [visibleCards, setVisibleCards] = useState<boolean[]>([]);
+  const [headerVisible, setHeaderVisible] = useState(false);
+  const [descriptionVisible, setDescriptionVisible] = useState(false);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const descriptionRef = useRef<HTMLParagraphElement>(null);  
   // Nastavíme prvky jako viditelné po montáži komponenty a detekce desktop
   useEffect(() => {
     setIsVisible(true);
     setIsDesktop(window.innerWidth >= 1024);
+    setVisibleCards(new Array(projects.length).fill(false));
     
     const handleResize = () => {
       setIsDesktop(window.innerWidth >= 1024);
@@ -86,33 +92,112 @@ const ProjectsSection = () => {
     };
   }, []);
 
+  // Reveal animations pro desktop
+  useEffect(() => {
+    if (!isDesktop) return;
+
+    // Observer pro karty
+    const cardsObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = parseInt(entry.target.getAttribute('data-index') || '0');
+            setVisibleCards(prev => {
+              const newState = [...prev];
+              newState[index] = true;
+              return newState;
+            });
+          }
+        });
+      },
+      {
+        threshold: 0.2,
+        rootMargin: '0px 0px -100px 0px'
+      }
+    );
+
+    // Observer pro header
+    const headerObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setHeaderVisible(true);
+            // Description se zobrazí s delayem
+            setTimeout(() => setDescriptionVisible(true), 600);
+          }
+        });
+      },
+      {
+        threshold: 0.3,
+        rootMargin: '50px 0px -50px 0px'
+      }
+    );
+
+    // Registrace observers
+    cardsRef.current.forEach((card) => {
+      if (card) cardsObserver.observe(card);
+    });
+
+    if (headerRef.current) headerObserver.observe(headerRef.current);
+
+    return () => {
+      cardsRef.current.forEach((card) => {
+        if (card) cardsObserver.unobserve(card);
+      });
+      if (headerRef.current) headerObserver.unobserve(headerRef.current);
+    };
+  }, [isDesktop]);
+
   return (
     <section className="relative bg-[#0f172a] text-white py-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
       {/* Čisté pozadí bez gradientních prvků */}
       <BackgroundAnimation isDesktop={isDesktop} />
       
       <div className="max-w-7xl mx-auto relative z-10">
-        {/* Centrovaný nadpis sekce - zmenšené mezery */}
-        <div className="relative py-6 flex flex-col items-center justify-center text-center mb-8">
+        {/* Centrovaný nadpis sekce - s animacemi */}
+        <div 
+          ref={headerRef}
+          className="relative py-6 flex flex-col items-center justify-center text-center mb-8"
+        >
           {/* Ozdobné prvky kolem nadpisu */}
-          <div className={`relative inline-flex flex-col items-center transition-all duration-700 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
-            {/* Horní dekorační linka */}
-            <div className="mb-3 flex items-center">
+          <div className={`relative inline-flex flex-col items-center transition-all duration-1000 ${
+            isDesktop 
+              ? `${headerVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-95'}`
+              : `${isVisible ? 'opacity-100' : 'opacity-0'}`
+          }`}>
+            {/* Horní dekorační linka s animací */}
+            <div className={`mb-3 flex items-center transition-all duration-800 delay-200 ${
+              isDesktop 
+                ? `${headerVisible ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0'}`
+                : 'opacity-100'
+            }`}>
               <div className="h-[1px] w-16 bg-gray-700"></div>
               <div className="mx-3 text-orange-500 font-bold">[]</div>
               <div className="h-[1px] w-16 bg-gray-700"></div>
             </div>
             
-            {/* Hlavní nadpis */}
-            <h2 className="text-5xl font-extrabold tracking-tight text-white relative inline-block mb-2">
+            {/* Hlavní nadpis s rozšířenými animacemi */}
+            <h2 className={`text-5xl font-extrabold tracking-tight text-white relative inline-block mb-2 transition-all duration-1200 ${
+              isDesktop 
+                ? `${headerVisible ? 'opacity-100 translate-y-0 rotate-0' : 'opacity-0 translate-y-8 rotate-1'}`
+                : 'opacity-100'
+            }`} style={{ transitionDelay: isDesktop ? '400ms' : '0ms' }}>
               Mé Projekty
             </h2>
             
-            {/* Oranžová podtržení */}
-            <div className={`h-[3px] w-[320px] bg-orange-500 rounded-full transition-all duration-1000 ${isVisible ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0'}`}></div>
+            {/* Oranžová podtržení s plynulou animací */}
+            <div className={`h-[3px] w-[320px] bg-orange-500 rounded-full transition-all duration-1500 ${
+              isDesktop 
+                ? `${headerVisible ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0'}`
+                : `${isVisible ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0'}`
+            }`} style={{ transitionDelay: isDesktop ? '600ms' : '1000ms' }}></div>
             
-            {/* Spodní dekorační text */}
-            <div className="mt-2 flex items-center">
+            {/* Spodní dekorační text s fade in efektem */}
+            <div className={`mt-2 flex items-center transition-all duration-800 ${
+              isDesktop 
+                ? `${headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`
+                : 'opacity-100'
+            }`} style={{ transitionDelay: isDesktop ? '800ms' : '0ms' }}>
               <div className="text-orange-500 opacity-70">{'//'}</div>
               <div className="mx-3 text-gray-400 uppercase text-sm tracking-widest">REFERENCE A UKÁZKY</div>
               <div className="text-orange-500 opacity-70">{'//'}</div>
@@ -131,21 +216,36 @@ const ProjectsSection = () => {
           {projects.map((project, index) => (
             <div
               key={index}
-              className={`relative group transition-all duration-700 hover:-translate-y-4
-              ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
-              style={{ transitionDelay: `${500 + index * 200}ms` }}
+              ref={el => { cardsRef.current[index] = el; }}
+              data-index={index}
+              className={`relative group transition-all duration-700 ${
+                isDesktop 
+                  ? `hover:-translate-y-4 ${visibleCards[index] ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-16 scale-95'}`
+                  : `${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`
+              }`}
+              style={{ 
+                transitionDelay: isDesktop 
+                  ? `${visibleCards[index] ? index * 200 : 0}ms`
+                  : `${500 + index * 200}ms` 
+              }}
             >
-              {/* Holografický outer glow */}
-              <div className="absolute -inset-4 bg-gradient-to-r from-cyan-500/20 via-blue-500/20 to-purple-500/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl"></div>
+              {/* Holografický outer glow - pouze na desktop při hover */}
+              {isDesktop && (
+                <div className="absolute -inset-4 bg-gradient-to-r from-cyan-500/20 via-blue-500/20 to-purple-500/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl"></div>
+              )}
               
               {/* Hlavní futuristická karta */}
-              <div className="relative bg-slate-800/60 backdrop-blur-lg rounded-2xl overflow-hidden border border-white/10 group-hover:border-cyan-400/50 transition-all duration-500 shadow-lg h-full flex flex-col">
+              <div className={`relative bg-slate-800/60 backdrop-blur-lg rounded-2xl overflow-hidden border border-white/10 transition-all duration-500 shadow-lg h-full flex flex-col ${
+                isDesktop ? 'group-hover:border-cyan-400/50' : ''
+              }`}>
                 
-                {/* Animovaný tech border */}
-                <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-cyan-500/30 via-transparent to-purple-500/30" 
-                       style={{ animation: 'border-pulse 3s ease-in-out infinite' }}></div>
-                </div>
+                {/* Animovaný tech border - pouze na desktop */}
+                {isDesktop && (
+                  <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-cyan-500/30 via-transparent to-purple-500/30" 
+                         style={{ animation: 'border-pulse 3s ease-in-out infinite' }}></div>
+                  </div>
+                )}
                 
                 {/* Horní tech panel */}
                 <div className="relative p-4 bg-slate-800/50 border-b border-white/10">
@@ -164,36 +264,26 @@ const ProjectsSection = () => {
                   </div>
                 </div>
                 
-                {/* Holografický obrázek container */}
+                {/* Obrázek container */}
                 <div className="relative h-48 overflow-hidden bg-slate-900">
-                  {/* Skenující laser linky */}
-                  <div className="absolute inset-0 overflow-hidden">
-                    <div className="absolute w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-60 group-hover:opacity-100 transition-opacity duration-500"
-                         style={{ animation: 'scan-horizontal 4s linear infinite', top: '30%' }}></div>
-                    <div className="absolute w-[2px] h-full bg-gradient-to-b from-transparent via-purple-400 to-transparent opacity-60 group-hover:opacity-100 transition-opacity duration-500"
-                         style={{ animation: 'scan-vertical 4s linear infinite', left: '70%' }}></div>
-                  </div>
-                  
-                  {/* Projekt obrázek s hologram efektem */}
+                  {/* Čistý projekt obrázek */}
                   <img 
                     src={project.image} 
                     alt={project.title}
-                    className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-110"
+                    className="w-full h-full object-cover"
                   />
-                  
-                  {/* Tech corner brackets */}
-                  <div className="absolute top-2 left-2 w-6 h-6 border-t-2 border-l-2 border-cyan-400/60"></div>
-                  <div className="absolute top-2 right-2 w-6 h-6 border-t-2 border-r-2 border-cyan-400/60"></div>
-                  <div className="absolute bottom-2 left-2 w-6 h-6 border-b-2 border-l-2 border-cyan-400/60"></div>
-                  <div className="absolute bottom-2 right-2 w-6 h-6 border-b-2 border-r-2 border-cyan-400/60"></div>
                 </div>
                 
                 {/* Hlavní content area */}
                 <div className="p-6 relative flex-grow flex flex-col">
-                  {/* Project Title s cyber efektem */}
-                  <h3 className="text-xl font-bold mb-3 text-white group-hover:text-cyan-300 transition-colors duration-300 relative">
+                  {/* Project Title s cyber efektem - pouze na desktop */}
+                  <h3 className={`text-xl font-bold mb-3 text-white transition-colors duration-300 relative ${
+                    isDesktop ? 'group-hover:text-cyan-300' : ''
+                  }`}>
                     <span className="relative z-10">{project.title}</span>
-                    <div className="absolute -bottom-1 left-0 w-0 h-[2px] bg-gradient-to-r from-cyan-400 to-purple-400 group-hover:w-full transition-all duration-500"></div>
+                    {isDesktop && (
+                      <div className="absolute -bottom-1 left-0 w-0 h-[2px] bg-gradient-to-r from-cyan-400 to-purple-400 group-hover:w-full transition-all duration-500"></div>
+                    )}
                   </h3>
                   
                   {/* Description */}
@@ -201,12 +291,14 @@ const ProjectsSection = () => {
                     {project.description}
                   </p>
                   
-                  {/* Tech stack s chip designem */}
+                  {/* Tech stack s chip designem - hover pouze na desktop */}
                   <div className="flex flex-wrap gap-2 mb-6">
                     {project.technologies.slice(0, 3).map((tech, i) => (
                       <span 
                         key={i} 
-                        className="px-2 py-1 text-xs bg-slate-700/50 text-gray-300 rounded-md border border-slate-500/30 font-mono hover:border-cyan-400/50 hover:text-cyan-300 transition-all duration-300"
+                        className={`px-2 py-1 text-xs bg-slate-700/50 text-gray-300 rounded-md border border-slate-500/30 font-mono transition-all duration-300 ${
+                          isDesktop ? 'hover:border-cyan-400/50 hover:text-cyan-300' : ''
+                        }`}
                       >
                         {tech}
                       </span>
@@ -250,7 +342,7 @@ const ProjectsSection = () => {
               Pojďme spolupracovat na vašem projektu!
             </h3>
             <p className="text-gray-400 mb-10 text-lg">
-              Máte nápad? Proměňme ho společně v realitu.
+              Máte nápad? Proměňmo ho společně v realitu.
             </p>
             
             <Link href="/kontakt">
@@ -276,16 +368,6 @@ const ProjectsSection = () => {
       
       {/* CSS pro animace a efekty */}
       <style jsx>{`
-        @keyframes scan-horizontal {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(200%); }
-        }
-        
-        @keyframes scan-vertical {
-          0% { transform: translateY(-100%); }
-          100% { transform: translateY(200%); }
-        }
-        
         @keyframes border-pulse {
           0%, 100% { opacity: 0.3; }
           50% { opacity: 0.8; }

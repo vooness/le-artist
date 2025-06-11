@@ -28,8 +28,61 @@ const generateDotPositions = (count: number) => {
   return positions;
 };
 
+// Typing effect hook
+const useTypingEffect = (texts: string[], speed = 100, deleteSpeed = 50, pauseTime = 2000) => {
+  const [currentTextIndex, setCurrentTextIndex] = useState(0);
+  const [currentText, setCurrentText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+
+  useEffect(() => {
+    const targetText = texts[currentTextIndex];
+
+    const timeout = setTimeout(() => {
+      if (isPaused) {
+        setIsPaused(false);
+        setIsDeleting(true);
+        return;
+      }
+
+      if (isDeleting) {
+        if (currentText.length > 0) {
+          setCurrentText(prev => prev.slice(0, -1));
+        } else {
+          setIsDeleting(false);
+          setCurrentTextIndex(prev => (prev + 1) % texts.length);
+        }
+      } else {
+        if (currentText.length < targetText.length) {
+          setCurrentText(prev => targetText.slice(0, prev.length + 1));
+        } else {
+          setIsPaused(true);
+        }
+      }
+    }, isPaused ? pauseTime : isDeleting ? deleteSpeed : speed);
+
+    return () => clearTimeout(timeout);
+  }, [currentText, currentTextIndex, isDeleting, isPaused, texts, speed, deleteSpeed, pauseTime]);
+
+  return currentText;
+};
+
 export const HeroSection: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
+  
+  // Texty pro typing efekt
+  const typingTexts = [
+    "grafické studio",
+    "webové stránky",
+    "grafický design",
+    "shoptet eshop",
+    "interaktivní kvízy",
+    "video marketing",
+    "online kurzy"
+  ];
+  
+  // Hook pro typing efekt
+  const typedText = useTypingEffect(typingTexts, 100, 50, 2000);
   
   // Vygenerujeme pozice teček pouze jednou při sestavení komponenty
   const dotPositions = useMemo(() => generateDotPositions(30), []);
@@ -196,7 +249,7 @@ export const HeroSection: React.FC = () => {
             </p>
             
             <div className="relative">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight text-center lg:text-left">
                 <motion.span
                   animate={{ 
                     textShadow: [
@@ -214,21 +267,17 @@ export const HeroSection: React.FC = () => {
                   Kreativní
                 </motion.span>{' '}
                 <div className="inline-block relative">
-                  <motion.span 
-                    className="bg-gradient-to-r from-orange-500 to-yellow-500 text-transparent bg-clip-text"
-                    animate={{
-                      backgroundPosition: ["0% 50%", "100% 50%"]
-                    }}
-                    transition={{
-                      duration: 2,
-                      ease: "easeInOut"
-                    }}
-                    style={{
-                      backgroundSize: "200% 200%"
-                    }}
-                  >
-                    grafické studio
-                  </motion.span>
+                  {/* Invisible placeholder to reserve space for the longest text */}
+                  <span className="invisible bg-gradient-to-r from-orange-500 to-yellow-500 text-transparent bg-clip-text whitespace-nowrap">
+                    interaktivní kvízy
+                  </span>
+                  
+                  {/* Actual typed text positioned absolutely - centered on mobile, left on desktop */}
+                  <span className="absolute left-1/2 lg:left-0 top-0 transform -translate-x-1/2 lg:translate-x-0 bg-gradient-to-r from-orange-500 to-yellow-500 text-transparent bg-clip-text whitespace-nowrap flex items-baseline">
+                    <span>{typedText}</span>
+                    <span className="inline-block w-1 h-[0.8em] bg-orange-500 ml-1 animate-pulse flex-shrink-0" />
+                  </span>
+                  
                   <motion.div
                     initial={{ scaleX: 0 }}
                     animate={{ 
