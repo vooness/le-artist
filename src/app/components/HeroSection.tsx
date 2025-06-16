@@ -28,50 +28,32 @@ const generateDotPositions = (count: number) => {
   return positions;
 };
 
-// Typing effect hook
-const useTypingEffect = (texts: string[], speed = 100, deleteSpeed = 50, pauseTime = 2000) => {
+// Fade in/out effect hook
+const useFadeEffect = (texts: string[], duration = 2000, fadeSpeed = 500) => {
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
-  const [currentText, setCurrentText] = useState("");
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
-    const targetText = texts[currentTextIndex];
+    const interval = setInterval(() => {
+      setIsVisible(false);
+      
+      setTimeout(() => {
+        setCurrentTextIndex(prev => (prev + 1) % texts.length);
+        setIsVisible(true);
+      }, fadeSpeed);
+    }, duration + fadeSpeed);
 
-    const timeout = setTimeout(() => {
-      if (isPaused) {
-        setIsPaused(false);
-        setIsDeleting(true);
-        return;
-      }
+    return () => clearInterval(interval);
+  }, [texts, duration, fadeSpeed]);
 
-      if (isDeleting) {
-        if (currentText.length > 0) {
-          setCurrentText(prev => prev.slice(0, -1));
-        } else {
-          setIsDeleting(false);
-          setCurrentTextIndex(prev => (prev + 1) % texts.length);
-        }
-      } else {
-        if (currentText.length < targetText.length) {
-          setCurrentText(prev => targetText.slice(0, prev.length + 1));
-        } else {
-          setIsPaused(true);
-        }
-      }
-    }, isPaused ? pauseTime : isDeleting ? deleteSpeed : speed);
-
-    return () => clearTimeout(timeout);
-  }, [currentText, currentTextIndex, isDeleting, isPaused, texts, speed, deleteSpeed, pauseTime]);
-
-  return currentText;
+  return { currentText: texts[currentTextIndex], isVisible };
 };
 
 export const HeroSection: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
   
-  // Texty pro typing efekt
-  const typingTexts = [
+  // Texty pro fade efekt
+  const fadeTexts = [
     "grafické studio",
     "webové stránky",
     "grafický design",
@@ -81,8 +63,8 @@ export const HeroSection: React.FC = () => {
     "online kurzy"
   ];
   
-  // Hook pro typing efekt
-  const typedText = useTypingEffect(typingTexts, 100, 50, 2000);
+  // Hook pro fade efekt
+  const { currentText, isVisible } = useFadeEffect(fadeTexts, 2000, 500);
   
   // Vygenerujeme pozice teček pouze jednou při sestavení komponenty
   const dotPositions = useMemo(() => generateDotPositions(30), []);
@@ -102,6 +84,16 @@ export const HeroSection: React.FC = () => {
     // Cleanup
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  // Helper function for conditional animations (removes initial/animate for mobile, keeps other animations)
+  const getMotionProps = (desktopProps: any) => {
+    if (isMobile) {
+      // Remove initial and animate properties on mobile, keep others like whileHover, whileTap
+      const { initial, animate, transition, ...otherProps } = desktopProps;
+      return otherProps;
+    }
+    return desktopProps;
+  };
 
   return (
     <section className="relative bg-[#0f172a] text-white py-12 sm:py-20 lg:py-28 flex flex-col items-center justify-center overflow-hidden px-6 sm:px-8 lg:px-20 min-h-screen">
@@ -183,66 +175,84 @@ export const HeroSection: React.FC = () => {
       <div className="relative flex flex-col items-center w-full max-w-7xl mt-12 z-10">
         <motion.div 
           className="flex items-center justify-center space-x-2 text-xs font-mono text-orange-500/70 mb-4"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.1 }}
+          {...getMotionProps({
+            initial: { opacity: 0 },
+            animate: { opacity: 1 },
+            transition: { duration: 0.8, delay: 0.1 }
+          })}
         >
           <span></span>
           <motion.div 
             className="h-px w-12 bg-orange-500/40"
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            {...getMotionProps({
+              initial: { scaleX: 0 },
+              animate: { scaleX: 1 },
+              transition: { duration: 0.8, delay: 0.2 }
+            })}
           />
           <motion.span
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
+            {...getMotionProps({
+              initial: { opacity: 0 },
+              animate: { opacity: 1 },
+              transition: { duration: 0.8, delay: 0.4 }
+            })}
           >
             GRAFICKÉ STUDIO
           </motion.span>
           <motion.div 
             className="h-px w-12 bg-orange-500/40"
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            {...getMotionProps({
+              initial: { scaleX: 0 },
+              animate: { scaleX: 1 },
+              transition: { duration: 0.8, delay: 0.2 }
+            })}
           />
           <span></span>
         </motion.div>
         
         <div className="flex flex-col lg:flex-row items-center justify-center w-full flex-wrap">
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.1 }}
+            {...getMotionProps({
+              initial: { opacity: 0, x: -50 },
+              animate: { opacity: 1, x: 0 },
+              transition: { duration: 0.8, delay: 0.1 }
+            })}
             className="flex flex-col gap-4 sm:gap-6 text-center lg:text-left flex-1"
           >
             <p className="text-base sm:text-lg text-gray-300 mb-2 mt-4">
               <motion.span
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
+                {...getMotionProps({
+                  initial: { opacity: 0 },
+                  animate: { opacity: 1 },
+                  transition: { duration: 0.5, delay: 0.3 }
+                })}
               >
                 Web Developer
               </motion.span>{" • "}
               <motion.span
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.5 }}
+                {...getMotionProps({
+                  initial: { opacity: 0 },
+                  animate: { opacity: 1 },
+                  transition: { duration: 0.5, delay: 0.5 }
+                })}
               >
                 Grafika
               </motion.span>{" • "}
               <motion.span
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.7 }}
+                {...getMotionProps({
+                  initial: { opacity: 0 },
+                  animate: { opacity: 1 },
+                  transition: { duration: 0.5, delay: 0.7 }
+                })}
               >
                 Lektor
               </motion.span>{" • "}
               <motion.span
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.9 }}
+                {...getMotionProps({
+                  initial: { opacity: 0 },
+                  animate: { opacity: 1 },
+                  transition: { duration: 0.5, delay: 0.9 }
+                })}
               >
                 Videa
               </motion.span>
@@ -251,74 +261,52 @@ export const HeroSection: React.FC = () => {
             <div className="relative">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight text-center lg:text-left">
                 <motion.span
-                  animate={{ 
-                    textShadow: [
-                      "0 0 0px rgba(249, 115, 22, 0)",
-                      "0 0 10px rgba(249, 115, 22, 0.3)",
-                      "0 0 20px rgba(249, 115, 22, 0.2)",
-                      "0 0 30px rgba(249, 115, 22, 0.4)"
-                    ]
-                  }}
-                  transition={{
-                    duration: 2,
-                    ease: "easeInOut"
-                  }}
+                  className="text-5xl sm:text-5xl lg:text-6xl xl:text-7xl"
+                  {...getMotionProps({
+                    animate: { 
+                      textShadow: [
+                        "0 0 0px rgba(249, 115, 22, 0)",
+                        "0 0 10px rgba(249, 115, 22, 0.3)",
+                        "0 0 20px rgba(249, 115, 22, 0.2)",
+                        "0 0 30px rgba(249, 115, 22, 0.4)"
+                      ]
+                    },
+                    transition: {
+                      duration: 2,
+                      ease: "easeInOut"
+                    }
+                  })}
                 >
                   Kreativní
                 </motion.span>{' '}
-                <div className="inline-block relative">
+                <div className="inline-block relative pb-2">
                   {/* Invisible placeholder to reserve space for the longest text */}
-                  <span className="invisible bg-gradient-to-r from-orange-500 to-yellow-500 text-transparent bg-clip-text whitespace-nowrap">
+                  <span className="invisible text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold bg-gradient-to-r from-orange-500 to-yellow-500 text-transparent bg-clip-text whitespace-nowrap leading-tight">
                     interaktivní kvízy
                   </span>
                   
-                  {/* Actual typed text positioned absolutely - centered on mobile, left on desktop */}
-                  <span className="absolute left-1/2 lg:left-0 top-0 transform -translate-x-1/2 lg:translate-x-0 bg-gradient-to-r from-orange-500 to-yellow-500 text-transparent bg-clip-text whitespace-nowrap flex items-baseline">
-                    <span>{typedText}</span>
-                    <span className="inline-block w-1 h-[0.8em] bg-orange-500 ml-1 animate-pulse flex-shrink-0" />
-                  </span>
-                  
-                  <motion.div
-                    initial={{ scaleX: 0 }}
-                    animate={{ 
-                      scaleX: 1,
-                      opacity: 1
-                    }}
-                    transition={{ 
-                      duration: 1.5,
-                      ease: 'easeInOut',
-                      delay: 0.5 
-                    }}
-                    className="absolute left-0 bottom-[-5px] h-1 w-full bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full origin-center"
-                  />
+                  {/* Actual fading text positioned absolutely - centered on mobile, left on desktop */}
+                  <motion.span 
+                    className="absolute left-1/2 lg:left-0 top-0 transform -translate-x-1/2 lg:translate-x-0 bg-gradient-to-r from-orange-500 to-yellow-500 text-transparent bg-clip-text whitespace-nowrap text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight"
+                    animate={{ opacity: isVisible ? 1 : 0 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    {currentText}
+                  </motion.span>
                 </div>
               </h1>
               
               {/* Obrázek logo4.svg pouze na mobilních zařízeních */}
               {isMobile && (
-                <motion.div
-                  className="flex justify-center mt-8"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 1.2 }}
-                >
-                  <motion.img
+                <div className="flex justify-center mt-8">
+                  <img
                     src="/imgs/logo4.svg"
                     alt="Logo"
                     className="w-64 h-64 sm:w-72 sm:h-72"
-                    animate={{
-                      rotate: [0, 5, -5, 0],
-                      scale: [1, 1.05, 1]
-                    }}
-                    transition={{
-                      duration: 6,
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }}
                     width={256}
                     height={256}
                   />
-                </motion.div>
+                </div>
               )}
               
               {/* Only render corner decorations on desktop */}
@@ -342,28 +330,36 @@ export const HeroSection: React.FC = () => {
             
             <motion.p 
               className="text-sm sm:text-base lg:text-lg text-gray-400 max-w-md sm:max-w-lg mx-auto lg:mx-0 mt-6"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
+              {...getMotionProps({
+                initial: { opacity: 0, y: 20 },
+                animate: { opacity: 1, y: 0 },
+                transition: { duration: 0.8, delay: 0.8 }
+              })}
             >
               Věnuji se tvorbě moderních a funkčních webů, grafice, stříhání videí, focení a vzdělávání dalších tvůrců.
             </motion.p>
             
             <motion.div 
               className="flex gap-4 mt-6 justify-center lg:justify-start"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 1 }}
+              {...getMotionProps({
+                initial: { opacity: 0, y: 20 },
+                animate: { opacity: 1, y: 0 },
+                transition: { duration: 0.8, delay: 1 }
+              })}
             >
               <motion.a 
                 href="/sluzby" 
                 className="relative group px-6 py-3 bg-orange-500 text-white font-medium rounded-full overflow-hidden"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.98 }}
+                {...getMotionProps({
+                  whileHover: { scale: 1.05 },
+                  whileTap: { scale: 0.98 }
+                })}
               >
-                <span className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                  <span className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000"></span>
-                </span>
+                {!isMobile && (
+                  <span className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    <span className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000"></span>
+                  </span>
+                )}
                 <span className="relative z-10 flex items-center">
                   Více informací
                   <motion.svg 
@@ -372,14 +368,16 @@ export const HeroSection: React.FC = () => {
                     stroke="currentColor" 
                     viewBox="0 0 24 24" 
                     xmlns="http://www.w3.org/2000/svg"
-                    initial={{ x: 0 }}
-                    animate={{ x: [0, 5, 0] }}
-                    transition={{ 
-                      duration: 1.5, 
-                      repeat: Infinity, 
-                      repeatDelay: 2,
-                      ease: "easeInOut"
-                    }}
+                    {...getMotionProps({
+                      initial: { x: 0 },
+                      animate: { x: [0, 5, 0] },
+                      transition: { 
+                        duration: 1.5, 
+                        repeat: Infinity, 
+                        repeatDelay: 2,
+                        ease: "easeInOut"
+                      }
+                    })}
                   >
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                   </motion.svg>
@@ -465,9 +463,11 @@ export const HeroSection: React.FC = () => {
         </div>
 
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
+          {...getMotionProps({
+            initial: { opacity: 0, y: 50 },
+            animate: { opacity: 1, y: 0 },
+            transition: { duration: 0.8, delay: 0.5 }
+          })}
           className="grid grid-cols-2 gap-6 text-center mt-12 lg:mt-36 xl:grid-cols-4 w-full max-w-5xl"
         >
           {[
@@ -479,10 +479,12 @@ export const HeroSection: React.FC = () => {
             <div key={index} className="relative group">
               <motion.div
                 className="absolute inset-0 bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-lg border border-white/5 -z-10"
-                whileHover={{ 
-                  boxShadow: "0 0 15px 2px rgba(249, 115, 22, 0.3)"
-                }}
-                transition={{ duration: 0.3 }}
+                {...getMotionProps({
+                  whileHover: { 
+                    boxShadow: "0 0 15px 2px rgba(249, 115, 22, 0.3)"
+                  },
+                  transition: { duration: 0.3 }
+                })}
               />
               
               <div className="absolute top-0 right-0 w-3 h-3 border-t-[1px] border-r-[1px] border-white/20 rounded-tr-lg"></div>
@@ -491,26 +493,32 @@ export const HeroSection: React.FC = () => {
               <div className="p-4 flex flex-col items-center z-10">
                 <motion.h3 
                   className="text-3xl sm:text-4xl font-bold text-orange-500"
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: 0.7 + index * 0.1 }}
+                  {...getMotionProps({
+                    initial: { opacity: 0, scale: 0.5 },
+                    animate: { opacity: 1, scale: 1 },
+                    transition: { duration: 0.5, delay: 0.7 + index * 0.1 }
+                  })}
                 >
-                  <CountUp start={0} end={stat.value} duration={2} />
+                  <CountUp start={0} end={stat.value} duration={isMobile ? 0 : 2} />
                   <span className="ml-1">+</span>
                 </motion.h3>
                 
                 <motion.div 
                   className="w-10 h-px bg-gradient-to-r from-transparent via-orange-500/50 to-transparent my-2"
-                  initial={{ scaleX: 0 }}
-                  animate={{ scaleX: 1 }}
-                  transition={{ duration: 0.5, delay: 0.9 + index * 0.1 }}
+                  {...getMotionProps({
+                    initial: { scaleX: 0 },
+                    animate: { scaleX: 1 },
+                    transition: { duration: 0.5, delay: 0.9 + index * 0.1 }
+                  })}
                 />
                 
                 <motion.p 
                   className="text-xs sm:text-sm text-gray-400"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.5, delay: 1.1 + index * 0.1 }}
+                  {...getMotionProps({
+                    initial: { opacity: 0 },
+                    animate: { opacity: 1 },
+                    transition: { duration: 0.5, delay: 1.1 + index * 0.1 }
+                  })}
                 >
                   {stat.label}
                 </motion.p>
