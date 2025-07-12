@@ -1,41 +1,41 @@
 import Navbar from "../../components/Navbar";
- import ShoptetServicesPage from "../../components/shoptet";
- import Footer from "../../components/Footer";
+import ShoptetServicesPage from "../../components/shoptet";
+import Footer from "../../components/Footer";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Mé služby - Le Artist",
+  title: "Shoptet Eshop - Tvorba a úpravy | Le Artist",
   description:
-    "Osobně nabízím širokou škálu služeb – od webdesignu a grafiky, přes video editaci, tvorbu reklam, úpravy Shoptetu, e-shopů, logo design, maskoty až po lektorství. Každou službu poskytuji s individuálním přístupem a maximální péčí o detail.",
+    "Specializuji se na tvorbu a úpravy Shoptet eshopů. Nabízím kompletní služby pro váš online obchod - design, customizace, optimalizace, SEO a technické úpravy Shoptet platformy s individuálním přístupem.",
   keywords: [
-    "mé služby",
-    "webdesign",
-    "grafika",
-    "video editace",
-    "tvorba reklam",
-    "reklamní kampaně",
-    "úpravy Shoptetu",
-    "e-shop",
-    "eshop",
-    "logo design",
-    "tvorba loga",
-    "maskoti",
-    "lektorství",
-    "osobní služby",
-    "profesionální služby",
-    "digitální marketing",
-    "branding",
-    "internetový obchod",
-    "reklamní design",
-    "online marketing",
-    "SEO"
+    "shoptet eshop",
+    "tvorba shoptet",
+    "úpravy shoptet",
+    "shoptet design",
+    "shoptet customizace",
+    "shoptet e-shop",
+    "shoptet online obchod",
+    "shoptet šablony",
+    "shoptet optimalizace",
+    "shoptet SEO",
+    "e-commerce shoptet",
+    "internetový obchod shoptet",
+    "shoptet webdesign",
+    "shoptet úpravy design",
+    "shoptet programování",
+    "shoptet specialista",
+    "shoptet expert",
+    "shoptet services",
+    "online prodej",
+    "e-shop tvorba",
+    "shoptet consulting"
   ],
   robots: { index: true, follow: true },
   alternates: {
-    canonical: "https://yourwebsite.com/sluzby",
+    canonical: "https://yourwebsite.com/sluzby/shoptet-eshop",
     languages: {
-      cs: "https://yourwebsite.com/cs/sluzby",
-      en: "https://yourwebsite.com/en/services",
+      cs: "https://yourwebsite.com/cs/sluzby/shoptet-eshop",
+      en: "https://yourwebsite.com/en/services/shoptet-eshop",
     },
   },
   verification: {
@@ -43,17 +43,17 @@ export const metadata: Metadata = {
     yandex: "YOUR_YANDEX_VERIFICATION_CODE",
   },
   openGraph: {
-    title: "Mé služby - Le Artist",
+    title: "Shoptet Eshop - Tvorba a úpravy | Le Artist",
     description:
-      "Osobně nabízím služby v oblasti webdesignu, grafiky, video editace, tvorby reklam, úprav Shoptetu, e-shopů, logo designu a maskotů – vše s individuálním přístupem pro Vaše specifické potřeby.",
-    url: "https://yourwebsite.com/sluzby",
+      "Profesionální tvorba a úpravy Shoptet eshopů. Specializuji se na design, customizace, optimalizace a technické úpravy Shoptet platformy. Získejte moderní a funkční online obchod.",
+    url: "https://yourwebsite.com/sluzby/shoptet-eshop",
     siteName: "Le Artist",
     images: [
       {
-        url: "https://yourwebsite.com/og-image-sluzby.jpg",
+        url: "https://yourwebsite.com/og-image-shoptet.jpg",
         width: 1200,
         height: 630,
-        alt: "Mé služby - Le Artist",
+        alt: "Shoptet Eshop služby - Le Artist",
       },
     ],
     locale: "cs_CZ",
@@ -61,21 +61,23 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Mé služby - Le Artist",
+    title: "Shoptet Eshop - Tvorba a úpravy | Le Artist",
     description:
-      "Nabízím osobní služby v oblasti webdesignu, grafiky, video editace, tvorby reklam, úprav Shoptetu, e-shopů, logo designu a maskotů. Kontaktujte mě pro individuální nabídku.",
-    images: ["https://yourwebsite.com/og-image-sluzby.jpg"],
+      "Specializuji se na tvorbu a úpravy Shoptet eshopů. Design, customizace, optimalizace a technické úpravy pro váš úspěšný online obchod.",
+    images: ["https://yourwebsite.com/og-image-shoptet.jpg"],
   },
   authors: [{ name: "Le Artist", url: "https://yourwebsite.com" }],
   viewport: "width=device-width, initial-scale=1",
-  themeColor: "#ffffff",
+  themeColor: "#ff6b35",
   other: {
     abstract:
-      "Osobně poskytuju služby v oblasti webdesignu, grafiky, video editace, tvorby reklam, úprav Shoptetu, e-shopů, logo designu a maskotů, vždy s individuálním přístupem.",
+      "Profesionální služby pro Shoptet eshopy - tvorba, úpravy, design, customizace a optimalizace online obchodů na Shoptet platformě.",
     distribution: "global",
     rating: "general",
     "revisit-after": "7 days",
     HandheldFriendly: "True",
+    "shoptet-specialist": "true",
+    "e-commerce-expert": "true",
   },
 };
 

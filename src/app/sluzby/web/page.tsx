@@ -1,42 +1,47 @@
 import Navbar from "../../components/Navbar";
- import WebServicesPage from "../../components/web";
- import Footer from "../../components/Footer";
- import InvestmentSection from "@/app/components/investice";
+import WebServicesPage from "../../components/web";
+import Footer from "../../components/Footer";
+import InvestmentSection from "@/app/components/investice";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Mé služby - Le Artist",
+  title: "Tvorba webů a webdesign | Le Artist",
   description:
-    "Osobně nabízím širokou škálu služeb – od webdesignu a grafiky, přes video editaci, tvorbu reklam, úpravy Shoptetu, e-shopů, logo design, maskoty až po lektorství. Každou službu poskytuji s individuálním přístupem a maximální péčí o detail.",
+    "Specializuji se na tvorbu moderních webových stránek, webdesign a vývoj webových aplikací. Nabízím responzivní weby, e-shopy, landing pages a kompletní web development s důrazem na UX/UI design a SEO optimalizaci.",
   keywords: [
-    "mé služby",
+    "tvorba webů",
     "webdesign",
-    "grafika",
-    "video editace",
-    "tvorba reklam",
-    "reklamní kampaně",
-    "úpravy Shoptetu",
-    "e-shop",
-    "eshop",
-    "logo design",
-    "tvorba loga",
-    "maskoti",
-    "lektorství",
-    "osobní služby",
-    "profesionální služby",
-    "digitální marketing",
-    "branding",
-    "internetový obchod",
-    "reklamní design",
-    "online marketing",
-    "SEO"
+    "web development",
+    "tvorba webových stránek",
+    "responzivní weby",
+    "moderní webdesign",
+    "webové aplikace",
+    "landing pages",
+    "UX design",
+    "UI design",
+    "frontend development",
+    "e-commerce weby",
+    "SEO optimalizace",
+    "mobilní weby",
+    "CMS systémy",
+    "WordPress",
+    "Next.js",
+    "React weby",
+    "webové řešení",
+    "corporate weby",
+    "prezentační weby",
+    "portfoliové weby",
+    "business weby",
+    "custom webdesign",
+    "web developer",
+    "webový specialista"
   ],
   robots: { index: true, follow: true },
   alternates: {
-    canonical: "https://yourwebsite.com/sluzby",
+    canonical: "https://yourwebsite.com/sluzby/tvorba-webu",
     languages: {
-      cs: "https://yourwebsite.com/cs/sluzby",
-      en: "https://yourwebsite.com/en/services",
+      cs: "https://yourwebsite.com/cs/sluzby/tvorba-webu",
+      en: "https://yourwebsite.com/en/services/web-development",
     },
   },
   verification: {
@@ -44,17 +49,17 @@ export const metadata: Metadata = {
     yandex: "YOUR_YANDEX_VERIFICATION_CODE",
   },
   openGraph: {
-    title: "Mé služby - Le Artist",
+    title: "Tvorba webů a webdesign | Le Artist",
     description:
-      "Osobně nabízím služby v oblasti webdesignu, grafiky, video editace, tvorby reklam, úprav Shoptetu, e-shopů, logo designu a maskotů – vše s individuálním přístupem pro Vaše specifické potřeby.",
-    url: "https://yourwebsite.com/sluzby",
+      "Profesionální tvorba moderních webových stránek a webdesign. Specializuji se na responzivní weby, e-shopy, landing pages a webové aplikace s důrazem na UX/UI design a SEO optimalizaci.",
+    url: "https://yourwebsite.com/sluzby/tvorba-webu",
     siteName: "Le Artist",
     images: [
       {
-        url: "https://yourwebsite.com/og-image-sluzby.jpg",
+        url: "https://yourwebsite.com/og-image-web.jpg",
         width: 1200,
         height: 630,
-        alt: "Mé služby - Le Artist",
+        alt: "Tvorba webů a webdesign - Le Artist",
       },
     ],
     locale: "cs_CZ",
@@ -62,21 +67,24 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Mé služby - Le Artist",
+    title: "Tvorba webů a webdesign | Le Artist",
     description:
-      "Nabízím osobní služby v oblasti webdesignu, grafiky, video editace, tvorby reklam, úprav Shoptetu, e-shopů, logo designu a maskotů. Kontaktujte mě pro individuální nabídku.",
-    images: ["https://yourwebsite.com/og-image-sluzby.jpg"],
+      "Profesionální tvorba moderních webových stránek, webdesign a web development. Responzivní weby, e-shopy a webové aplikace s důrazem na UX/UI.",
+    images: ["https://yourwebsite.com/og-image-web.jpg"],
   },
   authors: [{ name: "Le Artist", url: "https://yourwebsite.com" }],
   viewport: "width=device-width, initial-scale=1",
-  themeColor: "#ffffff",
+  themeColor: "#ff6b35",
   other: {
     abstract:
-      "Osobně poskytuju služby v oblasti webdesignu, grafiky, video editace, tvorby reklam, úprav Shoptetu, e-shopů, logo designu a maskotů, vždy s individuálním přístupem.",
+      "Profesionální služby v oblasti tvorby webových stránek, webdesign a web development s důrazem na moderní design, responzivitu a SEO optimalizaci.",
     distribution: "global",
     rating: "general",
     "revisit-after": "7 days",
     HandheldFriendly: "True",
+    "web-developer": "true",
+    "webdesign-specialist": "true",
+    "frontend-expert": "true",
   },
 };
 
@@ -85,9 +93,7 @@ export default function Home() {
     <>
       <Navbar />
       <WebServicesPage />
-      
-        <InvestmentSection />
-      
+      <InvestmentSection />
       <Footer />
     </>
   );

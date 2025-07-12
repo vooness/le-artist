@@ -1,41 +1,46 @@
 import Navbar from "../../components/Navbar";
- import InteractiveServicesPage from "../../components/cviceni";
- import Footer from "../../components/Footer";
+import InteractiveServicesPage from "../../components/cviceni";
+import Footer from "../../components/Footer";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Mé služby - Le Artist",
+  title: "Tvorba interaktivních cvičení a kvízů | Le Artist",
   description:
-    "Osobně nabízím širokou škálu služeb – od webdesignu a grafiky, přes video editaci, tvorbu reklam, úpravy Shoptetu, e-shopů, logo design, maskoty až po lektorství. Každou službu poskytuji s individuálním přístupem a maximální péčí o detail.",
+    "Specializuji se na tvorbu interaktivních cvičení, kvízů a edukačního obsahu. Vytvářím engaging e-learning materiály, online kurzy, interaktivní prezentace a vzdělávací aplikace s moderním designem a uživatelsky přívětivým rozhraním.",
   keywords: [
-    "mé služby",
-    "webdesign",
-    "grafika",
-    "video editace",
-    "tvorba reklam",
-    "reklamní kampaně",
-    "úpravy Shoptetu",
-    "e-shop",
-    "eshop",
-    "logo design",
-    "tvorba loga",
-    "maskoti",
-    "lektorství",
-    "osobní služby",
-    "profesionální služby",
-    "digitální marketing",
-    "branding",
-    "internetový obchod",
-    "reklamní design",
-    "online marketing",
-    "SEO"
+    "interaktivní cvičení",
+    "tvorba kvízů",
+    "interaktivní kvízy",
+    "e-learning",
+    "online kurzy",
+    "edukační obsah",
+    "vzdělávací materiály",
+    "interaktivní prezentace",
+    "gamifikace",
+    "vzdělávací aplikace",
+    "online výuka",
+    "digitální vzdělávání",
+    "interaktivní obsah",
+    "vzdělávací hry",
+    "mikrolearning",
+    "adaptive learning",
+    "quiz maker",
+    "educational design",
+    "instructional design",
+    "learning management",
+    "online assessment",
+    "interaktivní testy",
+    "vzdělávací platformy",
+    "custom e-learning",
+    "educational technology",
+    "learning experience"
   ],
   robots: { index: true, follow: true },
   alternates: {
-    canonical: "https://yourwebsite.com/sluzby",
+    canonical: "https://yourwebsite.com/sluzby/interaktivni-cviceni",
     languages: {
-      cs: "https://yourwebsite.com/cs/sluzby",
-      en: "https://yourwebsite.com/en/services",
+      cs: "https://yourwebsite.com/cs/sluzby/interaktivni-cviceni",
+      en: "https://yourwebsite.com/en/services/interactive-exercises",
     },
   },
   verification: {
@@ -43,17 +48,17 @@ export const metadata: Metadata = {
     yandex: "YOUR_YANDEX_VERIFICATION_CODE",
   },
   openGraph: {
-    title: "Mé služby - Le Artist",
+    title: "Tvorba interaktivních cvičení a kvízů | Le Artist",
     description:
-      "Osobně nabízím služby v oblasti webdesignu, grafiky, video editace, tvorby reklam, úprav Shoptetu, e-shopů, logo designu a maskotů – vše s individuálním přístupem pro Vaše specifické potřeby.",
-    url: "https://yourwebsite.com/sluzby",
+      "Profesionální tvorba interaktivních cvičení, kvízů a e-learning obsahu. Specializuji se na engaging vzdělávací materiály, online kurzy a interaktivní prezentace s moderním designem.",
+    url: "https://yourwebsite.com/sluzby/interaktivni-cviceni",
     siteName: "Le Artist",
     images: [
       {
-        url: "https://yourwebsite.com/og-image-sluzby.jpg",
+        url: "https://yourwebsite.com/og-image-interactive.jpg",
         width: 1200,
         height: 630,
-        alt: "Mé služby - Le Artist",
+        alt: "Interaktivní cvičení a kvízy - Le Artist",
       },
     ],
     locale: "cs_CZ",
@@ -61,21 +66,24 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Mé služby - Le Artist",
+    title: "Tvorba interaktivních cvičení a kvízů | Le Artist",
     description:
-      "Nabízím osobní služby v oblasti webdesignu, grafiky, video editace, tvorby reklam, úprav Shoptetu, e-shopů, logo designu a maskotů. Kontaktujte mě pro individuální nabídku.",
-    images: ["https://yourwebsite.com/og-image-sluzby.jpg"],
+      "Profesionální tvorba interaktivních cvičení, kvízů a e-learning obsahu. Engaging vzdělávací materiály a online kurzy s moderním designem.",
+    images: ["https://yourwebsite.com/og-image-interactive.jpg"],
   },
   authors: [{ name: "Le Artist", url: "https://yourwebsite.com" }],
   viewport: "width=device-width, initial-scale=1",
-  themeColor: "#ffffff",
+  themeColor: "#ff6b35",
   other: {
     abstract:
-      "Osobně poskytuju služby v oblasti webdesignu, grafiky, video editace, tvorby reklam, úprav Shoptetu, e-shopů, logo designu a maskotů, vždy s individuálním přístupem.",
+      "Profesionální služby v oblasti tvorby interaktivních cvičení, kvízů a e-learning obsahu pro moderní digitální vzdělávání a online kurzy.",
     distribution: "global",
     rating: "general",
     "revisit-after": "7 days",
     HandheldFriendly: "True",
+    "e-learning-specialist": "true",
+    "interactive-content-creator": "true",
+    "educational-designer": "true",
   },
 };
 
