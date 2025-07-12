@@ -11,7 +11,28 @@ import {
   Video,
   Film,
   Tv,
-  Youtube
+  Youtube,
+  Star,
+  Zap,
+  Shield,
+  Award,
+  TrendingUp,
+  Target,
+  Brush,
+  FileImage,
+  Monitor,
+  Crown,
+  Printer,
+  Image,
+  Layers,
+  Sparkles,
+  Mail,
+  ShoppingBag,
+  Edit3,
+  Play,
+  Headphones,
+  Camera,
+  Mic
 } from "lucide-react";
 
 // Předem definované hodnoty pro částice
@@ -231,18 +252,6 @@ const FuturisticBackground: React.FC = () => {
   );
 };
 
-// Futuristická položka s checkmarkem
-const FeatureItem: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  return (
-    <div className="flex items-start mb-4">
-      <div className="mr-3 mt-1 text-green-500 flex-shrink-0">
-        <Check className="w-5 h-5" />
-      </div>
-      <span className="text-gray-300">{children}</span>
-    </div>
-  );
-};
-
 // Futuristický balíček
 interface PricingPackageProps {
   title: string;
@@ -250,7 +259,7 @@ interface PricingPackageProps {
   features: string[];
   color: string;
   icon: React.ReactNode;
-  popular?: boolean;
+  isPopular?: boolean;
 }
 
 const PricingPackage: React.FC<PricingPackageProps> = ({ 
@@ -258,8 +267,7 @@ const PricingPackage: React.FC<PricingPackageProps> = ({
   price, 
   features, 
   color,
-  icon,
-  popular = false
+  icon
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   
@@ -268,17 +276,10 @@ const PricingPackage: React.FC<PricingPackageProps> = ({
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="relative rounded-lg overflow-hidden h-full"
+      className="relative rounded-lg overflow-hidden h-full flex flex-col"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Popular badge */}
-      {popular && (
-        <div className="absolute top-0 right-0 bg-pink-500 text-white text-xs font-medium px-3 py-1 rounded-bl-lg z-20">
-          Nejoblíbenější
-        </div>
-      )}
-      
       {/* Tenký border */}
       <div className="absolute inset-0 border border-slate-700/30 rounded-lg z-10"></div>
       
@@ -289,7 +290,7 @@ const PricingPackage: React.FC<PricingPackageProps> = ({
       <div className="absolute bottom-0 right-0 w-4 h-4 border-b border-r rounded-br-lg opacity-70" style={{ borderColor: color }}></div>
       
       {/* Hlavní pozadí */}
-      <div className="p-6 h-full bg-[#111827]/70 backdrop-blur-sm flex flex-col">
+      <div className="h-full bg-[#111827]/70 backdrop-blur-sm flex flex-col p-6">
         {/* Barevný gradient na pozadí při hoveru */}
         <motion.div 
           className="absolute inset-0 opacity-0 pointer-events-none rounded-lg"
@@ -302,27 +303,27 @@ const PricingPackage: React.FC<PricingPackageProps> = ({
           transition={{ duration: 0.3 }}
         />
         
-        {/* Ikona balíčku */}
-        <div 
-          className="w-12 h-12 rounded-full flex items-center justify-center mb-4"
-          style={{ 
-            backgroundColor: `${color}15`,
-            border: `1px solid ${color}30`
-          }}
-        >
-          <div style={{ color }}>{icon}</div>
+        {/* Název balíčku s ikonou - FIXED HEIGHT pro zarovnání */}
+        <div className="flex items-center mb-4 min-h-[3rem]">
+          <div 
+            className="w-10 h-10 rounded-lg flex items-center justify-center mr-3 flex-shrink-0"
+            style={{ 
+              backgroundColor: `${color}15`,
+              border: `1px solid ${color}30`
+            }}
+          >
+            <div style={{ color }}>{icon}</div>
+          </div>
+          <h3 
+            className="text-2xl font-bold leading-tight" 
+            style={{ color }}
+          >
+            {title}
+          </h3>
         </div>
         
-        {/* Název balíčku */}
-        <h3 
-          className="text-2xl font-bold mb-2" 
-          style={{ color }}
-        >
-          {title}
-        </h3>
-        
-        {/* Cena */}
-        <div className="mb-6">
+        {/* Cena - FIXED HEIGHT pro zarovnání */}
+        <div className="mb-6 min-h-[2.5rem] flex items-center">
           <div 
             className="text-xl font-bold inline-block px-4 py-1 rounded-full"
             style={{ 
@@ -351,7 +352,6 @@ const PricingPackage: React.FC<PricingPackageProps> = ({
   );
 };
 
-// Futuristický prvek procesu
 interface ProcessStepProps {
   number: number;
   title: string;
@@ -395,7 +395,7 @@ const VideoServicesPage: React.FC = () => {
       {/* Futuristické animované pozadí */}
       <FuturisticBackground />
       
-      <div className="max-w-5xl mx-auto relative z-10">
+      <div className="max-w-7xl mx-auto relative z-10">
         {/* Tlačítko zpět na hlavní stránku */}
         <div className="mb-10">
           <Link 
@@ -408,39 +408,91 @@ const VideoServicesPage: React.FC = () => {
         </div>
         
         {/* Hlavní nadpis */}
-        <div className="text-center mb-10">
-          <h1 className="text-5xl font-bold text-pink-500 mb-6">
-            Video tvorba
+        <div className="text-center mb-16">
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">
+            <span className="text-pink-500">Motion Graphics</span>{" "}
+            <span className="text-white">& Video editace</span>
           </h1>
           
-          <p className="text-gray-300 text-lg max-w-3xl mx-auto mb-8">
-            Profesionální video produkce pro vaše podnikání, sociální sítě nebo speciální příležitosti.
-            Od krátkých reklamních spotů až po komplexní firemní prezentace, vytvořím video,
-            které zaujme a přesvědčí.
+          <p className="text-gray-300 text-lg max-w-3xl mx-auto mb-10">
+            Specializuji se na motion graphics v Adobe After Effects a profesionální střih videí. 
+            Od animovaných reklam po střih podcastů - vytvořím video obsah, který zaujme a přesvědčí.
           </p>
           
-          {/* Hodinová sazba */}
-          <div className="flex justify-center mb-10">
-            <div className="px-6 py-3 rounded-lg border border-pink-500 bg-pink-500/10 backdrop-blur-sm flex items-center">
-              <Clock className="w-5 h-5 text-pink-500 mr-3" />
-              <span className="text-white font-medium">Hodinová sazba od</span>
-              <span className="text-pink-500 text-xl font-bold ml-2">800 Kč</span>
+          {/* Hook sekce */}
+          <div className="flex flex-col md:flex-row justify-center items-center gap-4 mb-10">
+            <div className="flex items-center px-4 py-2 bg-gradient-to-r from-green-500/20 to-green-600/20 border border-green-500/30 rounded-full">
+              <Zap className="w-5 h-5 text-green-400 mr-2" />
+              <span className="text-green-300 font-medium">Rychlé dodání</span>
+            </div>
+            <div className="flex items-center px-4 py-2 bg-gradient-to-r from-blue-500/20 to-blue-600/20 border border-blue-500/30 rounded-full">
+              <Shield className="w-5 h-5 text-blue-400 mr-2" />
+              <span className="text-blue-300 font-medium">After Effects & Premiere Pro</span>
             </div>
           </div>
           
           {/* Vlastnosti služby */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 max-w-3xl mx-auto">
-            <FeatureItem>Moderní střih a efekty</FeatureItem>
-            <FeatureItem>Profesionální color grading</FeatureItem>
-            <FeatureItem>Animované přechody</FeatureItem>
-            <FeatureItem>Hudba a zvukové efekty</FeatureItem>
-            <FeatureItem>Titulky a grafické prvky</FeatureItem>
-            <FeatureItem>Optimalizace pro web</FeatureItem>
+          <div className="mb-20 max-w-4xl mx-auto">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+              <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-3 sm:p-4 rounded-xl border border-green-500/20 backdrop-blur-sm">
+                <div className="flex items-center">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-500/20 rounded-lg flex items-center justify-center mr-2 sm:mr-3 flex-shrink-0">
+                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
+                  </div>
+                  <span className="text-white font-medium text-xs sm:text-base">Motion Graphics</span>
+                </div>
+              </div>
+              
+              <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-3 sm:p-4 rounded-xl border border-green-500/20 backdrop-blur-sm">
+                <div className="flex items-center">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-500/20 rounded-lg flex items-center justify-center mr-2 sm:mr-3 flex-shrink-0">
+                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
+                  </div>
+                  <span className="text-white font-medium text-xs sm:text-base">Animované bannery</span>
+                </div>
+              </div>
+              
+              <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-3 sm:p-4 rounded-xl border border-green-500/20 backdrop-blur-sm">
+                <div className="flex items-center">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-500/20 rounded-lg flex items-center justify-center mr-2 sm:mr-3 flex-shrink-0">
+                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
+                  </div>
+                  <span className="text-white font-medium text-xs sm:text-base">Střih podcastů</span>
+                </div>
+              </div>
+              
+              <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-3 sm:p-4 rounded-xl border border-green-500/20 backdrop-blur-sm">
+                <div className="flex items-center">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-500/20 rounded-lg flex items-center justify-center mr-2 sm:mr-3 flex-shrink-0">
+                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
+                  </div>
+                  <span className="text-white font-medium text-xs sm:text-base">Sociální média</span>
+                </div>
+              </div>
+              
+              <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-3 sm:p-4 rounded-xl border border-green-500/20 backdrop-blur-sm">
+                <div className="flex items-center">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-500/20 rounded-lg flex items-center justify-center mr-2 sm:mr-3 flex-shrink-0">
+                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
+                  </div>
+                  <span className="text-white font-medium text-xs sm:text-base">Firemní střih</span>
+                </div>
+              </div>
+              
+              <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-3 sm:p-4 rounded-xl border border-green-500/20 backdrop-blur-sm">
+                <div className="flex items-center">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-500/20 rounded-lg flex items-center justify-center mr-2 sm:mr-3 flex-shrink-0">
+                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
+                  </div>
+                  <span className="text-white font-medium text-xs sm:text-base">Color grading</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         
         {/* Přepínací záložky */}
-        <div className="flex justify-center mb-12">
+        <div className="flex justify-center mb-16">
           <div className="flex border-b border-slate-700">
             <button
               onClick={() => setActiveTab('pricing')}
@@ -487,127 +539,315 @@ const VideoServicesPage: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            {/* Balíčky služeb */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-              <PricingPackage
-                title="Reklamní spot"
-                price="od 8 000 Kč"
-                features={[
-                  "Délka do 30 sekund",
-                  "Střih z dodaných materiálů",
-                  "Základní barevné korekce",
-                  "Titulky a grafika",
-                  "Hudba a zvukové efekty",
-                  "2 revize zdarma",
-                  "Dodání do 7 dnů"
-                ]}
-                color="#EC4899"
-                icon={<Video className="w-6 h-6" />}
-              />
-              
-              <PricingPackage
-                title="Sociální sítě"
-                price="od 12 000 Kč"
-                features={[
-                  "Série 3-5 videí pro sociální média",
-                  "Délka do 60 sekund / video",
-                  "Jednotný vizuální styl",
-                  "Pokročilé barevné korekce",
-                  "Animované přechody a efekty",
-                  "3 revize zdarma",
-                  "Optimalizace pro různé platformy",
-                  "Dodání do 10 dnů"
-                ]}
-                color="#EC4899"
-                icon={<Youtube className="w-6 h-6" />}
-                popular={true}
-              />
-              
-              <PricingPackage
-                title="Firemní prezentace"
-                price="od 25 000 Kč"
-                features={[
-                  "Profesionální firemní video",
-                  "Délka 2-5 minut",
-                  "Komplexní příběh značky",
-                  "Pokročilý střih a efekty",
-                  "Animovaná grafika a logo",
-                  "Voice-over (namlouvání)",
-                  "Licencovaná hudba",
-                  "5 revizí zdarma",
-                  "Dodání do 21 dnů"
-                ]}
-                color="#EC4899"
-                icon={<Film className="w-6 h-6" />}
-              />
+            {/* Nadpis nad balíčky */}
+            <div className="text-center mb-16 max-w-4xl mx-auto">
+              <h3 className="text-2xl md:text-3xl font-bold mb-4 text-white">
+                Vyberte si službu podle vašich potřeb
+              </h3>
+              <p className="text-gray-300 text-base md:text-lg">
+                Motion graphics, animace a profesionální střih. 
+                Specializuji se na After Effects a Premiere Pro.
+              </p>
             </div>
-            
-            {/* Doplňkové služby */}
-            <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-6 mb-12">
-              <h3 className="text-xl font-bold text-white mb-4">Doplňkové služby</h3>
+
+            {/* Motion Graphics & Animace */}
+            <div className="mb-20">
+              <h4 className="text-2xl font-bold text-center mb-8 text-white">Motion Graphics & Animace</h4>
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div className="relative">
+                  <PricingPackage
+                    title="Animovaný banner"
+                    price="od 2 000 Kč"
+                    features={[
+                      "Jednoduchá animace - 15 sekund",
+                      "Základní formáty pro web",
+                      "2 revize zdarma",
+                      "GIF, MP4, HTML5 výstupy",
+                      "Dodání do 3 dnů"
+                    ]}
+                    color="#EC4899"
+                    icon={<Monitor className="w-5 h-5" />}
+                  />
+                </div>
+                
+                <div className="relative">
+                  {/* Badge nejoblíbenější - mimo balíček */}
+                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-20">
+                    <div className="flex items-center px-3 py-1.5 bg-gradient-to-r from-pink-500 to-pink-600 text-white rounded-full text-xs font-bold shadow-lg">
+                      <Star className="w-3 h-3 mr-1" />
+                      Nejoblíbenější
+                    </div>
+                  </div>
+                  <PricingPackage
+                    title="Produktová reklama"
+                    price="od 4 500 Kč"
+                    features={[
+                      "Střední komplexita - 15-30 sekund",
+                      "After Effects motion graphics",
+                      "3 revize zdarma",
+                      "Optimalizace pro sociální sítě",
+                      "Hudba a zvukové efekty",
+                      "Dodání do 7 dnů"
+                    ]}
+                    color="#EC4899"
+                    icon={<Sparkles className="w-5 h-5" />}
+                  />
+                </div>
+                
+                <div className="relative">
+                  <PricingPackage
+                    title="Animované logo"
+                    price="od 2 200 Kč"
+                    features={[
+                      "2-3 varianty animace",
+                      "Krátká animace - 3-5 sekund",
+                      "Intro/outro varianty",
+                      "Transparentní pozadí",
+                      "4K kvalita",
+                      "Dodání do 5 dnů"
+                    ]}
+                    color="#EC4899"
+                    icon={<Play className="w-5 h-5" />}
+                  />
+                </div>
+              </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="flex items-start">
-                  <div 
-                    className="mr-4 p-2 rounded-full"
-                    style={{ backgroundColor: 'rgba(236, 72, 153, 0.1)' }}
-                  >
-                    <Tv className="w-5 h-5 text-pink-500" />
+              {/* Doplňkové služby */}
+              <div className="mt-12 text-center">
+                <div className="max-w-3xl mx-auto bg-gradient-to-br from-slate-800/40 to-slate-700/20 p-6 rounded-xl border border-slate-700/30">
+                  <div className="flex items-center justify-center mb-3">
+                    <Mic className="w-5 h-5 text-pink-400 mr-2" />
+                    <h5 className="text-white font-bold">Doplňkové služby</h5>
                   </div>
-                  <div>
-                    <h4 className="font-bold text-white mb-1">Filmování</h4>
-                    <p className="text-sm text-gray-300">od 5 000 Kč / den</p>
+                  <p className="text-gray-300 text-sm">
+                    <strong className="text-pink-400">Voiceover a dabbing</strong> - Profesionální namluvení v češtině i angličtině, 
+                    čištění zvuku a synchronizace s videem. <strong className="text-pink-400">Cena od 1 500 Kč</strong>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Video editace & střih */}
+            <div className="mb-20">
+              <h4 className="text-2xl font-bold text-center mb-8 text-white">Video editace & střih</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+                <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-6 rounded-xl border border-pink-500/20">
+                  <div className="flex items-center mb-4">
+                    <Headphones className="w-6 h-6 text-pink-500 mr-3" />
+                    <h5 className="text-white font-bold">Střih podcastů</h5>
+                  </div>
+                  <p className="text-pink-400 font-bold text-lg mb-2">od 1 200 Kč</p>
+                  <p className="text-gray-300 text-sm">Čištění zvuku + střih + jednoduchý export</p>
+                </div>
+
+                <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-6 rounded-xl border border-pink-500/20">
+                  <div className="flex items-center mb-4">
+                    <Camera className="w-6 h-6 text-pink-500 mr-3" />
+                    <h5 className="text-white font-bold">Firemní video</h5>
+                  </div>
+                  <p className="text-pink-400 font-bold text-lg mb-2">od 1 800 Kč</p>
+                  <p className="text-gray-300 text-sm">Profesionální střih vašich záběrů</p>
+                </div>
+
+                <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-6 rounded-xl border border-pink-500/20">
+                  <div className="flex items-center mb-4">
+                    <Youtube className="w-6 h-6 text-pink-500 mr-3" />
+                    <h5 className="text-white font-bold">YouTube video</h5>
+                  </div>
+                  <p className="text-pink-400 font-bold text-lg mb-2">od 1 500 Kč</p>
+                  <p className="text-gray-300 text-sm">Střih + titulky + thumbnaily</p>
+                </div>
+
+                <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-6 rounded-xl border border-pink-500/20">
+                  <div className="flex items-center mb-4">
+                    <Edit3 className="w-6 h-6 text-pink-500 mr-3" />
+                    <h5 className="text-white font-bold">Color grading</h5>
+                  </div>
+                  <p className="text-pink-400 font-bold text-lg mb-2">od 600 Kč</p>
+                  <p className="text-gray-300 text-sm">Základní korekce barev a světel</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Balíčky pro sociální média */}
+            <div className="mb-20">
+              <h4 className="text-2xl font-bold text-center mb-8 text-white">Balíčky pro sociální média</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-6 rounded-xl border border-blue-500/20">
+                  <div className="flex items-center mb-4">
+                    <Target className="w-6 h-6 text-blue-400 mr-3" />
+                    <h5 className="text-white font-bold">Stories Pack</h5>
+                  </div>
+                  <p className="text-blue-400 font-bold text-lg mb-2">od 3 200 Kč</p>
+                  <p className="text-gray-300 text-sm">3 jednoduché animované stories</p>
+                </div>
+
+                <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-6 rounded-xl border border-blue-500/20">
+                  <div className="flex items-center mb-4">
+                    <Video className="w-6 h-6 text-blue-400 mr-3" />
+                    <h5 className="text-white font-bold">Reels Package</h5>
+                  </div>
+                  <p className="text-blue-400 font-bold text-lg mb-2">od 4 800 Kč</p>
+                  <p className="text-gray-300 text-sm">3 Reels/TikTok videa</p>
+                </div>
+
+                <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-6 rounded-xl border border-blue-500/20">
+                  <div className="flex items-center mb-4">
+                    <Sparkles className="w-6 h-6 text-blue-400 mr-3" />
+                    <h5 className="text-white font-bold">Ads Creative Set</h5>
+                  </div>
+                  <p className="text-blue-400 font-bold text-lg mb-2">od 8 500 Kč</p>
+                  <p className="text-gray-300 text-sm">Kompletní sada pro PPC kampaně</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Individuální projekty */}
+            <div className="mb-20 max-w-4xl mx-auto">
+              <div className="bg-gradient-to-br from-slate-800/40 to-slate-700/20 p-6 sm:p-8 rounded-xl border border-purple-500/30 text-center">
+                <div className="flex items-center justify-center mb-4">
+                  <Sparkles className="w-8 h-8 text-purple-400 mr-3" />
+                  <h4 className="text-xl font-bold text-white">Komplexní projekty na míru</h4>
+                </div>
+                <p className="text-gray-300 text-sm sm:text-base leading-relaxed mb-6">
+                  Potřebujete něco specifického? Vytvořím cenovou nabídku přesně podle vašich požadavků. 
+                  Specializuji se na motion graphics a pokročilé techniky v After Effects.
+                </p>
+                <div className="grid md:grid-cols-3 gap-4 mb-6">
+                  <div className="bg-purple-500/10 rounded-lg p-4 border border-purple-500/20">
+                    <h5 className="text-purple-300 font-bold mb-1">Explainer videa</h5>
+                    <p className="text-gray-400 text-sm">animovaná vysvětlující videa</p>
+                  </div>
+                  <div className="bg-purple-500/10 rounded-lg p-4 border border-purple-500/20">
+                    <h5 className="text-purple-300 font-bold mb-1">Dlouhodobá spolupráce</h5>
+                    <p className="text-gray-400 text-sm">měsíční balíčky obsahu</p>
+                  </div>
+                  <div className="bg-purple-500/10 rounded-lg p-4 border border-purple-500/20">
+                    <h5 className="text-purple-300 font-bold mb-1">Speciální efekty</h5>
+                    <p className="text-gray-400 text-sm">pokročilé VFX techniky</p>
                   </div>
                 </div>
-                
-                <div className="flex items-start">
-                  <div 
-                    className="mr-4 p-2 rounded-full"
-                    style={{ backgroundColor: 'rgba(236, 72, 153, 0.1)' }}
-                  >
-                    <Film className="w-5 h-5 text-pink-500" />
+                <Link href="/kontakt" className="inline-flex items-center px-6 py-3 rounded-lg bg-purple-500 text-white font-medium hover:bg-purple-600 transition-colors">
+                  <span>Nezávazná konzultace zdarma</span>
+                  <ChevronRight className="ml-2 w-5 h-5" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Proč motion graphics fungují */}
+            <div className="mb-20 max-w-5xl mx-auto">
+              <h3 className="text-3xl font-bold text-center mb-4 text-white">Proč motion graphics fungují?</h3>
+              <p className="text-center text-gray-300 text-lg mb-12 max-w-3xl mx-auto">
+                Animovaný obsah má až 1200% vyšší engagement než statické obrázky a je sdílen 3x častěji.
+              </p>
+              
+              {/* Statistiky */}
+              <div className="grid md:grid-cols-2 gap-6 mb-12">
+                <div className="bg-gradient-to-br from-slate-800/80 to-slate-700/60 p-6 rounded-xl border border-slate-700/50 backdrop-blur-sm">
+                  <div className="flex items-center mb-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+                      <span className="text-white font-bold text-lg">80%</span>
+                    </div>
+                    <div>
+                      <h4 className="text-white font-bold">Lepší zapamatování</h4>
+                      <p className="text-gray-400 text-sm">Video vs. text</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-bold text-white mb-1">Dodatečné revize</h4>
-                    <p className="text-sm text-gray-300">1 000 Kč / revize</p>
-                  </div>
+                  <p className="text-gray-300 text-sm">
+                    Lidé si zapamatují 80% z toho, co vidí a dělají, ale jen 20% z toho, co čtou.
+                  </p>
                 </div>
-                
-                <div className="flex items-start">
-                  <div 
-                    className="mr-4 p-2 rounded-full"
-                    style={{ backgroundColor: 'rgba(236, 72, 153, 0.1)' }}
-                  >
-                    <Youtube className="w-5 h-5 text-pink-500" />
+
+                <div className="bg-gradient-to-br from-slate-800/80 to-slate-700/60 p-6 rounded-xl border border-slate-700/50 backdrop-blur-sm">
+                  <div className="flex items-center mb-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+                      <span className="text-white font-bold text-lg">54x</span>
+                    </div>
+                    <div>
+                      <h4 className="text-white font-bold">Vyšší engagement</h4>
+                      <p className="text-gray-400 text-sm">Sociální sítě</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-bold text-white mb-1">Optimalizace pro YouTube</h4>
-                    <p className="text-sm text-gray-300">2 500 Kč</p>
-                  </div>
+                  <p className="text-gray-300 text-sm">
+                    Video obsah má 54x vyšší pravděpodobnost, že se objeví na první stránce Google.
+                  </p>
                 </div>
-                
-                <div className="flex items-start">
-                  <div 
-                    className="mr-4 p-2 rounded-full"
-                    style={{ backgroundColor: 'rgba(236, 72, 153, 0.1)' }}
-                  >
-                    <Video className="w-5 h-5 text-pink-500" />
+
+                <div className="bg-gradient-to-br from-slate-800/80 to-slate-700/60 p-6 rounded-xl border border-slate-700/50 backdrop-blur-sm">
+                  <div className="flex items-center mb-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+                      <span className="text-white font-bold text-lg">65%</span>
+                    </div>
+                    <div>
+                      <h4 className="text-white font-bold">Vyšší konverze</h4>
+                      <p className="text-gray-400 text-sm">Landing pages</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-bold text-white mb-1">Express dodání</h4>
-                    <p className="text-sm text-gray-300">+50% k ceně</p>
+                  <p className="text-gray-300 text-sm">
+                    Přidání videa na landing page může zvýšit konverze až o 65%.
+                  </p>
+                </div>
+
+                <div className="bg-gradient-to-br from-slate-800/80 to-slate-700/60 p-6 rounded-xl border border-slate-700/50 backdrop-blur-sm">
+                  <div className="flex items-center mb-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-pink-600 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+                      <span className="text-white font-bold text-lg">3x</span>
+                    </div>
+                    <div>
+                      <h4 className="text-white font-bold">Více sdílení</h4>
+                      <p className="text-gray-400 text-sm">Virální potenciál</p>
+                    </div>
+                  </div>
+                  <p className="text-gray-300 text-sm">
+                    Video obsah je sdílen 3x častěji než text a obrázky dohromady.
+                  </p>
+                </div>
+              </div>
+
+              {/* Moje odbornost */}
+              <div className="text-center mb-12">
+                <h4 className="text-2xl font-bold text-white mb-8">Moje odbornost</h4>
+                <div className="grid md:grid-cols-3 gap-6">
+                  <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-6 rounded-xl border border-emerald-500/30">
+                    <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+                      <Video className="w-6 h-6 text-white" />
+                    </div>
+                    <h5 className="text-white font-bold mb-2">After Effects Expert</h5>
+                    <p className="text-gray-300 text-sm">
+                      Pokročilé motion graphics, animace a VFX efekty v Adobe After Effects.
+                    </p>
+                  </div>
+
+                  <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-6 rounded-xl border border-cyan-500/30">
+                    <div className="w-12 h-12 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+                      <Edit3 className="w-6 h-6 text-white" />
+                    </div>
+                    <h5 className="text-white font-bold mb-2">Premiere Pro Specialist</h5>
+                    <p className="text-gray-300 text-sm">
+                      Profesionální střih, color grading a postprodukce všech typů videí.
+                    </p>
+                  </div>
+
+                  <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-6 rounded-xl border border-violet-500/30">
+                    <div className="w-12 h-12 bg-gradient-to-br from-violet-500 to-violet-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+                      <TrendingUp className="w-6 h-6 text-white" />
+                    </div>
+                    <h5 className="text-white font-bold mb-2">Marketing Focus</h5>
+                    <p className="text-gray-300 text-sm">
+                      Každé video vytvářím s důrazem na dosažení vašich obchodních cílů.
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
             
             {/* Kontaktní CTA */}
-            <div className="text-center">
-              <Link href="/kontakt" className="inline-flex items-center px-6 py-3 rounded-lg bg-pink-500 text-white font-medium hover:bg-pink-600 transition-colors">
+            <div className="text-center mt-16">
+              <Link href="/kontakt" className="inline-flex items-center px-4 sm:px-8 py-3 sm:py-4 rounded-lg bg-gradient-to-r from-pink-500 to-pink-600 text-white font-bold text-base sm:text-lg hover:from-pink-600 hover:to-pink-700 transition-all transform hover:scale-105 shadow-lg">
                 <span>Kontaktujte mě pro kalkulaci</span>
-                <ChevronRight className="ml-2 w-5 h-5" />
+                <ChevronRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5" />
               </Link>
-              <p className="text-gray-400 mt-4">
+              <p className="text-gray-400 mt-4 text-base sm:text-lg px-4">
                 Každý projekt je jedinečný. Kontaktujte mě pro nezávaznou konzultaci a přesnou kalkulaci.
               </p>
             </div>
@@ -622,182 +862,62 @@ const VideoServicesPage: React.FC = () => {
             className="max-w-3xl mx-auto"
           >
             {/* Proces tvorby */}
-            <div className="mb-16">
+            <div className="mb-20">
+              <div className="text-center mb-12">
+                <h3 className="text-2xl md:text-3xl font-bold mb-4 text-white">
+                  Jak probíhá tvorba motion graphics
+                </h3>
+                <p className="text-gray-300 text-base md:text-lg max-w-3xl mx-auto">
+                  Strukturovaný proces od briefingu po finální dodání zajišťuje, 
+                  že výsledné video bude přesně podle vašich představ a cílů.
+                </p>
+              </div>
+              
               <ProcessStep
                 number={1}
-                title="Konzultace a brief"
-                description="První krok zahrnuje důkladnou konzultaci vašich potřeb a cílů. Společně definujeme cílovou skupinu, klíčové sdělení, požadovaný styl a formát výsledného videa. Vytvořím podrobný brief, který bude základem pro celý projekt."
+                title="Kreativní briefing"
+                description="Proberu s vámi vizi, cíle a představy o videu. Analyzujeme cílovou skupinu, platformy kde bude video použito a definujeme klíčové prvky, které má video komunikovat."
               />
               
               <ProcessStep
                 number={2}
-                title="Scénář a koncept"
-                description="Na základě briefu vytvořím detailní scénář nebo koncept videa. V této fázi definujeme strukturu, obsah, klíčové záběry a případně i dialogy nebo voice-over texty. Po vaší zpětné vazbě koncept doladíme."
+                title="Koncept a storyboard"
+                description="Na základě briefingu vytvořím koncept a základní storyboard. U motion graphics navrhuji animační styl, u střihu stanovím strukturu a tempo videa."
               />
               
               <ProcessStep
                 number={3}
-                title="Produkce"
-                description="Pokud je součástí projektu natáčení, zorganizuji a provedu kompletní produkci včetně zajištění lokací, techniky a případných herců. Pokud pracujeme s existujícími materiály, v této fázi je shromáždíme a připravíme pro postprodukci."
+                title="Produkce v After Effects/Premiere"
+                description="Vytvořím animace v After Effects nebo provedu střih v Premiere Pro. Zahrnuje animace, efekty, color grading, zvukový design a všechny potřebné úpravy."
               />
               
               <ProcessStep
                 number={4}
-                title="Střih a postprodukce"
-                description="Následuje kreativní střih materiálů, barevné korekce, přidání grafických prvků, titulků, hudby a zvukových efektů. Vytvořím první verzi videa, kterou vám předložím k připomínkám."
+                title="Revize a doladění"
+                description="Předložím první verzi k připomínkám. Podle vašich požadavků provedu revize a doladíme každý detail do finální podoby."
               />
               
               <ProcessStep
                 number={5}
-                title="Revize a finalizace"
-                description="Na základě vašich připomínek provedu potřebné úpravy a finální doladění produktu. Tento proces opakujeme, dokud nebudete s výsledkem naprosto spokojeni. Poté probíhá finální export v požadovaných formátech."
+                title="Finální export a dodání"
+                description="Připravím finální verze ve všech potřebných formátech a rozlišeních optimalizovaných pro různé platformy (web, sociální sítě, TV)."
                 isLast
               />
             </div>
             
-            {/* Portfolio ukázky */}
-            <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-6 mb-12">
-              <h3 className="text-xl font-bold text-white mb-6">Ukázky z mého portfolia</h3>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="rounded-lg overflow-hidden border border-slate-700 hover:border-pink-500/50 transition-colors">
-                  <Link href="/portfolio/video-1" className="block aspect-video bg-slate-900/80 items-center justify-center">
-                    <div className="text-pink-500 hover:text-pink-400 transition-colors">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                      </svg>
-                    </div>
-                  </Link>
-                  <div className="p-3">
-                    <h4 className="font-bold text-white">Promo video XYZ Company</h4>
-                    <p className="text-sm text-gray-400">Reklamní spot, 2024</p>
-                  </div>
-                </div>
-                
-                <div className="rounded-lg overflow-hidden border border-slate-700 hover:border-pink-500/50 transition-colors">
-                  <Link href="/portfolio/video-2" className="aspect-video bg-slate-900/80 flex items-center justify-center">
-                    <div className="text-pink-500 hover:text-pink-400 transition-colors">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                      </svg>
-                    </div>
-                  </Link>
-                  <div className="p-3">
-                    <h4 className="font-bold text-white">Sada videí pro sociální sítě</h4>
-                    <p className="text-sm text-gray-400">Série 5 videí, 2023</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="text-center mt-6">
-                <Link href="/portfolio/video" className="inline-flex items-center text-pink-500 hover:text-pink-400 transition-colors">
-                  <span>Prohlédnout kompletní portfolio</span>
-                  <ChevronRight className="ml-1 w-4 h-4" />
-                </Link>
-              </div>
-            </div>
-            
             {/* Postup CTA */}
-            <div className="text-center p-6 border border-slate-700 rounded-lg bg-slate-800/30">
-              <h4 className="text-xl font-bold text-white mb-4">Připraveni na video produkci?</h4>
+            <div className="text-center p-6 border border-slate-700 rounded-lg bg-slate-800/30 mt-12">
+              <h4 className="text-xl font-bold text-white mb-4">Máte zájem o spolupráci?</h4>
               <p className="text-gray-300 mb-6">
-                Kontaktujte mě pro nezávaznou konzultaci a společně vytvořme video, 
-                které bude efektivně komunikovat vaše poselství.
+                Ať už potřebujete animovanou reklamu, střih podcastu nebo komplexní motion graphics projekt, rád vám pomohu vytvořit video obsah, který zaujme.
               </p>
               <Link href="/kontakt" className="inline-flex items-center px-6 py-3 rounded-lg bg-pink-500 text-white font-medium hover:bg-pink-600 transition-colors">
-                <span>Promluvme si o vašem projektu</span>
+                <span>Nezávazná konzultace</span>
                 <ChevronRight className="ml-2 w-5 h-5" />
               </Link>
             </div>
           </motion.div>
         )}
-      </div>
-
-      {/* FAQ Sekce */}
-      <div className="max-w-4xl mx-auto mt-20 relative z-10">
-        <h2 className="text-3xl font-bold text-white text-center mb-10">
-          Často kladené otázky
-        </h2>
-
-        <div className="space-y-6">
-          {/* FAQ Item 1 */}
-          <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-6">
-            <h3 className="text-xl font-bold text-white mb-3">Jak probíhá celý proces tvorby videa?</h3>
-            <p className="text-gray-300">
-              Proces začíná úvodní konzultací, kde detailně rozebereme vaše potřeby a očekávání. 
-              Následuje vypracování konceptu a scénáře, který po schválení realizujeme. 
-              Po natáčení nebo shromáždění materiálů přichází na řadu střih, grafika, zvuk a finální 
-              úpravy. Celý proces je transparentní a máte možnost vstupovat do něj ve formě revizí.
-            </p>
-          </div>
-
-          {/* FAQ Item 2 */}
-          <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-6">
-            <h3 className="text-xl font-bold text-white mb-3">Musím dodat vlastní záběry nebo zajistíte i natáčení?</h3>
-            <p className="text-gray-300">
-              Obě varianty jsou možné. Mohu pracovat s materiály, které mi dodáte vy, 
-              nebo zajistit kompletní produkci včetně natáčení. Pro natáčení mám k dispozici 
-              profesionální vybavení a v případě potřeby spolupracuji s dalšími profesionály 
-              (kameramany, zvukaři, osvětlovači).
-            </p>
-          </div>
-
-          {/* FAQ Item 3 */}
-          <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-6">
-            <h3 className="text-xl font-bold text-white mb-3">Na jakých platformách lze výsledné video použít?</h3>
-            <p className="text-gray-300">
-              Videa vytvářím tak, aby byla použitelná na všech běžných platformách - webové stránky, 
-              YouTube, Facebook, Instagram, LinkedIn a další. Pro každou platformu mohu připravit 
-              specifickou verzi videa s optimálními parametry (poměr stran, délka, formát).
-            </p>
-          </div>
-
-          {/* FAQ Item 4 */}
-          <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-6">
-            <h3 className="text-xl font-bold text-white mb-3">Jak je to s hudebním podkladem a licencemi?</h3>
-            <p className="text-gray-300">
-              Pro projekty zajišťuji licencovanou hudbu z profesionálních hudebních knihoven, 
-              které umožňují komerční použití. Všechny použité skladby mají platné licence, 
-              aby nedocházelo k porušení autorských práv. V případě specifických požadavků 
-              na hudbu je možné zajistit i tvorbu originálního hudebního podkladu.
-            </p>
-          </div>
-
-          {/* FAQ Item 5 */}
-          <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-6">
-            <h3 className="text-xl font-bold text-white mb-3">Jak dlouho trvá tvorba videa?</h3>
-            <p className="text-gray-300">
-              Délka procesu závisí na komplexnosti projektu. Jednoduchý reklamní spot 
-              lze vytvořit během jednoho týdne, zatímco komplexní firemní prezentace 
-              může trvat 3-4 týdny. Přesný časový harmonogram stanovíme během úvodní 
-              konzultace. V případě potřeby je možné zajistit express dodání za příplatek.
-            </p>
-          </div>
-        </div>
-      </div>
-
-     
-
-      {/* Závěrečná CTA */}
-      <div className="max-w-4xl mx-auto mt-20 mb-10 relative z-10">
-        <div className="bg-gradient-to-r from-pink-500/20 to-pink-600/20 rounded-xl p-8 border border-pink-500/30">
-          <h2 className="text-2xl md:text-3xl font-bold text-white text-center mb-6">
-            Připraveni posunout vaši komunikaci na další úroveň?
-          </h2>
-          <p className="text-gray-200 text-center mb-8 max-w-3xl mx-auto">
-            Video je nejúčinnější způsob, jak zaujmout a přesvědčit vaše publikum. Kontaktujte mě 
-            pro nezávaznou konzultaci a společně najdeme nejlepší řešení pro vaši značku nebo projekt.
-          </p>
-          <div className="flex justify-center">
-            <Link 
-              href="/kontakt" 
-              className="inline-flex items-center px-8 py-4 rounded-lg bg-pink-500 text-white font-medium hover:bg-pink-600 transition-colors"
-            >
-              <span>Vytvořme skvělé video</span>
-              <ChevronRight className="ml-2 w-5 h-5" />
-            </Link>
-          </div>
-        </div>
       </div>
     </section>
   );

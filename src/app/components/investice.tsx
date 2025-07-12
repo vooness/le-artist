@@ -305,7 +305,7 @@ const InvestmentSection = () => {
         <div className={`grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-10 items-center transition-all duration-700 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           {/* Left side - Why cheap websites aren't enough */}
           <div className="relative rounded-md overflow-hidden group hover:-translate-y-1 transition-all duration-300">
-            <div className="absolute inset-0 bg-[#0f1629] opacity-90"></div>
+            <div className="absolute inset-0 bg-[#111827]/70 "></div>
             <div className="absolute inset-0 border border-white/10 overflow-hidden">
               {/* Scan efekt - jen na desktopu */}
               {!isMobile && (

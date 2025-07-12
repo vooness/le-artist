@@ -1,5 +1,5 @@
 import Navbar from "../../components/Navbar";
-import OnlineCoursesPage from "../../components/onlinekurz3";
+import OnlineCoursesPage from "../../components/onlinekurz1";
 import Footer from "../../components/Footer";
 import type { Metadata } from "next";
 

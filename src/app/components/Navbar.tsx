@@ -4,12 +4,75 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { FaPaw, FaEnvelope, FaCog, FaCode, FaUser, FaQuestionCircle, FaTimes, FaIdCard, FaUserCircle } from "react-icons/fa";
+import { 
+  FaPaw, 
+  FaEnvelope, 
+  FaCog, 
+  FaCode, 
+  FaUser, 
+  FaQuestionCircle, 
+  FaTimes, 
+  FaIdCard, 
+  FaUserCircle,
+  FaChevronDown,
+  FaGlobe,
+  FaShoppingCart,
+  FaPaintBrush,
+  FaVideo,
+  FaGamepad,
+  FaGraduationCap
+} from "react-icons/fa";
+
+// Definice služeb pro dropdown
+const serviceItems = [
+  {
+    title: "Webové stránky",
+    href: "/sluzby/web",
+    icon: <FaGlobe className="text-orange-500" />,
+    description: "Moderní responzivní weby"
+  },
+  {
+    title: "Shoptet e-shop",
+    href: "/sluzby/shoptet",
+    icon: <FaShoppingCart className="text-orange-500" />,
+    description: "Kompletní e-shop řešení"
+  },
+  {
+    title: "Grafický design",
+    href: "/sluzby/Grafika",
+    icon: <FaPaintBrush className="text-blue-400" />,
+    description: "Loga a vizuální identita"
+  },
+  {
+    title: "Video tvorba",
+    href: "/sluzby/videa",
+    icon: <FaVideo className="text-pink-400" />,
+    description: "Střih videí a reklam"
+  },
+  {
+    title: "Interaktivní kvízy",
+    href: "/sluzby/interaktivnicviceni",
+    icon: <FaGamepad className="text-indigo-400" />,
+    description: "E-learning moduly"
+  },
+  {
+    title: "Online kurzy",
+    href: "/sluzby/onlinekurzy",
+    icon: <FaGraduationCap className="text-sky-400" />,
+    description: "Interaktivní vzdělávání"
+  }
+];
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const mobileMenuRef = useRef<HTMLDivElement | null>(null);
+  const servicesRef = useRef<HTMLDivElement | null>(null);
+  const dropdownTimeout = useRef<NodeJS.Timeout | null>(null);
 
   // Optimalizovaný listener pro scrollování pomocí Intersection Observer
   useEffect(() => {
@@ -54,6 +117,47 @@ const Navbar: React.FC = () => {
     document.documentElement.style.overflow = isOpen ? "hidden" : "";
   }, [isOpen]);
 
+  // Funkce pro dropdown menu
+  const handleDropdownEnter = () => {
+    if (dropdownTimeout.current) {
+      clearTimeout(dropdownTimeout.current);
+    }
+    setIsDropdownOpen(true);
+  };
+
+  const handleDropdownLeave = () => {
+    dropdownTimeout.current = setTimeout(() => {
+      setIsDropdownOpen(false);
+    }, 150);
+  };
+
+  // Funkce pro mobilní služby dropdown
+  const handleMobileServicesToggle = (event: React.MouseEvent) => {
+    event.stopPropagation(); // Zabrání propagaci eventu
+    event.preventDefault();
+    
+    setIsMobileServicesOpen(!isMobileServicesOpen);
+    
+    // Automatické scrollování
+    setTimeout(() => {
+      if (mobileMenuRef.current && servicesRef.current) {
+        if (!isMobileServicesOpen) {
+          // Otevírá se - scrolluj na služby
+          servicesRef.current.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
+          });
+        } else {
+          // Zavírá se - scrolluj nahoru
+          mobileMenuRef.current.scrollTo({ 
+            top: 0, 
+            behavior: 'smooth' 
+          });
+        }
+      }
+    }, 100);
+  };
+
   // Animační varianty pro hamburger menu
   const hamburgerVariants = {
     closed: {
@@ -66,13 +170,8 @@ const Navbar: React.FC = () => {
     }
   };
 
-  // Menu položky s ikonami
+  // Menu položky s ikonami (bez "Služby a ceník")
   const menuItems = [
-    {
-      title: "Služby a ceník",
-      href: "/sluzby",
-      icon: <FaCog className="text-orange-500" />
-    },
     {
       title: "Portfolio",
       href: "/portfolio",
@@ -114,6 +213,110 @@ const Navbar: React.FC = () => {
 
           {/* Desktop Menu */}
           <ul className="hidden lg:flex items-center gap-8">
+            {/* Služby dropdown */}
+            <li className="relative">
+              <div
+                ref={dropdownRef}
+                onMouseEnter={handleDropdownEnter}
+                onMouseLeave={handleDropdownLeave}
+                className="relative"
+              >
+                <div className="group relative text-white font-medium hover:text-orange-400 transition flex items-center cursor-pointer">
+                  <span className="mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <FaCog className="text-orange-500" />
+                  </span>
+                  <span>Služby a ceník</span>
+                  <motion.div
+                    animate={{ rotate: isDropdownOpen ? 180 : 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="ml-2"
+                  >
+                    <FaChevronDown className="w-3 h-3" />
+                  </motion.div>
+                  <motion.span
+                    className="absolute left-0 bottom-0 h-[2px] bg-gradient-to-r from-orange-500 to-transparent"
+                    initial={{ width: 0 }}
+                    whileHover={{ width: "100%" }}
+                    transition={{ duration: 0.3 }}
+                  />
+                </div>
+
+                {/* Dropdown Menu */}
+                <AnimatePresence>
+                  {isDropdownOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                      transition={{ duration: 0.2, ease: "easeOut" }}
+                      className="absolute top-full left-0 mt-2 w-80 bg-[#0f172a]/95 backdrop-blur-md rounded-lg border border-orange-500/20 shadow-2xl overflow-hidden"
+                    >
+                      {/* Dropdown Header */}
+                      <div className="p-4 border-b border-orange-500/20 bg-gradient-to-r from-orange-500/10 to-transparent">
+                        <h3 className="text-white font-semibold text-sm">Všechny služby</h3>
+                        <p className="text-gray-400 text-xs mt-1">Kompletní přehled nabídky</p>
+                      </div>
+
+                      {/* Dropdown Items */}
+                      <div className="py-2">
+                        {serviceItems.map((service, idx) => (
+                          <motion.div
+                            key={idx}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: idx * 0.05, duration: 0.2 }}
+                          >
+                            <Link
+                              href={service.href}
+                              className="group flex items-center px-4 py-3 text-white hover:bg-orange-500/10 hover:text-orange-400 transition-all duration-200"
+                            >
+                              <motion.span 
+                                className="mr-3 text-lg"
+                                whileHover={{ scale: 1.2, rotate: 5 }}
+                                transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                              >
+                                {service.icon}
+                              </motion.span>
+                              <div className="flex-1">
+                                <div className="font-medium text-sm group-hover:translate-x-1 transition-transform duration-200">
+                                  {service.title}
+                                </div>
+                                <div className="text-xs text-gray-400 group-hover:text-gray-300 transition-colors">
+                                  {service.description}
+                                </div>
+                              </div>
+                              <motion.div
+                                className="opacity-0 group-hover:opacity-100 transition-opacity"
+                                whileHover={{ x: 3 }}
+                              >
+                                <svg className="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                </svg>
+                              </motion.div>
+                            </Link>
+                          </motion.div>
+                        ))}
+                      </div>
+
+                      {/* Dropdown Footer */}
+                      <div className="p-4 border-t border-orange-500/20 bg-gradient-to-r from-orange-500/5 to-transparent">
+                        <Link
+                          href="/sluzby"
+                          className="flex items-center justify-center px-4 py-2 bg-gradient-to-r from-orange-600 to-orange-500 text-white rounded text-sm font-medium hover:from-orange-500 hover:to-orange-400 transition-all duration-200"
+                        >
+                          <span>Zobrazit všechny služby</span>
+                          <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                          </svg>
+                        </Link>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </li>
+
+            {/* Ostatní menu položky */}
             {menuItems.map((item, idx) => (
               <li key={idx}>
                 <Link
@@ -230,15 +433,131 @@ const Navbar: React.FC = () => {
               </motion.button>
             </motion.div>
 
-            {/* Animované menu položky */}
-            <div className="pt-4">
-              {menuItems.map((item, idx) => (
+            {/* Scrollable menu content */}
+            <div 
+              ref={mobileMenuRef}
+              className="flex-1 overflow-y-auto" 
+              style={{ maxHeight: 'calc(100vh - 300px)' }}
+            >
+              <div className="pt-4 pb-4">
+                {/* Služby expandovatelná sekce */}
                 <motion.div
-                  key={idx}
+                  ref={servicesRef}
                   initial={{ opacity: 0, x: 50, scale: 0.9 }}
                   animate={{ opacity: 1, x: 0, scale: 1 }}
                   transition={{ 
-                    delay: 0.15 + (idx * 0.08),
+                    delay: 0.15,
+                    duration: 0.4,
+                    ease: "easeOut",
+                    type: "spring",
+                    stiffness: 200,
+                    damping: 20
+                  }}
+                >
+                  <button
+                    onClick={handleMobileServicesToggle}
+                    className="flex items-center justify-between w-full px-6 py-4 text-white hover:bg-orange-500/10 hover:text-orange-400 transition-all duration-200 border-b border-gray-800/30 group"
+                  >
+                    <div className="flex items-center">
+                      <motion.span 
+                        className="mr-4 text-lg"
+                        whileHover={{ scale: 1.2, rotate: 5 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                      >
+                        <FaCog className="text-orange-500" />
+                      </motion.span>
+                      <span className="font-medium group-hover:translate-x-1 transition-transform duration-200 text-sm">Služby a ceník</span>
+                    </div>
+                    <motion.div
+                      animate={{ rotate: isMobileServicesOpen ? 180 : 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <FaChevronDown className="w-3 h-3 text-orange-500" />
+                    </motion.div>
+                  </button>
+
+                  {/* Expandovatelné služby */}
+                  <AnimatePresence mode="wait">
+                    {isMobileServicesOpen && (
+                      <motion.div
+                        key="mobile-services"
+                        initial={{ maxHeight: 0, opacity: 0 }}
+                        animate={{ maxHeight: "400px", opacity: 1 }}
+                        exit={{ maxHeight: 0, opacity: 0 }}
+                        transition={{ duration: 0.4, ease: "easeInOut" }}
+                        className="overflow-hidden bg-[#0a0f1c]/50"
+                      >
+                        {serviceItems.map((service, idx) => (
+                          <motion.div
+                            key={idx}
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: 20 }}
+                            transition={{ 
+                              delay: idx * 0.05,
+                              duration: 0.2,
+                              ease: "easeOut"
+                            }}
+                          >
+                            <Link
+                              href={service.href}
+                              onClick={() => setIsOpen(false)}
+                              className="flex items-center px-12 py-3 text-white hover:bg-orange-500/10 hover:text-orange-400 transition-all duration-200 border-b border-gray-800/20 group"
+                            >
+                              <motion.span 
+                                className="mr-3 text-base"
+                                whileHover={{ scale: 1.2, rotate: 5 }}
+                                transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                              >
+                                {service.icon}
+                              </motion.span>
+                              <span className="font-medium group-hover:translate-x-1 transition-transform duration-200 text-sm">{service.title}</span>
+                            </Link>
+                          </motion.div>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+
+                {/* Ostatní menu položky */}
+                {menuItems.map((item, idx) => (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, x: 50, scale: 0.9 }}
+                    animate={{ opacity: 1, x: 0, scale: 1 }}
+                    transition={{ 
+                      delay: 0.25 + (idx * 0.06),
+                      duration: 0.4,
+                      ease: "easeOut",
+                      type: "spring",
+                      stiffness: 200,
+                      damping: 20
+                    }}
+                  >
+                    <Link
+                      href={item.href}
+                      onClick={() => setIsOpen(false)}
+                      className="flex items-center px-6 py-4 text-white hover:bg-orange-500/10 hover:text-orange-400 transition-all duration-200 border-b border-gray-800/30 group"
+                    >
+                      <motion.span 
+                        className="mr-4 text-lg"
+                        whileHover={{ scale: 1.2, rotate: 5 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                      >
+                        {item.icon}
+                      </motion.span>
+                      <span className="font-medium group-hover:translate-x-1 transition-transform duration-200 text-sm">{item.title}</span>
+                    </Link>
+                  </motion.div>
+                ))}
+                
+                {/* Kontakt v menu s animací */}
+                <motion.div
+                  initial={{ opacity: 0, x: 50, scale: 0.9 }}
+                  animate={{ opacity: 1, x: 0, scale: 1 }}
+                  transition={{ 
+                    delay: 0.25 + (menuItems.length * 0.06),
                     duration: 0.4,
                     ease: "easeOut",
                     type: "spring",
@@ -247,55 +566,26 @@ const Navbar: React.FC = () => {
                   }}
                 >
                   <Link
-                    href={item.href}
+                    href="/kontakt"
                     onClick={() => setIsOpen(false)}
                     className="flex items-center px-6 py-4 text-white hover:bg-orange-500/10 hover:text-orange-400 transition-all duration-200 border-b border-gray-800/30 group"
                   >
                     <motion.span 
-                      className="mr-4 text-xl"
+                      className="mr-4 text-lg"
                       whileHover={{ scale: 1.2, rotate: 5 }}
                       transition={{ type: "spring", stiffness: 400, damping: 15 }}
                     >
-                      {item.icon}
+                      <FaEnvelope className="text-orange-500" />
                     </motion.span>
-                    <span className="font-medium group-hover:translate-x-1 transition-transform duration-200">{item.title}</span>
+                    <span className="font-medium group-hover:translate-x-1 transition-transform duration-200 text-sm">Kontakt</span>
                   </Link>
                 </motion.div>
-              ))}
-              
-              {/* Kontakt v menu s animací */}
-              <motion.div
-                initial={{ opacity: 0, x: 50, scale: 0.9 }}
-                animate={{ opacity: 1, x: 0, scale: 1 }}
-                transition={{ 
-                  delay: 0.15 + (menuItems.length * 0.08),
-                  duration: 0.4,
-                  ease: "easeOut",
-                  type: "spring",
-                  stiffness: 200,
-                  damping: 20
-                }}
-              >
-                <Link
-                  href="/kontakt"
-                  onClick={() => setIsOpen(false)}
-                  className="flex items-center px-6 py-4 text-white hover:bg-orange-500/10 hover:text-orange-400 transition-all duration-200 border-b border-gray-800/30 group"
-                >
-                  <motion.span 
-                    className="mr-4 text-xl"
-                    whileHover={{ scale: 1.2, rotate: 5 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 15 }}
-                  >
-                    <FaEnvelope className="text-orange-500" />
-                  </motion.span>
-                  <span className="font-medium group-hover:translate-x-1 transition-transform duration-200">Kontakt</span>
-                </Link>
-              </motion.div>
+              </div>
             </div>
 
-            {/* Animovaný spodní kontaktní panel */}
+            {/* Spodní kontaktní panel - RELATIVNÍ POZICE místo absolutní */}
             <motion.div
-              className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[#0f172a] to-transparent"
+              className="mt-auto p-6 bg-gradient-to-t from-[#0f172a] to-transparent border-t border-gray-800/30"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ 

@@ -1,14 +1,59 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import ParticlesBackground from "./ParticlesBakckground";
 
-const IntroSection: React.FC = () => {
-  const sectionRef = useRef<HTMLElement>(null);
+const IntroSection = () => {
+  const sectionRef = useRef(null);
   const [hoveredServiceId, setHoveredServiceId] = useState<number | null>(null);
-  const [isMobileOrTablet, setIsMobileOrTablet] = useState<boolean>(false);
+  const [isMobileOrTablet, setIsMobileOrTablet] = useState(false);
+  const [currentTestimonial, setCurrentTestimonial] = useState(0);
+
+  const testimonials = [
+    {
+      text: "Konečně web, který skutečně prodává! Náš e-shop teď generuje objednávky i v noci.",
+      author: "Martin K.",
+      business: "E-shop s outdoor vybavením",
+      rating: 5,
+      metric: "+180% prodeje"
+    },
+    {
+      text: "Investice se vrátila už za 2 měsíce. Konverze vzrostly o 150%!",
+      author: "Jana S.", 
+      business: "Online kurzy",
+      rating: 5,
+      metric: "+150% konverze"
+    },
+    {
+      text: "Nejlepší rozhodnutí pro náš byznys. Profesionální přístup a skvělé výsledky.",
+      author: "Petr M.",
+      business: "Konzultační služby", 
+      rating: 5,
+      metric: "+90% klientů"
+    },
+    {
+      text: "Naše škola konečně má moderní systém. Studenti jsou nadšení!",
+      author: "Mgr. Kateřina V.",
+      business: "ZŠ Vinohrady",
+      rating: 5,
+      metric: "95% spokojenost"
+    },
+    {
+      text: "Rychlost, kvalita a férový přístup. Doporučuji všem!",
+      author: "Tomáš L.",
+      business: "Stavební firma",
+      rating: 5,
+      metric: "+200% kontakty"
+    },
+    {
+      text: "Díky novému webu máme konečně více zákazníků než stihneme.",
+      author: "Eva K.",
+      business: "Designové studio",
+      rating: 5,
+      metric: "+120% objednávky"
+    }
+  ];
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -19,9 +64,69 @@ const IntroSection: React.FC = () => {
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
-  // Pouze desktop hover efekt
-  const isHovered = (id: number) =>
-    !isMobileOrTablet && hoveredServiceId === id;
+  useEffect(() => {
+    if (isMobileOrTablet) {
+      const interval = setInterval(() => {
+        setCurrentTestimonial(prev => (prev + 1) % testimonials.length);
+      }, 4000);
+
+      return () => clearInterval(interval);
+    }
+  }, [isMobileOrTablet, testimonials.length]);
+
+  const isHovered = (id: number | null) => !isMobileOrTablet && hoveredServiceId === id;
+
+  const TestimonialCard = ({ testimonial, isMobile = false }: { 
+    testimonial: typeof testimonials[0], 
+    isMobile?: boolean 
+  }) => (
+    <div className={`${isMobile ? 'w-full' : 'flex-shrink-0 w-96'} relative group`}>
+      <div className="absolute -inset-0.5 bg-gradient-to-br from-orange-500/0 via-orange-500/30 to-orange-600/0 rounded-2xl blur opacity-0 group-hover:opacity-100 transition duration-500" />
+      
+      <div className={`relative ${isMobile ? 'p-6' : 'p-8'} bg-slate-800/80 rounded-2xl border border-slate-700/50 backdrop-blur-sm group-hover:border-orange-500/30 transition-all duration-300 h-full`}>
+        <div className="absolute top-0 left-8 right-8 h-0.5 bg-gradient-to-r from-transparent via-orange-400 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        
+        <div className={`flex justify-between items-start ${isMobile ? 'mb-4' : 'mb-6'}`}>
+          <div className="flex space-x-1">
+            {[...Array(testimonial.rating)].map((_, i) => (
+              <span key={i} className={`text-yellow-400 ${isMobile ? 'text-lg' : 'text-xl'}`}>⭐</span>
+            ))}
+          </div>
+          <div className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 px-3 py-1.5 rounded-full flex items-center justify-center">
+            <span className="text-green-400 text-sm font-bold">
+              {testimonial.metric}
+            </span>
+          </div>
+        </div>
+        
+        <div className={`relative ${isMobile ? 'mb-6' : 'mb-8'}`}>
+          <div className={`absolute -top-2 -left-2 text-orange-400/30 ${isMobile ? 'text-3xl' : 'text-4xl'} font-serif`}>"</div>
+          <p className={`text-gray-200 ${isMobile ? 'text-base' : 'text-lg'} leading-relaxed italic pl-6 pr-2`}>
+            {testimonial.text}
+          </p>
+          <div className={`absolute -bottom-2 -right-2 text-orange-400/30 ${isMobile ? 'text-3xl' : 'text-4xl'} font-serif rotate-180`}>"</div>
+        </div>
+        
+        <div className={`flex items-center space-x-4 ${isMobile ? 'pt-4' : 'pt-6'} border-t border-slate-700/50`}>
+          <div className={`${isMobile ? 'w-10 h-10' : 'w-12 h-12'} bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center`}>
+            <span className={`text-white font-bold ${isMobile ? 'text-base' : 'text-lg'}`}>
+              {testimonial.author.charAt(0)}
+            </span>
+          </div>
+          <div>
+            <p className={`text-orange-400 font-bold ${isMobile ? 'text-sm' : 'text-base'}`}>
+              {testimonial.author}
+            </p>
+            <p className={`text-gray-400 ${isMobile ? 'text-xs' : 'text-sm'}`}>
+              {testimonial.business}
+            </p>
+          </div>
+        </div>
+
+        <div className="absolute bottom-0 left-8 right-8 h-0.5 bg-gradient-to-r from-transparent via-orange-400/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      </div>
+    </div>
+  );
 
   const services = [
     {
@@ -178,24 +283,24 @@ const IntroSection: React.FC = () => {
 
   const benefits = [
     {
-      title: "Bezplatná konzultace",
-      desc: "Probereme váš projekt nezávazně",
-      icon: "💬",
-    },
-    {
-      title: "Transparentní ceny",
-      desc: "Jasná cenová nabídka předem",
-      icon: "💎",
-    },
-    {
-      title: "Rychlá realizace",
-      desc: "Dodržujeme dohodnuté termíny",
+      title: "Rychlé dodání",
+      desc: "Většinu projektů za 2-4 týdny",
       icon: "⚡",
     },
     {
-      title: "24/7 podpora",
-      desc: "Jsem tu pro vás kdykoliv",
+      title: "Transparentní ceny",
+      desc: "Jasná nabídka, žádná překvapení",
+      icon: "💎",
+    },
+    {
+      title: "Dlouhodobá podpora",
+      desc: "Nepustím vás po spuštění",
       icon: "🛡️",
+    },
+    {
+      title: "Moderní technologie",
+      desc: "Používám to nejlepší z trhu",
+      icon: "🚀",
     },
   ];
 
@@ -204,22 +309,16 @@ const IntroSection: React.FC = () => {
       ref={sectionRef}
       className="relative min-h-screen py-16 lg:py-24 bg-[#0f172a] text-white overflow-hidden"
     >
-      {!isMobileOrTablet && <ParticlesBackground />}
-
-      {/* Čisté pozadí - pouze grid pattern */}
-      {!isMobileOrTablet && (
-        <div className="absolute inset-0 hidden lg:block">
-          {/* Grid pattern */}
-          <div
-            className="absolute inset-0 opacity-[0.03]"
-            style={{
-              backgroundImage: `linear-gradient(rgba(249,115,22,0.3) 1px, transparent 1px),
-                                linear-gradient(90deg,rgba(249,115,22,0.3) 1px, transparent 1px)`,
-              backgroundSize: "100px 100px",
-            }}
-          />
-        </div>
-      )}
+      {/* Viditelnější mřížka na pozadí */}
+      <div className="absolute inset-0">
+        <div
+          className="absolute inset-0 opacity-[0.08]"
+          style={{
+            backgroundImage: `linear-gradient(rgba(249,115,22,0.4) 1px, transparent 1px), linear-gradient(90deg,rgba(249,115,22,0.4) 1px, transparent 1px)`,
+            backgroundSize: "60px 60px",
+          }}
+        />
+      </div>
 
       <div className="container mx-auto px-4 relative z-10">
         {/* Header */}
@@ -253,9 +352,29 @@ const IntroSection: React.FC = () => {
               <span className="text-orange-500 font-mono text-xl md:text-sm">=//</span>
             </div>
           </h1>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="max-w-4xl mx-auto mb-8"
+          >
+            <p className="text-lg md:text-xl text-gray-300 leading-relaxed mb-4">
+              Specializuji se na <span className="text-orange-400 font-semibold">digitální řešení, která skutečně fungují</span>. 
+              Nejen že vytvořím krásný web nebo e-shop, ale především <span className="text-white font-medium">zajistím, aby vám přinášel zákazníky a zisk</span>.
+            </p>
+            <p className="text-gray-400 mb-4">
+              Každý projekt začínám důkladnou analýzou vašeho byznysu a cílové skupiny. 
+              Teprve pak navrhuji řešení, které <span className="text-orange-400">kombinuje atraktivní design s psychologií prodeje</span> a moderními technologiemi.
+            </p>
+            <p className="text-gray-300">
+              <span className="text-orange-400 font-medium">Můj přístup:</span> Neprodávám vám technologie, ale řešení konkrétních problémů. 
+              Každá stránka, každé tlačítko a každý text má svůj důvod - přeměnit návštěvníka v zákazníka.
+            </p>
+          </motion.div>
         </motion.div>
 
-        {/* Služby */}
+        {/* Služby - Grid 3x2 z prvního kódu */}
         <div className="grid lg:grid-cols-3 gap-6 mb-16">
           {services.map((service, idx) => (
             <motion.div
@@ -368,21 +487,103 @@ const IntroSection: React.FC = () => {
           ))}
         </div>
 
+        {/* Scrollující testimonials */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="mb-20"
+        >
+          <div className="text-center mb-12">
+            <h3 className="text-3xl font-bold text-white mb-4">
+              Co říkají spokojení klienti
+            </h3>
+            <p className="text-gray-400 text-lg">
+              Reálné výsledky od skutečných klientů
+            </p>
+            {isMobileOrTablet && (
+              <div className="flex justify-center space-x-2 mt-6">
+                {testimonials.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentTestimonial(index)}
+                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                      index === currentTestimonial 
+                        ? 'bg-orange-500 scale-125' 
+                        : 'bg-slate-600 hover:bg-slate-500'
+                    }`}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+          
+          {/* Desktop scrollování */}
+          {!isMobileOrTablet && (
+            <div className="relative overflow-hidden">
+              <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#0f172a] to-transparent z-10 pointer-events-none" />
+              <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#0f172a] to-transparent z-10 pointer-events-none" />
+              
+              <motion.div 
+                className="flex space-x-6 py-4"
+                animate={{ 
+                  x: [0, -384 * 6 - 24 * 6] 
+                }}
+                transition={{
+                  duration: 30,
+                  repeat: Infinity,
+                  ease: "linear",
+                  repeatType: "loop"
+                }}
+                style={{ width: "fit-content" }}
+              >
+                {[...testimonials, ...testimonials].map((testimonial, index) => (
+                  <TestimonialCard key={index} testimonial={testimonial} />
+                ))}
+              </motion.div>
+            </div>
+          )}
+
+          {/* Mobilní single view s rotací */}
+          {isMobileOrTablet && (
+            <div className="relative px-4">
+              <motion.div
+                key={currentTestimonial}
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -50 }}
+                transition={{ duration: 0.5 }}
+                className="w-full max-w-sm mx-auto"
+              >
+                <TestimonialCard testimonial={testimonials[currentTestimonial]} isMobile={true} />
+              </motion.div>
+            </div>
+          )}
+        </motion.div>
+
         {/* Benefity */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
-          className="relative"
+          transition={{ duration: 0.6, delay: 1.0 }}
+          className="relative mb-16"
         >
           <div className="p-8 rounded-2xl bg-gradient-to-br from-slate-800/90 to-slate-700/70 backdrop-blur-sm border border-orange-500/20">
-            <div className="grid md:grid-cols-4 gap-6">
+            <div className="text-center mb-8">
+              <h3 className="text-2xl font-bold text-white mb-2">
+                Proč spolupracovat právě se mnou?
+              </h3>
+              <p className="text-gray-400">
+                Kombinuji technické dovednosti s obchodním myšlením a psychologií prodeje
+              </p>
+            </div>
+            <div className="grid md:grid-cols-4 gap-6 mb-8">
               {benefits.map((b, i) => (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.4, delay: 0.9 + i * 0.1 }}
+                  transition={{ duration: 0.4, delay: 1.1 + i * 0.1 }}
                   className="text-center"
                 >
                   <div className="text-3xl mb-3">{b.icon}</div>
@@ -393,7 +594,6 @@ const IntroSection: React.FC = () => {
             </div>
           </div>
 
-          {/* Floating particles - pouze desktop */}
           {!isMobileOrTablet &&
             [...Array(6)].map((_, i) => (
               <motion.div
@@ -421,33 +621,71 @@ const IntroSection: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.2 }}
-          className="text-center mt-16"
+          transition={{ duration: 0.6, delay: 1.4 }}
+          className="text-center"
         >
-          <a
-            href="/portfolio"
-            className="group relative inline-flex items-center"
-          >
-            <div className="absolute -inset-1 bg-gradient-to-r from-orange-600 to-orange-500 rounded-full blur opacity-70 group-hover:opacity-100 transition duration-200"></div>
-            <div className="relative flex items-center px-8 py-4 bg-[#0f172a] rounded-full border border-orange-500/50 group-hover:border-orange-400 transition-colors">
-              <span className="text-white font-semibold mr-2">
-                Prohlédnout portfolio
-              </span>
-              <svg
-                className="w-5 h-5 text-orange-400 group-hover:translate-x-1 transition-transform"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M13 7l5 5m0 0l-5 5m5-5H6"
-                />
-              </svg>
-            </div>
-          </a>
+          <div className="mb-8">
+            <h3 className="text-2xl font-bold text-white mb-3">
+              Připraven na projekt, který skutečně funguje?
+            </h3>
+            <p className="text-gray-400 mb-2">
+              Napište mi a během 24 hodin dostanete detailní návrh řešení
+            </p>
+            <p className="text-sm text-green-400">
+              ✓ Bezplatná konzultace  ✓ Jasný plán a cena  ✓ Bez závazků
+            </p>
+          </div>
+          
+          <div className="flex flex-col sm:flex-row gap-3 max-w-sm mx-auto">
+            <a
+              href="/kontakt"
+              className="group relative flex-1"
+            >
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-orange-600 to-orange-500 rounded-lg blur opacity-70 group-hover:opacity-100 transition duration-200"></div>
+              <div className="relative flex items-center justify-center px-4 py-2.5 bg-[#0f172a] rounded-lg border border-orange-500/50 group-hover:border-orange-400 transition-colors">
+                <span className="text-white font-semibold text-sm mr-2">
+                  Začít projekt
+                </span>
+                <svg
+                  className="w-4 h-4 text-orange-400 group-hover:translate-x-1 transition-transform"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M13 7l5 5m0 0l-5 5m5-5H6"
+                  />
+                </svg>
+              </div>
+            </a>
+            
+            <a
+              href="/portfolio"
+              className="group relative flex-1"
+            >
+              <div className="relative flex items-center justify-center px-4 py-2.5 bg-slate-800/80 rounded-lg border border-slate-600 group-hover:border-slate-500 transition-colors backdrop-blur-sm">
+                <span className="text-white font-medium text-sm mr-2">
+                  Ukázky prací
+                </span>
+                <svg
+                  className="w-4 h-4 text-slate-400 group-hover:translate-x-1 transition-transform"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M13 7l5 5m0 0l-5 5m5-5H6"
+                  />
+                </svg>
+              </div>
+            </a>
+          </div>
         </motion.div>
       </div>
     </section>

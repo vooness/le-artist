@@ -7,8 +7,17 @@ import {
   ArrowLeft, 
   Check,
   Code,
+  ChevronRight,
+  Star,
+  Zap,
+  Shield,
   Clock,
-  ChevronRight
+  Award,
+  Users,
+  TrendingUp,
+  Monitor,
+  Briefcase,
+  Crown
 } from "lucide-react";
 
 // Předem definované hodnoty pro částice
@@ -228,17 +237,7 @@ const FuturisticBackground: React.FC = () => {
   );
 };
 
-// Futuristická položka s checkmarkem
-const FeatureItem: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  return (
-    <div className="flex items-start mb-4">
-      <div className="mr-3 mt-1 text-green-500 flex-shrink-0">
-        <Check className="w-5 h-5" />
-      </div>
-      <span className="text-gray-300">{children}</span>
-    </div>
-  );
-};
+// Futuristický prvek procesu
 
 // Futuristický balíček
 interface PricingPackageProps {
@@ -246,13 +245,17 @@ interface PricingPackageProps {
   price: string;
   features: string[];
   color: string;
+  icon: React.ReactNode;
+  isPopular?: boolean;
 }
 
 const PricingPackage: React.FC<PricingPackageProps> = ({ 
   title, 
   price, 
   features, 
-  color 
+  color,
+  icon,
+  isPopular = false
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   
@@ -265,6 +268,16 @@ const PricingPackage: React.FC<PricingPackageProps> = ({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
+      {/* Badge nejoblíbenější v pravém horním rohu */}
+      {isPopular && (
+        <div className="absolute top-4 right-4 z-20">
+          <div className="flex items-center px-3 py-1.5 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-full text-xs font-bold shadow-lg">
+            <Star className="w-3 h-3 mr-1" />
+            Nejoblíbenější
+          </div>
+        </div>
+      )}
+
       {/* Tenký border */}
       <div className="absolute inset-0 border border-slate-700/30 rounded-lg z-10"></div>
       
@@ -288,13 +301,24 @@ const PricingPackage: React.FC<PricingPackageProps> = ({
           transition={{ duration: 0.3 }}
         />
         
-        {/* Název balíčku */}
-        <h3 
-          className="text-2xl font-bold mb-2" 
-          style={{ color }}
-        >
-          {title}
-        </h3>
+        {/* Název balíčku s ikonou */}
+        <div className="flex items-center mb-4">
+          <div 
+            className="w-10 h-10 rounded-lg flex items-center justify-center mr-3"
+            style={{ 
+              backgroundColor: `${color}15`,
+              border: `1px solid ${color}30`
+            }}
+          >
+            <div style={{ color }}>{icon}</div>
+          </div>
+          <h3 
+            className="text-2xl font-bold" 
+            style={{ color }}
+          >
+            {title}
+          </h3>
+        </div>
         
         {/* Cena */}
         <div className="mb-6">
@@ -326,7 +350,6 @@ const PricingPackage: React.FC<PricingPackageProps> = ({
   );
 };
 
-// Futuristický prvek procesu
 interface ProcessStepProps {
   number: number;
   title: string;
@@ -370,7 +393,7 @@ const WebServicesPage: React.FC = () => {
       {/* Futuristické animované pozadí */}
       <FuturisticBackground />
       
-      <div className="max-w-5xl mx-auto relative z-10">
+      <div className="max-w-7xl mx-auto relative z-10">
         {/* Tlačítko zpět na hlavní stránku */}
         <div className="mb-10">
           <Link 
@@ -383,39 +406,91 @@ const WebServicesPage: React.FC = () => {
         </div>
         
         {/* Hlavní nadpis */}
-        <div className="text-center mb-10">
-          <h1 className="text-5xl font-bold text-orange-500 mb-6">
-            Webové Služby
+        <div className="text-center mb-16">
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">
+            <span className="text-orange-500">Webové</span>{" "}
+            <span className="text-white">stránky</span>
           </h1>
           
-          <p className="text-gray-300 text-lg max-w-3xl mx-auto mb-8">
+          <p className="text-gray-300 text-lg max-w-3xl mx-auto mb-10">
             Moderní, responzivní a přehledné webové stránky navržené na míru. Specializuji se na 
-            tvorbu webů a integraci moderních technologií, které pomáhají vašemu 
-            podnikání růst.
+            tvorbu webů které skutečně prodávají a pomáhají vašemu podnikání růst.
           </p>
           
-          {/* Hodinová sazba */}
-          <div className="flex justify-center mb-10">
-            <div className="px-6 py-3 rounded-lg border border-orange-500 bg-orange-500/10 backdrop-blur-sm flex items-center">
-              <Clock className="w-5 h-5 text-orange-500 mr-3" />
-              <span className="text-white font-medium">Hodinová sazba od</span>
-              <span className="text-orange-500 text-xl font-bold ml-2">900 Kč</span>
+          {/* Hook sekce */}
+          <div className="flex flex-col md:flex-row justify-center items-center gap-4 mb-10">
+            <div className="flex items-center px-4 py-2 bg-gradient-to-r from-green-500/20 to-green-600/20 border border-green-500/30 rounded-full">
+              <Zap className="w-5 h-5 text-green-400 mr-2" />
+              <span className="text-green-300 font-medium">Dodání do 14 dní</span>
+            </div>
+            <div className="flex items-center px-4 py-2 bg-gradient-to-r from-blue-500/20 to-blue-600/20 border border-blue-500/30 rounded-full">
+              <Shield className="w-5 h-5 text-blue-400 mr-2" />
+              <span className="text-blue-300 font-medium">Záruka spokojenosti</span>
             </div>
           </div>
           
           {/* Vlastnosti služby */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 max-w-3xl mx-auto">
-            <FeatureItem>Responzivní design</FeatureItem>
-            <FeatureItem>SEO optimalizace</FeatureItem>
-            <FeatureItem>Rychlé načítání</FeatureItem>
-            <FeatureItem>Moderní UX/UI</FeatureItem>
-            <FeatureItem>Individuální přístup</FeatureItem>
-            <FeatureItem>Pravidelná údržba</FeatureItem>
+          <div className="mb-20 max-w-4xl mx-auto">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+              <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-3 sm:p-4 rounded-xl border border-green-500/20 backdrop-blur-sm">
+                <div className="flex items-center">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-500/20 rounded-lg flex items-center justify-center mr-2 sm:mr-3 flex-shrink-0">
+                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
+                  </div>
+                  <span className="text-white font-medium text-xs sm:text-base">Responzivní design</span>
+                </div>
+              </div>
+              
+              <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-3 sm:p-4 rounded-xl border border-green-500/20 backdrop-blur-sm">
+                <div className="flex items-center">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-500/20 rounded-lg flex items-center justify-center mr-2 sm:mr-3 flex-shrink-0">
+                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
+                  </div>
+                  <span className="text-white font-medium text-xs sm:text-base">SEO optimalizace</span>
+                </div>
+              </div>
+              
+              <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-3 sm:p-4 rounded-xl border border-green-500/20 backdrop-blur-sm">
+                <div className="flex items-center">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-500/20 rounded-lg flex items-center justify-center mr-2 sm:mr-3 flex-shrink-0">
+                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
+                  </div>
+                  <span className="text-white font-medium text-xs sm:text-base">Rychlé načítání</span>
+                </div>
+              </div>
+              
+              <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-3 sm:p-4 rounded-xl border border-green-500/20 backdrop-blur-sm">
+                <div className="flex items-center">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-500/20 rounded-lg flex items-center justify-center mr-2 sm:mr-3 flex-shrink-0">
+                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
+                  </div>
+                  <span className="text-white font-medium text-xs sm:text-base">Moderní UX/UI</span>
+                </div>
+              </div>
+              
+              <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-3 sm:p-4 rounded-xl border border-green-500/20 backdrop-blur-sm">
+                <div className="flex items-center">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-500/20 rounded-lg flex items-center justify-center mr-2 sm:mr-3 flex-shrink-0">
+                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
+                  </div>
+                  <span className="text-white font-medium text-xs sm:text-base">Individuální přístup</span>
+                </div>
+              </div>
+              
+              <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-3 sm:p-4 rounded-xl border border-green-500/20 backdrop-blur-sm">
+                <div className="flex items-center">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-500/20 rounded-lg flex items-center justify-center mr-2 sm:mr-3 flex-shrink-0">
+                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
+                  </div>
+                  <span className="text-white font-medium text-xs sm:text-base">Dlouhodobá podpora</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         
         {/* Přepínací záložky */}
-        <div className="flex justify-center mb-12">
+        <div className="flex justify-center mb-16">
           <div className="flex border-b border-slate-700">
             <button
               onClick={() => setActiveTab('pricing')}
@@ -462,56 +537,337 @@ const WebServicesPage: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
+            {/* Nadpis nad balíčky */}
+            <div className="text-center mb-16 max-w-4xl mx-auto">
+              <h3 className="text-2xl md:text-3xl font-bold mb-4 text-white">
+                Vyberte si váš balíček webových stránek
+              </h3>
+              <p className="text-gray-300 text-base md:text-lg">
+                Každý balíček je navržen pro konkrétní potřeby a velikost podnikání. 
+                Všechny zahrnují moderní design, SEO optimalizaci a technickou podporu.
+              </p>
+            </div>
+
             {/* Balíčky služeb */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-20 max-w-6xl mx-auto">
               <PricingPackage
-                title="Basic"
-                price="od 20 000 Kč"
+                title="Prezentační"
+                price="od 15 000 Kč"
                 features={[
-                  "Do 5 stránek",
+                  "Do 5 podstránek",
                   "Responzivní design",
                   "Kontaktní formulář",
                   "Základní SEO",
-                  "Dodání 10 dní"
+                  "Google Analytics",
+                  "SSL certifikát",
+                  "Optimalizace rychlosti",
+                  "Hosting zajištěn (platíte jen domunu)"
                 ]}
                 color="#F97316"
+                icon={<Monitor className="w-5 h-5" />}
               />
               
               <PricingPackage
                 title="Business"
                 price="od 35 000 Kč"
                 features={[
-                  "Až 10 stránek",
+                  "8-12 podstránek",
                   "Blog systém",
-                  "Pokročilé funkce",
+                  "Pokročilé SEO",
+                  "Google Mapy integrace",
                   "Napojení na sociální sítě",
-                  "Dodání 20 dní"
+                  "Kontaktní a objednávkové formuláře",
+                  "Analytics a konverze tracking",
+                  "Performance optimalizace",
+                  "Hosting zajištěn (platíte jen doménu)"
                 ]}
                 color="#F97316"
+                isPopular={true}
+                icon={<Briefcase className="w-5 h-5" />}
               />
               
               <PricingPackage
-                title="Premium"
-                price="od 50 000 Kč"
+                title="Pro"
+                price="od 60 000 Kč"
                 features={[
-                  "Neomezený počet stránek",
-                  "Vlastní administrace",
-                  "E-mail marketing",
-                  "Analytika návštěvnosti",
-                  "Optimalizace pro vyhledávače",
-                  "Dodání 30 dní"
+                  "15+ podstránek",
+                  "Vícejazyčná verze",
+                  "Pokročilá analytika",
+                  "API integrace (CRM, newslettery)",
+                  "Vlastní funkce na míru",
+                  "A/B testing setup",
+                  "Schema markup",
+                  "Pokročilé SEO auditování",
+                  "3 měsíce technická podpora zdarma",
+                  "Hosting zajištěn (platíte jen doménu)"
                 ]}
                 color="#F97316"
+                icon={<Crown className="w-5 h-5" />}
               />
+            </div>
+
+            {/* Hosting informace */}
+            <div className="mb-20 max-w-4xl mx-auto">
+              <div className="bg-gradient-to-br from-slate-800/40 to-slate-700/20 p-6 sm:p-8 rounded-xl border border-blue-500/30">
+                <div className="flex items-center mb-4">
+                  <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center mr-4">
+                    <Shield className="w-6 h-6 text-blue-400" />
+                  </div>
+                  <h4 className="text-xl font-bold text-white">Hosting bez starostí</h4>
+                </div>
+                <p className="text-gray-300 text-sm sm:text-base leading-relaxed">
+                  O hosting se postarám já prostřednictvím profesionálních služeb Vercel. 
+                  Váš web bude rychlý, bezpečný a dostupný 24/7. <span className="text-blue-400 font-medium">
+                  Vy platíte pouze za doménu (cca 300-500 Kč/rok)</span> - hosting je součástí 
+                  mých služeb. Žádné měsíční poplatky za hosting, žádné technické starosti.
+                </p>
+              </div>
+            </div>
+
+            {/* Proč web za 5000 Kč nestačí */}
+            <div className="mb-20 max-w-5xl mx-auto">
+              <div className="text-center mb-8">
+                <h3 className="text-2xl md:text-3xl font-bold mb-4 text-white">
+                  Proč web za 5 000 Kč nestačí?
+                </h3>
+                <p className="text-gray-300 text-base md:text-lg max-w-3xl mx-auto">
+                  Levný web vás bude stát víc, než si myslíte. Zde je rozdíl mezi amatérským 
+                  a profesionálním přístupem.
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-6 mb-8">
+                {/* Levný web */}
+                <div className="bg-gradient-to-br from-red-900/20 to-red-800/10 p-6 rounded-xl border border-red-500/30">
+                  <div className="flex items-center mb-4">
+                    <div className="w-12 h-12 bg-red-500/20 rounded-lg flex items-center justify-center mr-4">
+                      <span className="text-red-400 font-bold text-lg">5K</span>
+                    </div>
+                    <h4 className="text-red-400 font-bold text-lg">Levný web</h4>
+                  </div>
+                  <ul className="space-y-2 text-sm text-gray-300">
+                    <li className="flex items-start">
+                      <span className="text-red-400 mr-2 mt-1">×</span>
+                      Šablona za pár korun
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-red-400 mr-2 mt-1">×</span>
+                      Žádné SEO nebo špatné SEO
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-red-400 mr-2 mt-1">×</span>
+                      Pomalé načítání (3+ sekundy)
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-red-400 mr-2 mt-1">×</span>
+                      Nevyhovuje na mobilu
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-red-400 mr-2 mt-1">×</span>
+                      Žádná podpora po dodání
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-red-400 mr-2 mt-1">×</span>
+                      Nepřináší zákazníky
+                    </li>
+                  </ul>
+                  <div className="mt-4 p-3 bg-red-500/10 rounded-lg border border-red-500/20">
+                    <p className="text-red-300 text-sm font-medium">
+                      Výsledek: Za rok potřebujete nový web → skutečná cena 15 000+ Kč
+                    </p>
+                  </div>
+                </div>
+
+                {/* Profesionální web */}
+                <div className="bg-gradient-to-br from-green-900/20 to-green-800/10 p-6 rounded-xl border border-green-500/30">
+                  <div className="flex items-center mb-4">
+                    <div className="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center mr-4">
+                      <span className="text-green-400 font-bold text-lg">15K+</span>
+                    </div>
+                    <h4 className="text-green-400 font-bold text-lg">Profesionální web</h4>
+                  </div>
+                  <ul className="space-y-2 text-sm text-gray-300">
+                    <li className="flex items-start">
+                      <span className="text-green-400 mr-2 mt-1">✓</span>
+                      Design na míru vašemu podnikání
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-400 mr-2 mt-1">✓</span>
+                      Profesionální SEO optimalizace
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-400 mr-2 mt-1">✓</span>
+                      Rychlost pod 1 sekundu
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-400 mr-2 mt-1">✓</span>
+                      Perfektní na všech zařízeních
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-400 mr-2 mt-1">✓</span>
+                      Dlouhodobá podpora a údržba
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-400 mr-2 mt-1">✓</span>
+                      Skutečně přináší zákazníky
+                    </li>
+                  </ul>
+                  <div className="mt-4 p-3 bg-green-500/10 rounded-lg border border-green-500/20">
+                    <p className="text-green-300 text-sm font-medium">
+                      Výsledek: Investice, která se vrátí během 3-6 měsíců
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="text-center bg-gradient-to-br from-slate-800/40 to-slate-700/20 p-6 rounded-xl border border-slate-600/30">
+                <h5 className="text-white font-bold text-lg mb-2">Pamatujte si:</h5>
+                <p className="text-gray-300">
+                  Kvalitní web není náklad, ale <span className="text-orange-400 font-semibold">investice do růstu vašeho podnikání</span>. 
+                  Rozdíl v ceně se vrátí už prvním novým zákazníkem.
+                </p>
+              </div>
+            </div>
+            
+            {/* Hook obsah - proč si vybrat mě */}
+            <div className="mb-20 max-w-5xl mx-auto">
+              <h3 className="text-3xl font-bold text-center mb-4 text-white">Proč investovat do profesionálního webu?</h3>
+              <p className="text-center text-gray-300 text-lg mb-12 max-w-3xl mx-auto">
+                Kvalitní web není náklad, ale nástroj, který vám vydělává peníze. Zde jsou konkrétní důvody, proč se profesionální přístup vyplatí.
+              </p>
+              
+              {/* Statistiky - první řada */}
+              <div className="grid md:grid-cols-2 gap-6 mb-12">
+                <div className="bg-gradient-to-br from-slate-800/80 to-slate-700/60 p-6 rounded-xl border border-slate-700/50 backdrop-blur-sm">
+                  <div className="flex items-center mb-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+                      <span className="text-white font-bold text-lg">3x</span>
+                    </div>
+                    <div>
+                      <h4 className="text-white font-bold">Vyšší konverze</h4>
+                      <p className="text-gray-400 text-sm">Oproti levným šablonám</p>
+                    </div>
+                  </div>
+                  <p className="text-gray-300 text-sm">
+                    Profesionálně navržený web převede 3x více návštěvníků na zákazníky díky promyšlené UX a psychologii prodeje.
+                  </p>
+                </div>
+
+                <div className="bg-gradient-to-br from-slate-800/80 to-slate-700/60 p-6 rounded-xl border border-slate-700/50 backdrop-blur-sm">
+                  <div className="flex items-center mb-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+                      <span className="text-white font-bold text-lg">80%</span>
+                    </div>
+                    <div>
+                      <h4 className="text-white font-bold">Rychlejší načítání</h4>
+                      <p className="text-gray-400 text-sm">Pod 1 sekundu vs 3+ sekundy</p>
+                    </div>
+                  </div>
+                  <p className="text-gray-300 text-sm">
+                    Každá sekunda zpoždění znamená 7% méně konverzí. Moje weby se načítají bleskově rychle.
+                  </p>
+                </div>
+
+                <div className="bg-gradient-to-br from-slate-800/80 to-slate-700/60 p-6 rounded-xl border border-slate-700/50 backdrop-blur-sm">
+                  <div className="flex items-center mb-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+                      <span className="text-white font-bold text-lg">5x</span>
+                    </div>
+                    <div>
+                      <h4 className="text-white font-bold">Lepší pozice v Google</h4>
+                      <p className="text-gray-400 text-sm">Díky profesionálnímu SEO</p>
+                    </div>
+                  </div>
+                  <p className="text-gray-300 text-sm">
+                    Správně optimalizovaný web se dostane na první stránku Google 5x rychleji než šablonový web.
+                  </p>
+                </div>
+
+                <div className="bg-gradient-to-br from-slate-800/80 to-slate-700/60 p-6 rounded-xl border border-slate-700/50 backdrop-blur-sm">
+                  <div className="flex items-center mb-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+                      <span className="text-white font-bold text-lg">ROI</span>
+                    </div>
+                    <div>
+                      <h4 className="text-white font-bold">Rychlá návratnost</h4>
+                      <p className="text-gray-400 text-sm">Průměrně za 3-6 měsíců</p>
+                    </div>
+                  </div>
+                  <p className="text-gray-300 text-sm">
+                    Kvalitní web se zaplatí sám už několika novými zákazníky. Není to náklad, ale investice.
+                  </p>
+                </div>
+              </div>
+
+              {/* Co dostanete navíc */}
+              <div className="text-center mb-12">
+                <h4 className="text-2xl font-bold text-white mb-8">Moje garance úspěchu</h4>
+                <div className="grid md:grid-cols-3 gap-6">
+                  <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-6 rounded-xl border border-emerald-500/30">
+                    <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+                      <Clock className="w-6 h-6 text-white" />
+                    </div>
+                    <h5 className="text-white font-bold mb-2">Dodání na čas</h5>
+                    <p className="text-gray-300 text-sm">
+                      98% projektů dodávám přesně v termínu nebo dříve. Termín je pro mě závazek.
+                    </p>
+                  </div>
+
+                  <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-6 rounded-xl border border-cyan-500/30">
+                    <div className="w-12 h-12 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+                      <Award className="w-6 h-6 text-white" />
+                    </div>
+                    <h5 className="text-white font-bold mb-2">Záruka spokojenosti</h5>
+                    <p className="text-gray-300 text-sm">
+                      Pokud nebudete spokojeni, upravím web dokud nebude přesně podle vašich představ.
+                    </p>
+                  </div>
+
+                  <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-6 rounded-xl border border-violet-500/30">
+                    <div className="w-12 h-12 bg-gradient-to-br from-violet-500 to-violet-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+                      <TrendingUp className="w-6 h-6 text-white" />
+                    </div>
+                    <h5 className="text-white font-bold mb-2">Podpora růstu</h5>
+                    <p className="text-gray-300 text-sm">
+                      Nejen web, ale i strategie jak získat více zákazníků a zvýšit tržby.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Výsledky které dostanete */}
+              <div className="bg-gradient-to-br from-slate-800/40 to-slate-700/20 p-8 rounded-xl border border-slate-600/30 text-center">
+                <h4 className="text-xl font-bold text-white mb-6">Co konkrétně získáte</h4>
+                <div className="grid md:grid-cols-2 gap-6 text-left">
+                  <div>
+                    <h5 className="text-orange-400 font-bold mb-2">Technicky:</h5>
+                    <ul className="text-gray-300 text-sm space-y-1">
+                      <li>• Web který se načte pod 1 sekundu</li>
+                      <li>• Perfektní zobrazení na všech zařízeních</li>
+                      <li>• Top pozice v Google vyhledávání</li>
+                      <li>• Zabezpečení proti hackerům</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h5 className="text-orange-400 font-bold mb-2">Obchodně:</h5>
+                    <ul className="text-gray-300 text-sm space-y-1">
+                      <li>• Více zákazníků z internetu</li>
+                      <li>• Vyšší důvěryhodnost značky</li>
+                      <li>• Automatizace části prodeje</li>
+                      <li>• Měřitelné výsledky a růst</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
             </div>
             
             {/* Kontaktní CTA */}
-            <div className="text-center">
-              <Link href="/kontakt" className="inline-flex items-center px-6 py-3 rounded-lg bg-orange-500 text-white font-medium hover:bg-orange-600 transition-colors">
+            <div className="text-center mt-16">
+              <Link href="/kontakt" className="inline-flex items-center px-4 sm:px-8 py-3 sm:py-4 rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold text-base sm:text-lg hover:from-orange-600 hover:to-orange-700 transition-all transform hover:scale-105 shadow-lg">
                 <span>Kontaktujte mě pro kalkulaci</span>
-                <ChevronRight className="ml-2 w-5 h-5" />
+                <ChevronRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5" />
               </Link>
-              <p className="text-gray-400 mt-4">
+              <p className="text-gray-400 mt-4 text-base sm:text-lg px-4">
                 Každý projekt je jedinečný. Kontaktujte mě pro nezávaznou konzultaci a přesnou kalkulaci.
               </p>
             </div>
@@ -526,38 +882,48 @@ const WebServicesPage: React.FC = () => {
             className="max-w-3xl mx-auto"
           >
             {/* Proces tvorby */}
-            <div className="mb-16">
+            <div className="mb-20">
+              <div className="text-center mb-12">
+                <h3 className="text-2xl md:text-3xl font-bold mb-4 text-white">
+                  Jak probíhá tvorba webu
+                </h3>
+                <p className="text-gray-300 text-base md:text-lg max-w-3xl mx-auto">
+                  Transparentní proces od první konzultace po spuštění webu. 
+                  Budete vědět, co se děje v každé fázi projektu.
+                </p>
+              </div>
+              
               <ProcessStep
                 number={1}
-                title="Konzultace"
-                description="V první fázi se seznámíme s vaším projektem. Během konzultace analyzujeme vaše potřeby, cíle a představy. Společně stanovíme rozsah projektu, funkcionalitu a časový harmonogram."
+                title="Konzultace a analýza"
+                description="V první fázi se seznámíme s vaším projektem a cílovou skupinou. Analyzujeme konkurenci, stanovíme cíle webu a společně vytvoříme strategii, která skutečně funguje."
               />
               
               <ProcessStep
                 number={2}
-                title="Návrh designu"
-                description="Vytvoříme grafický návrh vašeho webu, který bude reflektovat vaši značku a splňovat moderní standardy webdesignu. Po schválení návrhu pokračujeme na další krok."
+                title="Design a wireframy"
+                description="Vytvoříme grafický návrh a strukturu webu zaměřenou na konverze. Design bude reflektovat vaši značku a splňovat moderní standardy uživatelského prožitku."
               />
               
               <ProcessStep
                 number={3}
-                title="Vývoj & testování"
-                description="Podle schváleného návrhu vytvoříme funkční web, implementujeme všechny požadované funkce a zajistíme, že vše funguje na všech zařízeních a prohlížečích. Následně probíhá důkladné testování."
+                title="Vývoj a optimalizace"
+                description="Naprogramujeme funkční web s důrazem na rychlost, SEO a bezpečnost. Implementujeme všechny požadované funkce a otestujeme na všech zařízeních."
               />
               
               <ProcessStep
                 number={4}
-                title="Spuštění webu"
-                description="Po finálním schválení web spustíme na vámi vybranou doménu. Nabízíme i pomoc s výběrem a nastavením hostingu, pokud je potřeba. Poskytujeme krátké školení pro správu obsahu."
+                title="Spuštění a školení"
+                description="Po finálním schválení web spustíme a provedeme školení pro správu obsahu. Poskytneme detailní dokumentaci a zůstáváme k dispozici pro případné dotazy."
                 isLast
               />
             </div>
             
             {/* Postup CTA */}
-            <div className="text-center p-6 border border-slate-700 rounded-lg bg-slate-800/30">
+            <div className="text-center p-6 border border-slate-700 rounded-lg bg-slate-800/30 mt-12">
               <h4 className="text-xl font-bold text-white mb-4">Máte zájem o spolupráci?</h4>
               <p className="text-gray-300 mb-6">
-                Každý projekt začíná nezávaznou konzultací. Kontaktujte mě a společně vytvoříme web, který posune vaše podnikání na další úroveň.
+                Každý projekt začíná nezávaznou konzultací. Kontaktujte mě a společně vytvoříme web, který skutečně funguje a přináší výsledky.
               </p>
               <Link href="/kontakt" className="inline-flex items-center px-6 py-3 rounded-lg bg-orange-500 text-white font-medium hover:bg-orange-600 transition-colors">
                 <span>Nezávazná konzultace</span>

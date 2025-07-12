@@ -11,7 +11,16 @@ import {
   ChevronRight,
   Settings,
   Layout,
-  Truck
+  Truck,
+  Star,
+  Zap,
+  Shield,
+  Award,
+  TrendingUp,
+  Target,
+  CreditCard,
+  BarChart3,
+  Crown
 } from "lucide-react";
 
 // Předem definované hodnoty pro částice
@@ -231,18 +240,6 @@ const FuturisticBackground: React.FC = () => {
   );
 };
 
-// Futuristická položka s checkmarkem
-const FeatureItem: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  return (
-    <div className="flex items-start mb-4">
-      <div className="mr-3 mt-1 text-green-500 flex-shrink-0">
-        <Check className="w-5 h-5" />
-      </div>
-      <span className="text-gray-300">{children}</span>
-    </div>
-  );
-};
-
 // Futuristický balíček
 interface PricingPackageProps {
   title: string;
@@ -250,6 +247,7 @@ interface PricingPackageProps {
   features: string[];
   color: string;
   icon: React.ReactNode;
+  isPopular?: boolean;
 }
 
 const PricingPackage: React.FC<PricingPackageProps> = ({ 
@@ -257,7 +255,8 @@ const PricingPackage: React.FC<PricingPackageProps> = ({
   price, 
   features, 
   color,
-  icon
+  icon,
+  isPopular = false
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   
@@ -270,6 +269,16 @@ const PricingPackage: React.FC<PricingPackageProps> = ({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
+      {/* Badge nejoblíbenější v pravém horním rohu */}
+      {isPopular && (
+        <div className="absolute top-4 right-4 z-20">
+          <div className="flex items-center px-3 py-1.5 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-full text-xs font-bold shadow-lg">
+            <Star className="w-3 h-3 mr-1" />
+            Nejoblíbenější
+          </div>
+        </div>
+      )}
+
       {/* Tenký border */}
       <div className="absolute inset-0 border border-slate-700/30 rounded-lg z-10"></div>
       
@@ -293,24 +302,24 @@ const PricingPackage: React.FC<PricingPackageProps> = ({
           transition={{ duration: 0.3 }}
         />
         
-        {/* Ikona balíčku */}
-        <div 
-          className="w-12 h-12 rounded-full flex items-center justify-center mb-4"
-          style={{ 
-            backgroundColor: `${color}15`,
-            border: `1px solid ${color}30`
-          }}
-        >
-          <div style={{ color }}>{icon}</div>
+        {/* Název balíčku s ikonou */}
+        <div className="flex items-center mb-4">
+          <div 
+            className="w-10 h-10 rounded-lg flex items-center justify-center mr-3"
+            style={{ 
+              backgroundColor: `${color}15`,
+              border: `1px solid ${color}30`
+            }}
+          >
+            <div style={{ color }}>{icon}</div>
+          </div>
+          <h3 
+            className="text-2xl font-bold" 
+            style={{ color }}
+          >
+            {title}
+          </h3>
         </div>
-        
-        {/* Název balíčku */}
-        <h3 
-          className="text-2xl font-bold mb-2" 
-          style={{ color }}
-        >
-          {title}
-        </h3>
         
         {/* Cena */}
         <div className="mb-6">
@@ -342,7 +351,6 @@ const PricingPackage: React.FC<PricingPackageProps> = ({
   );
 };
 
-// Futuristický prvek procesu
 interface ProcessStepProps {
   number: number;
   title: string;
@@ -377,8 +385,8 @@ const ProcessStep: React.FC<ProcessStepProps> = ({
   );
 };
 
-// Shoptet služby komponenta
-const ShoptetServicesPage: React.FC = () => {
+// E-shop služby komponenta
+const EshopServicesPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'pricing' | 'process'>('pricing');
   
   return (
@@ -386,7 +394,7 @@ const ShoptetServicesPage: React.FC = () => {
       {/* Futuristické animované pozadí */}
       <FuturisticBackground />
       
-      <div className="max-w-5xl mx-auto relative z-10">
+      <div className="max-w-7xl mx-auto relative z-10">
         {/* Tlačítko zpět na hlavní stránku */}
         <div className="mb-10">
           <Link 
@@ -399,39 +407,91 @@ const ShoptetServicesPage: React.FC = () => {
         </div>
         
         {/* Hlavní nadpis */}
-        <div className="text-center mb-10">
-          <h1 className="text-5xl font-bold text-orange-500 mb-6">
-            Shoptet E-shop Služby
+        <div className="text-center mb-16">
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">
+            <span className="text-orange-500">E-shop</span>{" "}
+            <span className="text-white">který prodává</span>
           </h1>
           
-          <p className="text-gray-300 text-lg max-w-3xl mx-auto mb-8">
-            Kompletní řešení e-shopu na platformě Shoptet, včetně úprav šablon na míru. 
-            Spojím své zkušenosti s osvědčenou platformou a vytvořím e-shop, 
-            který bude prodávat.
+          <p className="text-gray-300 text-lg max-w-3xl mx-auto mb-10">
+            Profesionální e-shop na platformě Shoptet, který skutečně prodává a generuje tržby. 
+            Specializuji se na tvorbu obchodů zaměřených na konverze a uživatelský zážitek.
           </p>
           
-          {/* Hodinová sazba */}
-          <div className="flex justify-center mb-10">
-            <div className="px-6 py-3 rounded-lg border border-orange-500 bg-orange-500/10 backdrop-blur-sm flex items-center">
-              <Clock className="w-5 h-5 text-orange-500 mr-3" />
-              <span className="text-white font-medium">Hodinová sazba od</span>
-              <span className="text-orange-500 text-xl font-bold ml-2">900 Kč</span>
+          {/* Hook sekce */}
+          <div className="flex flex-col md:flex-row justify-center items-center gap-4 mb-10">
+            <div className="flex items-center px-4 py-2 bg-gradient-to-r from-green-500/20 to-green-600/20 border border-green-500/30 rounded-full">
+              <Zap className="w-5 h-5 text-green-400 mr-2" />
+              <span className="text-green-300 font-medium">Spuštění za 14 dní</span>
+            </div>
+            <div className="flex items-center px-4 py-2 bg-gradient-to-r from-blue-500/20 to-blue-600/20 border border-blue-500/30 rounded-full">
+              <Shield className="w-5 h-5 text-blue-400 mr-2" />
+              <span className="text-blue-300 font-medium">Garantovaná funkčnost</span>
             </div>
           </div>
           
           {/* Vlastnosti služby */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 max-w-3xl mx-auto">
-            <FeatureItem>Responzivní design</FeatureItem>
-            <FeatureItem>Úpravy šablon</FeatureItem>
-            <FeatureItem>Instalace doplňků</FeatureItem>
-            <FeatureItem>Nastavení marketingu</FeatureItem>
-            <FeatureItem>Propojení s ERP</FeatureItem>
-            <FeatureItem>Podpora po spuštění</FeatureItem>
+          <div className="mb-20 max-w-4xl mx-auto">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+              <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-3 sm:p-4 rounded-xl border border-green-500/20 backdrop-blur-sm">
+                <div className="flex items-center">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-500/20 rounded-lg flex items-center justify-center mr-2 sm:mr-3 flex-shrink-0">
+                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
+                  </div>
+                  <span className="text-white font-medium text-xs sm:text-base">Optimalizace konverzí</span>
+                </div>
+              </div>
+              
+              <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-3 sm:p-4 rounded-xl border border-green-500/20 backdrop-blur-sm">
+                <div className="flex items-center">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-500/20 rounded-lg flex items-center justify-center mr-2 sm:mr-3 flex-shrink-0">
+                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
+                  </div>
+                  <span className="text-white font-medium text-xs sm:text-base">Mobil-first design</span>
+                </div>
+              </div>
+              
+              <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-3 sm:p-4 rounded-xl border border-green-500/20 backdrop-blur-sm">
+                <div className="flex items-center">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-500/20 rounded-lg flex items-center justify-center mr-2 sm:mr-3 flex-shrink-0">
+                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
+                  </div>
+                  <span className="text-white font-medium text-xs sm:text-base">SEO optimalizace</span>
+                </div>
+              </div>
+              
+              <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-3 sm:p-4 rounded-xl border border-green-500/20 backdrop-blur-sm">
+                <div className="flex items-center">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-500/20 rounded-lg flex items-center justify-center mr-2 sm:mr-3 flex-shrink-0">
+                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
+                  </div>
+                  <span className="text-white font-medium text-xs sm:text-base">Integrované platby</span>
+                </div>
+              </div>
+              
+              <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-3 sm:p-4 rounded-xl border border-green-500/20 backdrop-blur-sm">
+                <div className="flex items-center">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-500/20 rounded-lg flex items-center justify-center mr-2 sm:mr-3 flex-shrink-0">
+                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
+                  </div>
+                  <span className="text-white font-medium text-xs sm:text-base">Cloudový hosting</span>
+                </div>
+              </div>
+              
+              <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-3 sm:p-4 rounded-xl border border-green-500/20 backdrop-blur-sm">
+                <div className="flex items-center">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-500/20 rounded-lg flex items-center justify-center mr-2 sm:mr-3 flex-shrink-0">
+                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
+                  </div>
+                  <span className="text-white font-medium text-xs sm:text-base">Pokročilá analytika</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         
         {/* Přepínací záložky */}
-        <div className="flex justify-center mb-12">
+        <div className="flex justify-center mb-16">
           <div className="flex border-b border-slate-700">
             <button
               onClick={() => setActiveTab('pricing')}
@@ -478,123 +538,474 @@ const ShoptetServicesPage: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            {/* Balíčky služeb */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            {/* Nadpis nad balíčky */}
+            <div className="text-center mb-16 max-w-4xl mx-auto">
+              <h3 className="text-2xl md:text-3xl font-bold mb-4 text-white">
+                Vyberte si váš e-shop balíček
+              </h3>
+              <p className="text-gray-300 text-base md:text-lg">
+                Každý balíček obsahuje vše potřebné pro úspěšný start online prodeje. 
+                Shoptet hosting a licenci máte v ceně měsíčního pronájmu.
+              </p>
+            </div>
+
+            {/* ===== BALÍČKY S OPRAVENÝMI POČTY PRODUKTŮ ===== */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-20 max-w-6xl mx-auto">
               <PricingPackage
-                title="Základní e-shop"
+                title="Starter"
                 price="od 25 000 Kč"
                 features={[
-                  "Základní nastavení Shoptet",
-                  "Úprava šablony",
-                  "Instalace 5 doplňků",
-                  "Propojení s platební bránou",
+                  "Nastavení Shoptet účtu",
+                  "Základní úprava šablony",
+                  "Do 25 produktů",
+                  "Základní SEO optimalizace",
+                  "Napojení platebních metod",
                   "Nastavení dopravy",
-                  "30 dní podpory zdarma"
+                  "Google Analytics",
+                  "30 dní technická podpora"
                 ]}
                 color="#F97316"
-                icon={<ShoppingCart className="w-6 h-6" />}
+                icon={<ShoppingCart className="w-5 h-5" />}
               />
               
               <PricingPackage
-                title="Business e-shop"
-                price="od 35 000 Kč"
+                title="Business"
+                price="od 45 000 Kč"
                 features={[
                   "Kompletní nastavení Shoptet",
-                  "Vlastní úpravy šablony",
-                  "Instalace 10 doplňků",
-                  "Napojení na účetní systém",
-                  "Nastavení Google Analytics",
-                  "SEO optimalizace",
-                  "60 dní podpory zdarma"
+                  "Vlastní úpravy šablony na míru",
+                  "Do 100 produktů",
+                  "Pokročilé SEO + schema markup",
+                  "Integrace s účetním systémem",
+                  "Napojení na ERP systémy",
+                  "Pokročilá analytika a tracking",
+                  "Marketing automatizace",
+                  "60 dní technická podpora"
                 ]}
                 color="#F97316"
-                icon={<Settings className="w-6 h-6" />}
+                isPopular={true}
+                icon={<BarChart3 className="w-5 h-5" />}
               />
               
               <PricingPackage
-                title="Premium e-shop"
-                price="od 50 000 Kč"
+                title="Pro"
+                price="od 75 000 Kč"
                 features={[
-                  "Komplexní individuální řešení",
-                  "Vlastní design",
-                  "Neomezené množství doplňků",
-                  "Napojení na ERP systémy",
-                  "Marketingová automatizace",
-                  "Školení pro zaměstnance",
-                  "Pokročilá SEO optimalizace",
-                  "90 dní podpory zdarma"
+                  "Neomezený počet produktů",
+                  "Zcela vlastní design a funkcionalita",
+                  "B2B a B2C řešení",
+                  "Vícejazyčné mutace",
+                  "Pokročilé CRM integrace",
+                  "AI chatbot implementace",
+                  "Detailní konverzní optimalizace",
+                  "Školení pro tým",
+                  "90 dní technická podpora"
                 ]}
                 color="#F97316"
-                icon={<Layout className="w-6 h-6" />}
+                icon={<Crown className="w-5 h-5" />}
               />
             </div>
+
+            {/* Shopify prémiová nabídka */}
+            <div className="mb-20 max-w-4xl mx-auto">
+              <div className="bg-gradient-to-br from-purple-900/20 to-purple-800/10 p-6 sm:p-8 rounded-xl border border-purple-500/30">
+                <div className="flex items-center mb-4">
+                  <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center mr-4">
+                    <Crown className="w-6 h-6 text-purple-400" />
+                  </div>
+                  <h4 className="text-xl font-bold text-white">Shopify - Prémiové řešení</h4>
+                </div>
+                <p className="text-gray-300 text-sm sm:text-base leading-relaxed mb-4">
+                  Pro náročné projekty nabízím také tvorbu e-shopů na platformě <span className="text-purple-400 font-medium">
+                  Shopify</span> - světově nejpoužívanější e-commerce platformě. Shopify je ideální 
+                  pro mezinárodní obchody, rozsáhlé katalogy a pokročilé funkce.
+                </p>
+                <div className="bg-purple-500/10 rounded-lg p-4 border border-purple-500/20">
+                  <p className="text-purple-300 text-sm font-medium">
+                    <strong>Cena:</strong> od 50 000 Kč | <strong>Implementace:</strong> Individuální konzultace podle rozsahu projektu
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Custom vzhled a programování */}
+            <div className="mb-20 max-w-5xl mx-auto">
+              <div className="text-center mb-8">
+                <h3 className="text-2xl md:text-3xl font-bold mb-4 text-white">
+                  Vlastní vzhled a programování funkcí
+                </h3>
+                <p className="text-gray-300 text-base md:text-lg max-w-3xl mx-auto">
+                  Dokážu vytvořit zcela unikátní vzhled a naprogramovat jakékoliv specifické funkce 
+                  podle vašich potřeb - váš e-shop nebude vypadat šablonově.
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-8 mb-8">
+                {/* Šablonový vs Custom */}
+                <div className="bg-gradient-to-br from-red-900/20 to-red-800/10 p-6 rounded-xl border border-red-500/30">
+                  <div className="flex items-center mb-4">
+                    <div className="w-12 h-12 bg-red-500/20 rounded-lg flex items-center justify-center mr-4">
+                      <Layout className="w-6 h-6 text-red-400" />
+                    </div>
+                    <h4 className="text-red-400 font-bold text-lg">Běžné šablonové řešení</h4>
+                  </div>
+                  <ul className="space-y-2 text-sm text-gray-300">
+                    <li className="flex items-start">
+                      <span className="text-red-400 mr-2 mt-1">×</span>
+                      Omezené možnosti vzhledu
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-red-400 mr-2 mt-1">×</span>
+                      Vypadá stejně jako konkurence
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-red-400 mr-2 mt-1">×</span>
+                      Funkce pouze z hotových doplňků
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-red-400 mr-2 mt-1">×</span>
+                      Neoptimalizované pro vaše procesy
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Custom řešení */}
+                <div className="bg-gradient-to-br from-green-900/20 to-green-800/10 p-6 rounded-xl border border-green-500/30">
+                  <div className="flex items-center mb-4">
+                    <div className="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center mr-4">
+                      <Settings className="w-6 h-6 text-green-400" />
+                    </div>
+                    <h4 className="text-green-400 font-bold text-lg">Moje custom řešení</h4>
+                  </div>
+                  <ul className="space-y-2 text-sm text-gray-300">
+                    <li className="flex items-start">
+                      <span className="text-green-400 mr-2 mt-1">✓</span>
+                      Zcela vlastní design a kódování
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-400 mr-2 mt-1">✓</span>
+                      Unikátní vzhled a funkcionalita
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-400 mr-2 mt-1">✓</span>
+                      Naprogramované přesně na míru
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-400 mr-2 mt-1">✓</span>
+                      Optimalizováno pro vaše procesy
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              {/* Co dokážu vytvořit a naprogramovat */}
+              <div className="bg-gradient-to-br from-slate-800/40 to-slate-700/20 p-6 sm:p-8 rounded-xl border border-orange-500/30">
+                <h4 className="text-xl font-bold text-white mb-6 text-center">Co dokážu vytvořit a naprogramovat</h4>
+                
+                {/* Vzhledové úpravy */}
+                <div className="mb-6">
+                  <h5 className="text-orange-400 font-bold mb-4">🎨 Vzhledové úpravy a design:</h5>
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    <div className="bg-orange-500/10 rounded-lg p-3 border border-orange-500/20">
+                      <p className="text-gray-300 text-sm">Vlastní CSS styly pro šablony</p>
+                    </div>
+                    <div className="bg-orange-500/10 rounded-lg p-3 border border-orange-500/20">
+                      <p className="text-gray-300 text-sm">HTML úpravy a přizpůsobení</p>
+                    </div>
+                    <div className="bg-orange-500/10 rounded-lg p-3 border border-orange-500/20">
+                      <p className="text-gray-300 text-sm">JavaScript animace a efekty</p>
+                    </div>
+                    <div className="bg-orange-500/10 rounded-lg p-3 border border-orange-500/20">
+                      <p className="text-gray-300 text-sm">Responzivní mobilní design</p>
+                    </div>
+                    <div className="bg-orange-500/10 rounded-lg p-3 border border-orange-500/20">
+                      <p className="text-gray-300 text-sm">Brandové barevné schéma</p>
+                    </div>
+                    <div className="bg-orange-500/10 rounded-lg p-3 border border-orange-500/20">
+                      <p className="text-gray-300 text-sm">Přizpůsobené produktové stránky</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Funkcionalita */}
+                <div>
+                  <h5 className="text-orange-400 font-bold mb-4">⚙️ Vlastní funkce a integrace:</h5>
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    <div className="bg-orange-500/10 rounded-lg p-3 border border-orange-500/20">
+                      <p className="text-gray-300 text-sm">API integrace s ERP/CRM systémy</p>
+                    </div>
+                    <div className="bg-orange-500/10 rounded-lg p-3 border border-orange-500/20">
+                      <p className="text-gray-300 text-sm">Vlastní doplňky a rozšíření</p>
+                    </div>
+                    <div className="bg-orange-500/10 rounded-lg p-3 border border-orange-500/20">
+                      <p className="text-gray-300 text-sm">Google Analytics a tracking</p>
+                    </div>
+                    <div className="bg-orange-500/10 rounded-lg p-3 border border-orange-500/20">
+                      <p className="text-gray-300 text-sm">E-mail marketing integrace</p>
+                    </div>
+                    <div className="bg-orange-500/10 rounded-lg p-3 border border-orange-500/20">
+                      <p className="text-gray-300 text-sm">Platební brány a služby</p>
+                    </div>
+                    <div className="bg-orange-500/10 rounded-lg p-3 border border-orange-500/20">
+                      <p className="text-gray-300 text-sm">Vlastní checkout úpravy</p>
+                    </div>
+                    <div className="bg-orange-500/10 rounded-lg p-3 border border-orange-500/20">
+                      <p className="text-gray-300 text-sm">SEO a konverzní optimalizace</p>
+                    </div>
+                    <div className="bg-orange-500/10 rounded-lg p-3 border border-orange-500/20">
+                      <p className="text-gray-300 text-sm">Skladové systémy propojení</p>
+                    </div>
+                    <div className="bg-orange-500/10 rounded-lg p-3 border border-orange-500/20">
+                      <p className="text-gray-300 text-sm">Účetní software napojení</p>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Poznámka o omezeních */}
+                <div className="mt-6 p-4 bg-blue-500/10 rounded-lg border border-blue-500/20">
+                  <h6 className="text-blue-400 font-bold mb-2">ℹ️ Shoptet Premium možnosti:</h6>
+                  <p className="text-gray-300 text-sm">
+                    Pro nejnáročnější projekty nabízím <strong>Shoptet Premium</strong> s privátním API a neomezenými 
+                    možnostmi customizace - včetně vlastních šablon od nuly a komplexních funkcí na míru.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Proč e-shop na Shoptetu */}
+            <div className="mb-20 max-w-5xl mx-auto">
+              <div className="text-center mb-8">
+                <h3 className="text-2xl md:text-3xl font-bold mb-4 text-white">
+                  Proč Shoptet pro váš e-shop?
+                </h3>
+                <p className="text-gray-300 text-base md:text-lg max-w-3xl mx-auto">
+                  Shoptet je česká cloudová platforma, která kombinuje jednoduchost použití 
+                  s profesionálními funkcemi potřebnými pro úspěšný online obchod.
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-6 mb-8">
+                {/* Shoptet výhody */}
+                <div className="bg-gradient-to-br from-green-900/20 to-green-800/10 p-6 rounded-xl border border-green-500/30">
+                  <div className="flex items-center mb-4">
+                    <div className="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center mr-4">
+                      <span className="text-green-400 font-bold text-lg">CZ</span>
+                    </div>
+                    <h4 className="text-green-400 font-bold text-lg">Shoptet výhody</h4>
+                  </div>
+                  <ul className="space-y-2 text-sm text-gray-300">
+                    <li className="flex items-start">
+                      <span className="text-green-400 mr-2 mt-1">✓</span>
+                      Česká platforma s lokální podporou
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-400 mr-2 mt-1">✓</span>
+                      Výborný poměr cena/výkon
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-400 mr-2 mt-1">✓</span>
+                      Jednoduchá správa a údržba
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-400 mr-2 mt-1">✓</span>
+                      Cloudový hosting v ceně
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-400 mr-2 mt-1">✓</span>
+                      Rychlé spuštění (14 dní)
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-400 mr-2 mt-1">✓</span>
+                      Integrované platební brány
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Měsíční náklady */}
+                <div className="bg-gradient-to-br from-blue-900/20 to-blue-800/10 p-6 rounded-xl border border-blue-500/30">
+                  <div className="flex items-center mb-4">
+                    <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mr-4">
+                      <span className="text-blue-400 font-bold text-lg">€</span>
+                    </div>
+                    <h4 className="text-blue-400 font-bold text-lg">Měsíční náklady</h4>
+                  </div>
+                  <ul className="space-y-2 text-sm text-gray-300">
+                    <li className="flex items-start">
+                      <span className="text-blue-400 mr-2 mt-1">•</span>
+                      Shoptet licence: od 490 Kč/měsíc
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-blue-400 mr-2 mt-1">•</span>
+                      Platební brána: 2,9% z tržeb
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-blue-400 mr-2 mt-1">•</span>
+                      Premium doplňky: 200-800 Kč/měsíc
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-blue-400 mr-2 mt-1">•</span>
+                      Hosting: součást licence ✓
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-blue-400 mr-2 mt-1">•</span>
+                      Aktualizace: automatické ✓
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-blue-400 mr-2 mt-1">•</span>
+                      Zabezpečení: v ceně ✓
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="text-center bg-gradient-to-br from-slate-800/40 to-slate-700/20 p-6 rounded-xl border border-slate-600/30">
+                <h5 className="text-white font-bold text-lg mb-2">Žádné skryté poplatky</h5>
+                <p className="text-gray-300">
+                  Na rozdíl od vlastního hostingu <span className="text-orange-400 font-semibold">neplatíte za technickou údržbu, 
+                  aktualizace nebo zabezpečení</span>. Vše je součástí měsíční licence Shoptet.
+                </p>
+              </div>
+            </div>
             
-            {/* Další možnosti */}
-            <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-6 mb-12">
-              <h3 className="text-xl font-bold text-white mb-4">Doplňkové služby</h3>
+            {/* Proč investovat do profesionálního e-shopu */}
+            <div className="mb-20 max-w-5xl mx-auto">
+              <h3 className="text-3xl font-bold text-center mb-4 text-white">Proč investovat do profesionálního e-shopu?</h3>
+              <p className="text-center text-gray-300 text-lg mb-12 max-w-3xl mx-auto">
+                E-shop není jen katalog produktů - je to prodejní nástroj, který musí přesvědčit návštěvníka k nákupu za několik sekund.
+              </p>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="flex items-start">
-                  <div 
-                    className="mr-4 p-2 rounded-full"
-                    style={{ backgroundColor: 'rgba(249, 115, 22, 0.1)' }}
-                  >
-                    <Settings className="w-5 h-5 text-orange-500" />
+              {/* Statistiky */}
+              <div className="grid md:grid-cols-2 gap-6 mb-12">
+                <div className="bg-gradient-to-br from-slate-800/80 to-slate-700/60 p-6 rounded-xl border border-slate-700/50 backdrop-blur-sm">
+                  <div className="flex items-center mb-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+                      <span className="text-white font-bold text-lg">4x</span>
+                    </div>
+                    <div>
+                      <h4 className="text-white font-bold">Vyšší konverze</h4>
+                      <p className="text-gray-400 text-sm">Oproti šablonové verzi</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-bold text-white mb-1">Instalace doplňků</h4>
-                    <p className="text-sm text-gray-300">od 500 Kč / doplněk</p>
+                  <p className="text-gray-300 text-sm">
+                    Optimalizovaný e-shop převede 4x více návštěvníků na zákazníky díky důmyslné UX a psychology prodeje.
+                  </p>
+                </div>
+
+                <div className="bg-gradient-to-br from-slate-800/80 to-slate-700/60 p-6 rounded-xl border border-slate-700/50 backdrop-blur-sm">
+                  <div className="flex items-center mb-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+                      <span className="text-white font-bold text-lg">67%</span>
+                    </div>
+                    <div>
+                      <h4 className="text-white font-bold">Mobilní nákupy</h4>
+                      <p className="text-gray-400 text-sm">Podíl z celkových tržeb</p>
+                    </div>
+                  </div>
+                  <p className="text-gray-300 text-sm">
+                    Bez optimalizace pro mobily přicházíte o 2/3 potenciálních zákazníků. Mobilní verze je klíčová.
+                  </p>
+                </div>
+
+                <div className="bg-gradient-to-br from-slate-800/80 to-slate-700/60 p-6 rounded-xl border border-slate-700/50 backdrop-blur-sm">
+                  <div className="flex items-center mb-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+                      <span className="text-white font-bold text-lg">15s</span>
+                    </div>
+                    <div>
+                      <h4 className="text-white font-bold">Doba rozhodnutí</h4>
+                      <p className="text-gray-400 text-sm">Průměrná doba před nákupem</p>
+                    </div>
+                  </div>
+                  <p className="text-gray-300 text-sm">
+                    Máte jen 15 sekund na to přesvědčit zákazníka. Každý detail designu a UX musí sedět.
+                  </p>
+                </div>
+
+                <div className="bg-gradient-to-br from-slate-800/80 to-slate-700/60 p-6 rounded-xl border border-slate-700/50 backdrop-blur-sm">
+                  <div className="flex items-center mb-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+                      <span className="text-white font-bold text-lg">ROI</span>
+                    </div>
+                    <div>
+                      <h4 className="text-white font-bold">Rychlá návratnost</h4>
+                      <p className="text-gray-400 text-sm">Typicky za 2-4 měsíce</p>
+                    </div>
+                  </div>
+                  <p className="text-gray-300 text-sm">
+                    Profesionální e-shop se zaplatí během několika měsíců díky vyšším konverzím a průměrné hodnotě objednávky.
+                  </p>
+                </div>
+              </div>
+
+              {/* Moje garance */}
+              <div className="text-center mb-12">
+                <h4 className="text-2xl font-bold text-white mb-8">Moje garance úspěchu</h4>
+                <div className="grid md:grid-cols-3 gap-6">
+                  <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-6 rounded-xl border border-emerald-500/30">
+                    <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+                      <Target className="w-6 h-6 text-white" />
+                    </div>
+                    <h5 className="text-white font-bold mb-2">Konverzní optimalizace</h5>
+                    <p className="text-gray-300 text-sm">
+                      Každý element navržen s cílem maximalizovat prodeje a průměrnou hodnotu košíku.
+                    </p>
+                  </div>
+
+                  <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-6 rounded-xl border border-cyan-500/30">
+                    <div className="w-12 h-12 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+                      <Award className="w-6 h-6 text-white" />
+                    </div>
+                    <h5 className="text-white font-bold mb-2">Testování a data</h5>
+                    <p className="text-gray-300 text-sm">
+                      Kontinuální A/B testování a optimalizace na základě reálných dat o chování zákazníků.
+                    </p>
+                  </div>
+
+                  <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-6 rounded-xl border border-violet-500/30">
+                    <div className="w-12 h-12 bg-gradient-to-br from-violet-500 to-violet-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+                      <TrendingUp className="w-6 h-6 text-white" />
+                    </div>
+                    <h5 className="text-white font-bold mb-2">Dlouhodobý růst</h5>
+                    <p className="text-gray-300 text-sm">
+                      Strategie a nástroje pro škálování obchodu a zvyšování tržeb v čase.
+                    </p>
                   </div>
                 </div>
-                
-                <div className="flex items-start">
-                  <div 
-                    className="mr-4 p-2 rounded-full"
-                    style={{ backgroundColor: 'rgba(249, 115, 22, 0.1)' }}
-                  >
-                    <Layout className="w-5 h-5 text-orange-500" />
+              </div>
+
+              {/* Co konkrétně získáte */}
+              <div className="bg-gradient-to-br from-slate-800/40 to-slate-700/20 p-8 rounded-xl border border-slate-600/30 text-center">
+                <h4 className="text-xl font-bold text-white mb-6">Co konkrétně získáte</h4>
+                <div className="grid md:grid-cols-2 gap-6 text-left">
+                  <div>
+                    <h5 className="text-orange-400 font-bold mb-2">Technicky:</h5>
+                    <ul className="text-gray-300 text-sm space-y-1">
+                      <li>• Rychlý a responzivní e-shop</li>
+                      <li>• Optimalizovaný nákupní proces</li>
+                      <li>• Integrované platební metody</li>
+                      <li>• Cloudový hosting a zabezpečení</li>
+                    </ul>
                   </div>
                   <div>
-                    <h4 className="font-bold text-white mb-1">Úprava šablony</h4>
-                    <p className="text-sm text-gray-300">od 3 000 Kč</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start">
-                  <div 
-                    className="mr-4 p-2 rounded-full"
-                    style={{ backgroundColor: 'rgba(249, 115, 22, 0.1)' }}
-                  >
-                    <Truck className="w-5 h-5 text-orange-500" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-white mb-1">Nastavení dopravy a plateb</h4>
-                    <p className="text-sm text-gray-300">od 1 500 Kč</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start">
-                  <div 
-                    className="mr-4 p-2 rounded-full"
-                    style={{ backgroundColor: 'rgba(249, 115, 22, 0.1)' }}
-                  >
-                    <Clock className="w-5 h-5 text-orange-500" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-white mb-1">Měsíční správa e-shopu</h4>
-                    <p className="text-sm text-gray-300">od 2 500 Kč / měsíc</p>
+                    <h5 className="text-orange-400 font-bold mb-2">Obchodně:</h5>
+                    <ul className="text-gray-300 text-sm space-y-1">
+                      <li>• Vyšší konverze a tržby</li>
+                      <li>• Automatizované procesy</li>
+                      <li>• Detailní analytika prodejů</li>
+                      <li>• Škálovatelné řešení</li>
+                    </ul>
                   </div>
                 </div>
               </div>
             </div>
             
             {/* Kontaktní CTA */}
-            <div className="text-center">
-              <Link href="/kontakt" className="inline-flex items-center px-6 py-3 rounded-lg bg-orange-500 text-white font-medium hover:bg-orange-600 transition-colors">
+            <div className="text-center mt-16">
+              <Link href="/kontakt" className="inline-flex items-center px-4 sm:px-8 py-3 sm:py-4 rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold text-base sm:text-lg hover:from-orange-600 hover:to-orange-700 transition-all transform hover:scale-105 shadow-lg">
                 <span>Kontaktujte mě pro kalkulaci</span>
-                <ChevronRight className="ml-2 w-5 h-5" />
+                <ChevronRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5" />
               </Link>
-              <p className="text-gray-400 mt-4">
+              <p className="text-gray-400 mt-4 text-base sm:text-lg px-4">
                 Každý e-shop je jedinečný. Kontaktujte mě pro nezávaznou konzultaci a přesnou kalkulaci.
               </p>
             </div>
@@ -609,59 +1020,55 @@ const ShoptetServicesPage: React.FC = () => {
             className="max-w-3xl mx-auto"
           >
             {/* Proces tvorby */}
-            <div className="mb-16">
+            <div className="mb-20">
+              <div className="text-center mb-12">
+                <h3 className="text-2xl md:text-3xl font-bold mb-4 text-white">
+                  Jak probíhá tvorba e-shopu
+                </h3>
+                <p className="text-gray-300 text-base md:text-lg max-w-3xl mx-auto">
+                  Systematický proces od analýzy po spuštění zajišťuje, že váš e-shop 
+                  bude od prvního dne prodávat a generovat tržby.
+                </p>
+              </div>
+              
               <ProcessStep
                 number={1}
-                title="Analýza potřeb"
-                description="V první fázi se seznámíme s vaším podnikáním a produkty. Provedeme analýzu vašich potřeb, konkurence a cílového trhu. Definujeme funkce, které váš e-shop potřebuje, a vytvoříme plán implementace."
+                title="Analýza a strategie"
+                description="Analyzujeme vaše produkty, cílovou skupinu a konkurenci. Definujeme prodejní strategii, strukturu e-shopu a požadované funkce. Vytvoříme detailní plán implementace s jasnými milníky."
               />
               
               <ProcessStep
                 number={2}
-                title="Nastavení a přizpůsobení"
-                description="Vytvoříme vaši Shoptet licenci, nastavíme základní parametry e-shopu a vybereme vhodnou šablonu. Tu následně upravíme podle vašich požadavků, aby odpovídala vaší firemní identitě a potřebám."
+                title="Design a UX optimalizace"
+                description="Navrhneme design zaměřený na konverze a vytvoříme prototypy klíčových stránek. Optimalizujeme nákupní proces, košík a checkout pro maximální dokončenost objednávek."
               />
               
               <ProcessStep
                 number={3}
-                title="Implementace a testování"
-                description="Nainstalujeme potřebné doplňky, nastavíme platební metody a dopravu. Naplníme e-shop vzorkem produktů a důkladně otestujeme všechny funkce. Optimalizujeme výkon a SEO parametry."
+                title="Implementace a konfigurace"
+                description="Nastavíme Shoptet e-shop, implementujeme design a konfigurujeme všechny potřebné funkce. Integrujeme platební metody, dopravu, skladové systémy a analytické nástroje."
               />
               
               <ProcessStep
                 number={4}
-                title="Spuštění a podpora"
-                description="Po finálním schválení e-shop spustíme, provedeme školení pro správce obchodu a zajistíme nepřetržitou podporu v prvních dnech provozu. Po spuštění poskytujeme servis a pomoc s dalším rozvojem."
+                title="Testování a spuštění"
+                description="Důkladně otestujeme všechny funkce, naplníme e-shop produkty a provedeme konečnou optimalizaci. Po schválení e-shop spustíme a zajistíme školení a podporu."
                 isLast
               />
             </div>
             
-            {/* Výhody Shoptetu */}
-            <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-6 mb-12">
-              <h3 className="text-xl font-bold text-white mb-6">Proč zvolit Shoptet?</h3>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <FeatureItem>Česká platforma s profesionální podporou</FeatureItem>
-                <FeatureItem>Jednoduchá administrace</FeatureItem>
-                <FeatureItem>Bezkonkurenční poměr cena/výkon</FeatureItem>
-                <FeatureItem>Stovky rozšiřujících doplňků</FeatureItem>
-                <FeatureItem>Pravidelné aktualizace systému</FeatureItem>
-                <FeatureItem>Stabilní a bezpečné řešení</FeatureItem>
-              </div>
-            </div>
-            
             {/* Postup CTA */}
-            <div className="text-center p-6 border border-slate-700 rounded-lg bg-slate-800/30">
+            <div className="text-center p-6 border border-slate-700 rounded-lg bg-slate-800/30 mt-12">
               <h4 className="text-xl font-bold text-white mb-4">Připraveni začít prodávat online?</h4>
               <p className="text-gray-300 mb-6">
-                Získejte profesionální e-shop, který bude fungovat pro vaše podnikání. Kontaktujte mě pro nezávaznou konzultaci.
+                Získejte profesionální e-shop, který skutečně prodává a přináší výsledky. Kontaktujte mě pro nezávaznou konzultaci a cenovou nabídku.
               </p>
               <Link href="/kontakt" className="inline-flex items-center px-6 py-3 rounded-lg bg-orange-500 text-white font-medium hover:bg-orange-600 transition-colors">
                 <span>Nezávazná konzultace</span>
                 <ChevronRight className="ml-2 w-5 h-5" />
               </Link>
             </div>
-            </motion.div>
+          </motion.div>
         )}
       </div>
 
@@ -674,60 +1081,61 @@ const ShoptetServicesPage: React.FC = () => {
         <div className="space-y-6">
           {/* FAQ Item 1 */}
           <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-6">
-            <h3 className="text-xl font-bold text-white mb-3">Jak dlouho trvá vytvoření e-shopu na Shoptetu?</h3>
+            <h3 className="text-xl font-bold text-white mb-3">Jak dlouho trvá vytvoření e-shopu?</h3>
             <p className="text-gray-300">
-              Doba realizace závisí na rozsahu projektu. Základní e-shop lze zprovoznit již za 2-3 týdny, 
-              komplexnější řešení obvykle vyžadují 4-8 týdnů. Vždy záleží na množství vlastních úprav, 
-              počtu produktů a požadovaných funkcích.
+              Standardní e-shop na Shoptetu dokážu spustit za 10-14 dní. Komplexnější řešení s vlastními funkcemi 
+              a integrací obvykle zabere 3-6 týdnů. Shopify projekty 4-8 týdnů podle rozsahu customizace.
             </p>
           </div>
 
           {/* FAQ Item 2 */}
           <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-6">
-            <h3 className="text-xl font-bold text-white mb-3">Potřebuji mít vlastní hosting pro Shoptet?</h3>
+            <h3 className="text-xl font-bold text-white mb-3">Kolik stojí měsíční provoz e-shopu?</h3>
             <p className="text-gray-300">
-              Ne, Shoptet je cloudové řešení, které již obsahuje hosting v ceně měsíčního pronájmu. 
-              Nemusíte se starat o technické zázemí, aktualizace či zabezpečení. Vše je zajištěno v rámci služby.
+              <strong>Shoptet:</strong> licence od 490 Kč/měsíc + platební brána 2,9% z tržeb. Hosting, aktualizace a zabezpečení v ceně.<br/>
+              <strong>Shopify:</strong> od $29/měsíc + transakční poplatky 2,9%. Více funkcí a flexibility.
             </p>
           </div>
 
           {/* FAQ Item 3 */}
           <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-6">
-            <h3 className="text-xl font-bold text-white mb-3">Je možné napojit Shoptet na účetní systém?</h3>
+            <h3 className="text-xl font-bold text-white mb-3">Můžete naprogramovat specifické funkce na míru?</h3>
             <p className="text-gray-300">
-              Ano, Shoptet umožňuje propojení s mnoha účetními a ERP systémy jako Pohoda, Money S3, FlexiBee a další. 
-              V rámci našich služeb zajistíme kompletní implementaci a nastavení těchto propojení pro bezproblémový 
-              chod vašeho podnikání.
+              Ano, specializuji se na custom kódování. Dokážu vytvořit vlastní kalkulátory, rezervační systémy, 
+              B2B funkce, specifické filtry nebo jakoukoliv jinou funkcionalitu přesně podle vašich potřeb.
             </p>
           </div>
 
           {/* FAQ Item 4 */}
           <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-6">
-            <h3 className="text-xl font-bold text-white mb-3">Jaké jsou měsíční náklady na provoz e-shopu?</h3>
+            <h3 className="text-xl font-bold text-white mb-3">Jak zajistíte, aby e-shop skutečně prodával?</h3>
             <p className="text-gray-300">
-              Měsíční náklady zahrnují pronájem Shoptet licence (od 490 Kč/měsíc) a případné 
-              poplatky za prémiové doplňky. Nabízíme také službu měsíční správy e-shopu, která 
-              zajistí bezproblémový chod, aktualizace a drobné úpravy.
+              Používám konverzní optimalizaci na základě psychologie prodeje, A/B testování klíčových elementů, 
+              optimalizaci pro mobily a důkladnou analýzu zákazníků. Každý detail je navržen pro maximální prodeje.
             </p>
           </div>
 
           {/* FAQ Item 5 */}
           <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-6">
-            <h3 className="text-xl font-bold text-white mb-3">Mohu později svůj e-shop rozšířit?</h3>
+            <h3 className="text-xl font-bold text-white mb-3">Kdy zvolit Shoptet a kdy Shopify?</h3>
             <p className="text-gray-300">
-              Rozhodně ano. Shoptet je velmi flexibilní systém, který umožňuje postupné rozšiřování. 
-              Začít můžete s jednoduchou verzí a postupně přidávat funkce, upravovat design a optimalizovat 
-              procesy podle vašich zkušeností a potřeb.
+              <strong>Shoptet:</strong> Ideální pro český trh, střední e-shopy, jednoduchou správu a nižší náklady.<br/>
+              <strong>Shopify:</strong> Lepší pro mezinárodní prodej, rozsáhlé katalogy, pokročilé funkce a větší flexibilitu.
+            </p>
+          </div>
+
+          {/* FAQ Item 6 */}
+          <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-6">
+            <h3 className="text-xl font-bold text-white mb-3">Zajistíte i propojení s účetním systémem?</h3>
+            <p className="text-gray-300">
+              Ano, běžně implementuji napojení na Pohoda, Money S3, FlexiBee a další účetní systémy. 
+              Včetně automatické synchronizace objednávek, zásob a fakturace pro bezproblémový chod.
             </p>
           </div>
         </div>
       </div>
-
-      
-
-      
     </section>
   );
 };
 
-export default ShoptetServicesPage;
+export default EshopServicesPage;

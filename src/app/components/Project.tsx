@@ -1,48 +1,121 @@
 "use client"
 
-import React, { useEffect, useState, useRef } from "react"
-import Link from "next/link"
+import React, { useState, useEffect, useRef } from 'react';
 
-/// Příklady projektů
-const projects = [
+interface Project {
+  id: number;
+  title: string;
+  description: string;
+  category: string;
+  technologies: string[];
+  image: string;
+  link: string;
+  featured: boolean;
+}
+
+const projects: Project[] = [
   {
-    title: "EdukoPlatform",
-    description: "Zabezpečená vzdělávací platforma s interaktivními cvičeními a animacemi propojenými s odkazy v učebnicích. Přístup je umožněn pouze přes zabezpečené odkazy s tokeny.",
-    category: "Vzdělávací software",
-    technologies: ["React", "Node.js", "JWT", "MongoDB", "GSAP Animations"],
-    image: "/imgs/web3.png",
-    result: "87% studentů hodnotí platformu jako velmi užitečnou, 34% zlepšení studijních výsledků"
+    id: 1,
+    title: "Veterinární Ordinace",
+    description: "Webová aplikace pro veterinární ordinaci s rezervačním systémem a správou klientů.",
+    category: "Web Development",
+    technologies: [".NET Core", "C#", "HTML", "CSS", "JavaScript"],
+    image: "/imgs/veterina.jpg",
+    link: "https://veterinagottwaldova.cz",
+    featured: true
   },
   {
-    title: "Království zdraví e-shop",
-    description: "Komplexní úprava Shoptet šablony, rozšíření funkcionalit a stylů pro e-shop Království zdraví. Vytvořeno několik vlastních modulů a přizpůsobení pro zlepšení uživatelského zážitku.",
-    category: "E-commerce úpravy",
-    technologies: ["Shoptet", "CSS/SCSS", "JavaScript", "HTML5"],
-    image: "/imgs/kz.png",
-    result: "43% nárůst objednávek, 28% prodloužení času stráveného na stránce"
+    id: 2,
+    title: "Portfolio AI Konzultanta",
+    description: "Moderní portfolio kombinující čistý design s interaktivními prvky a 3D vizualizací.",
+    category: "Web Design",
+    technologies: ["React", "Next.js", "Tailwind CSS", "Three.js"],
+    image: "/imgs/ai-andrt.jpg",
+    link: "https://www.ai-andrt.cz",
+    featured: false
   },
   {
-    title: "Filmová databáze",
-    description: "Aplikace pro vyhledávání filmů s využitím externího API. Umožňuje filtrování podle žánrů, hodnocení a roku vydání, ukládání oblíbených filmů a vytváření vlastních seznamů.",
-    category: "Webová aplikace",
-    technologies: ["React", "Tailwind CSS", "REST API", "LocalStorage"],
-    image: "/imgs/movie.png",
-    result: "Přes 5,000 aktivních uživatelů během prvního měsíce"
+    id: 3,
+    title: "Filmová Databáze",
+    description: "Aplikace pro vyhledávání filmů s využitím externího API a pokročilými filtry.",
+    category: "Web App",
+    technologies: ["React", "Tailwind CSS", "REST API"],
+    image: "/imgs/film.jpg",
+    link: "https://movieapp-mu-gilt.vercel.app",
+    featured: false
+  },
+  {
+    id: 4,
+    title: "Království Zdraví",
+    description: "Komplexní e-shop řešení na platformě Shoptet s custom úpravami designu a funkcionalit.",
+    category: "E-commerce",
+    technologies: ["Shoptet", "HTML", "CSS", "JavaScript"],
+    image: "/imgs/eshop.jpg",
+    link: "https://www.kralostvizdravi.cz",
+    featured: true
+  },
+  {
+    id: 5,
+    title: "Účetní Systém Pro",
+    description: "Komplexní účetní software pro malé a střední firmy s automatizací fakturace a reporting.",
+    category: "Business App",
+    technologies: ["React", "Node.js", "PostgreSQL", "Express"],
+    image: "/imgs/ucet.jpg",
+    link: "https://accounting-pro-demo.vercel.app",
+    featured: false
+  },
+  {
+    id: 6,
+    title: "Last Message",
+    description: "Osobní projekt zaměřený na uchování vzpomínek a vztahů prostřednictvím vzkazů pro vaše blízké.",
+    category: "Personal Project",
+    technologies: ["React", "Node.js", "MongoDB", "Tailwind CSS"],
+    image: "/imgs/last.jpg",
+    link: "https://lastmessage-personal.vercel.app",
+    featured: false
   }
 ];
 
-// Čisté pozadí bez gradientních prvků (stejné jako ServicesGrid)
-const BackgroundAnimation: React.FC<{ isDesktop: boolean }> = ({ isDesktop }) => {
+// Futuristické pozadí
+interface BackgroundAnimationProps {
+  isDesktop: boolean;
+}
+
+const BackgroundAnimation: React.FC<BackgroundAnimationProps> = ({ isDesktop }) => {
   if (!isDesktop) {
-    // Pro mobilní zařízení - bez pozadí
-    return null;
+    return (
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div 
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage: 'linear-gradient(to right, rgba(249,115,22,0.3) 1px, transparent 1px), linear-gradient(to bottom, rgba(249,115,22,0.3) 1px, transparent 1px)',
+            backgroundSize: '40px 40px'
+          }}
+        />
+      </div>
+    );
   }
   
-  // Pro desktop - pouze jemná mřížka a kódový vzor
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {/* Jemný overlay kódového vzoru */}
-      <div className="absolute inset-0 opacity-[0.015] font-mono text-[0.6rem] text-white overflow-hidden select-none">
+      {/* Tech grid pattern */}
+      <div 
+        className="absolute inset-0 opacity-[0.06]"
+        style={{
+          backgroundImage: 'linear-gradient(to right, rgba(249,115,22,0.4) 1px, transparent 1px), linear-gradient(to bottom, rgba(249,115,22,0.4) 1px, transparent 1px)',
+          backgroundSize: '60px 60px'
+        }}
+      />
+      
+      {/* Floating tech elements */}
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-orange-400 rounded-full animate-pulse"></div>
+        <div className="absolute top-3/4 right-1/4 w-1 h-1 bg-cyan-400 rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
+        <div className="absolute top-1/2 left-3/4 w-1.5 h-1.5 bg-orange-400 rounded-full animate-pulse" style={{animationDelay: '2s'}}></div>
+      </div>
+      
+      {/* Subtle code overlay */}
+      <div className="absolute inset-0 opacity-[0.015] font-mono text-[0.6rem] text-orange-400 overflow-hidden select-none">
         <div className="absolute -left-20 top-10 transform -rotate-3 opacity-50">
           {`// Project showcase
 const projects = [...data];
@@ -53,34 +126,22 @@ export const renderProjects = () => {
 };`}
         </div>
       </div>
-      
-      {/* Jemná mřížka */}
-      <div 
-        className="absolute inset-0 opacity-5"
-        style={{
-          backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px)',
-          backgroundSize: '40px 40px'
-        }}
-      ></div>
     </div>
   );
 };
 
 const ProjectsSection = () => {
-  // State pro postupné zobrazení prvků
-  const [isVisible, setIsVisible] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(false);
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+  const [isDesktop, setIsDesktop] = useState<boolean>(false);
   const [visibleCards, setVisibleCards] = useState<boolean[]>([]);
-  const [headerVisible, setHeaderVisible] = useState(false);
-  const [descriptionVisible, setDescriptionVisible] = useState(false);
-  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const [headerVisible, setHeaderVisible] = useState<boolean>(false);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>(new Array(projects.length).fill(null));
   const headerRef = useRef<HTMLDivElement>(null);
-  const descriptionRef = useRef<HTMLParagraphElement>(null);  
-  // Nastavíme prvky jako viditelné po montáži komponenty a detekce desktop
+
   useEffect(() => {
     setIsVisible(true);
     setIsDesktop(window.innerWidth >= 1024);
-    setVisibleCards(new Array(projects.length).fill(false));
+    setVisibleCards(new Array(projects.length).fill(false) as boolean[]);
     
     const handleResize = () => {
       setIsDesktop(window.innerWidth >= 1024);
@@ -96,13 +157,12 @@ const ProjectsSection = () => {
   useEffect(() => {
     if (!isDesktop) return;
 
-    // Observer pro karty
     const cardsObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const index = parseInt(entry.target.getAttribute('data-index') || '0');
-            setVisibleCards(prev => {
+            setVisibleCards((prev: boolean[]) => {
               const newState = [...prev];
               newState[index] = true;
               return newState;
@@ -116,14 +176,11 @@ const ProjectsSection = () => {
       }
     );
 
-    // Observer pro header
     const headerObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             setHeaderVisible(true);
-            // Description se zobrazí s delayem
-            setTimeout(() => setDescriptionVisible(true), 600);
           }
         });
       },
@@ -133,7 +190,6 @@ const ProjectsSection = () => {
       }
     );
 
-    // Registrace observers
     cardsRef.current.forEach((card) => {
       if (card) cardsObserver.observe(card);
     });
@@ -149,20 +205,19 @@ const ProjectsSection = () => {
   }, [isDesktop]);
 
   return (
-    <section className="relative bg-[#0f172a] text-white py-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
-      {/* Čisté pozadí bez gradientních prvků */}
+    <section className="relative bg-[#0f172a] text-white py-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      {/* Futuristické pozadí */}
       <BackgroundAnimation isDesktop={isDesktop} />
       
       <div className="max-w-7xl mx-auto relative z-10">
-        {/* Centrovaný nadpis sekce - s animacemi */}
+        {/* Header sekce */}
         <div 
           ref={headerRef}
           className="relative py-6 flex flex-col items-center justify-center text-center mb-8"
         >
-          {/* Ozdobné prvky kolem nadpisu */}
           <div className={`relative inline-flex flex-col items-center transition-all duration-1000 ${
             isDesktop 
-              ? `${headerVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-95'}`
+              ? `${headerVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'}`
               : `${isVisible ? 'opacity-100' : 'opacity-0'}`
           }`}>
             {/* Horní dekorační linka s animací */}
@@ -171,12 +226,12 @@ const ProjectsSection = () => {
                 ? `${headerVisible ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0'}`
                 : 'opacity-100'
             }`}>
-              <div className="h-[1px] w-16 bg-gray-700"></div>
+              <div className="h-[1px] w-16 bg-gradient-to-r from-transparent via-orange-500 to-transparent"></div>
               <div className="mx-3 text-orange-500 font-bold">[]</div>
-              <div className="h-[1px] w-16 bg-gray-700"></div>
+              <div className="h-[1px] w-16 bg-gradient-to-r from-transparent via-orange-500 to-transparent"></div>
             </div>
             
-            {/* Hlavní nadpis s rozšířenými animacemi */}
+            {/* Hlavní nadpis */}
             <h2 className={`text-5xl font-extrabold tracking-tight text-white relative inline-block mb-2 transition-all duration-1200 ${
               isDesktop 
                 ? `${headerVisible ? 'opacity-100 translate-y-0 rotate-0' : 'opacity-0 translate-y-8 rotate-1'}`
@@ -186,7 +241,7 @@ const ProjectsSection = () => {
             </h2>
             
             {/* Oranžová podtržení s plynulou animací */}
-            <div className={`h-[3px] w-[320px] bg-orange-500 rounded-full transition-all duration-1500 ${
+            <div className={`h-[3px] w-[320px] bg-gradient-to-r from-orange-600 via-orange-500 to-orange-600 rounded-full transition-all duration-1500 ${
               isDesktop 
                 ? `${headerVisible ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0'}`
                 : `${isVisible ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0'}`
@@ -199,134 +254,134 @@ const ProjectsSection = () => {
                 : 'opacity-100'
             }`} style={{ transitionDelay: isDesktop ? '800ms' : '0ms' }}>
               <div className="text-orange-500 opacity-70">{'//'}</div>
-              <div className="mx-3 text-gray-400 uppercase text-sm tracking-widest">REFERENCE A UKÁZKY</div>
+              <div className="mx-3 text-gray-400 uppercase text-sm tracking-widest">PORTFOLIO</div>
               <div className="text-orange-500 opacity-70">{'//'}</div>
             </div>
           </div>
         </div>
         
-        <p className="text-gray-300 text-lg mb-16 max-w-3xl mx-auto text-center leading-relaxed">
-          Prohlédněte si výběr z mých nejúspěšnějších projektů. 
-          Každý projekt je navržen s důrazem na <span className="text-orange-400 font-semibold">funkčnost, estetiku a výsledky</span>. 
-          Ať už jde o e-shop, firemní web nebo mobilní aplikaci, vždy se zaměřuji na to, 
-          aby finální řešení přineslo <span className="text-white font-medium">měřitelnou hodnotu</span>.
+        {/* Popis sekce */}
+        <p className={`text-gray-300 text-lg mb-8 max-w-3xl mx-auto text-center leading-relaxed transition-all duration-700 ${
+          isDesktop 
+            ? `${headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`
+            : `${isVisible ? 'opacity-100' : 'opacity-0'}`
+        }`} style={{ transitionDelay: isDesktop ? '1000ms' : '500ms' }}>
+          Vybral jsem ukázky projektů, které kombinují moderní technologie s optimalizovaným designem a přívětivým uživatelským rozhraním.
         </p>
-          
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+        {/* Grid projektů - 2x3 */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
           {projects.map((project, index) => (
             <div
               key={index}
-              ref={el => { cardsRef.current[index] = el; }}
+              ref={(el: HTMLDivElement | null) => { cardsRef.current[index] = el; }}
               data-index={index}
-              className={`relative group transition-all duration-700 ${
+              className={`transition-all duration-700 ${
                 isDesktop 
-                  ? `hover:-translate-y-4 ${visibleCards[index] ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-16 scale-95'}`
+                  ? `${visibleCards[index] ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-95'}`
                   : `${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`
               }`}
               style={{ 
                 transitionDelay: isDesktop 
-                  ? `${visibleCards[index] ? index * 200 : 0}ms`
+                  ? `${visibleCards[index] ? index * 150 : 0}ms`
                   : `${500 + index * 200}ms` 
               }}
             >
-              {/* Holografický outer glow - pouze na desktop při hover */}
-              {isDesktop && (
-                <div className="absolute -inset-4 bg-gradient-to-r from-cyan-500/20 via-blue-500/20 to-purple-500/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl"></div>
-              )}
-              
-              {/* Hlavní futuristická karta */}
-              <div className={`relative bg-slate-800/60 backdrop-blur-lg rounded-2xl overflow-hidden border border-white/10 transition-all duration-500 shadow-lg h-full flex flex-col ${
-                isDesktop ? 'group-hover:border-cyan-400/50' : ''
-              }`}>
+              {/* Futuristická projekt karta */}
+              <div className="relative h-full group">
+                {/* Outer glow effect */}
+                <div className="absolute -inset-1 bg-gradient-to-r from-orange-500/20 via-cyan-500/10 to-orange-500/20 rounded-2xl blur-sm opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
                 
-                {/* Animovaný tech border - pouze na desktop */}
-                {isDesktop && (
-                  <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-cyan-500/30 via-transparent to-purple-500/30" 
-                         style={{ animation: 'border-pulse 3s ease-in-out infinite' }}></div>
+                {/* Main card */}
+                <div className="relative bg-slate-900/40 backdrop-blur-lg rounded-2xl overflow-hidden border border-slate-700/50 h-full flex flex-col group-hover:border-orange-500/50 transition-all duration-500">
+                  
+                  {/* Scanning line animation */}
+                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-orange-400 to-transparent transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out z-10"></div>
+                  
+                  {/* Corner accents */}
+                  <div className="absolute top-3 left-3 w-3 h-3 border-l-2 border-t-2 border-orange-500/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute top-3 right-3 w-3 h-3 border-r-2 border-t-2 border-orange-500/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute bottom-3 left-3 w-3 h-3 border-l-2 border-b-2 border-orange-500/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute bottom-3 right-3 w-3 h-3 border-r-2 border-b-2 border-orange-500/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  
+                  {/* Obrázek sekce s 16:9 aspect ratio */}
+                  <div className="relative aspect-video overflow-hidden bg-slate-900/80">
+                    <img 
+                      src={project.image} 
+                      alt={project.title}
+                      className="w-full h-full object-cover transition-all duration-300"
+                    />
+                    
+                    {/* Tech overlay - bez hover efektu */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-slate-900/10 via-transparent to-slate-900/10"></div>
+                    
+                    {/* Project number with futuristic design */}
+                    <div className="absolute bottom-4 left-4">
+                      <div className="relative">
+                        <div className="bg-slate-900/80 backdrop-blur-md border border-orange-500/30 text-orange-400 text-xs font-bold px-3 py-1.5 rounded-lg group-hover:border-orange-400 group-hover:text-orange-300 transition-all duration-300">
+                          <span className="font-mono">{String(index + 1).padStart(2, '0')}</span>
+                        </div>
+                        <div className="absolute inset-0 bg-orange-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-pulse"></div>
+                      </div>
+                    </div>
                   </div>
-                )}
-                
-                {/* Horní tech panel */}
-                <div className="relative p-4 bg-slate-800/50 border-b border-white/10">
-                  <div className="flex items-center justify-between">
-                    {/* Status indikátory */}
-                    <div className="flex items-center space-x-2">
-                      <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse"></div>
-                      <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                      <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                  
+                  {/* Content sekce */}
+                  <div className="p-6 flex-1 flex flex-col bg-slate-900/60 backdrop-blur-sm relative">
+                    {/* Tech pattern overlay */}
+                    <div className="absolute inset-0 opacity-5">
+                      <div 
+                        style={{
+                          backgroundImage: 'linear-gradient(45deg, rgba(249,115,22,0.1) 25%, transparent 25%), linear-gradient(-45deg, rgba(249,115,22,0.1) 25%, transparent 25%)',
+                          backgroundSize: '20px 20px'
+                        }}
+                        className="w-full h-full"
+                      />
                     </div>
                     
-                    {/* Kategorie chip */}
-                    <div className="px-3 py-1 bg-cyan-500/20 rounded-full border border-cyan-400/30 text-xs text-cyan-300 font-mono tracking-wider">
-                      {project.category.toUpperCase()}
+                    {/* Kategorie */}
+                    <div className="relative z-10 flex items-center justify-between mb-3">
+                      <p className="text-orange-400 text-xs font-medium uppercase tracking-wider flex items-center">
+                        <span className="w-2 h-2 bg-orange-400 rounded-full mr-2 animate-pulse"></span>
+                        {project.category}
+                      </p>
+                      
+                      {/* Status indicator */}
+                      <div className="flex items-center">
+                        <div className="w-1.5 h-1.5 bg-green-400 rounded-full mr-1 animate-pulse"></div>
+                        <span className="text-green-400 text-xs font-mono">LIVE</span>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                
-                {/* Obrázek container */}
-                <div className="relative h-48 overflow-hidden bg-slate-900">
-                  {/* Čistý projekt obrázek */}
-                  <img 
-                    src={project.image} 
-                    alt={project.title}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                
-                {/* Hlavní content area */}
-                <div className="p-6 relative flex-grow flex flex-col">
-                  {/* Project Title s cyber efektem - pouze na desktop */}
-                  <h3 className={`text-xl font-bold mb-3 text-white transition-colors duration-300 relative ${
-                    isDesktop ? 'group-hover:text-cyan-300' : ''
-                  }`}>
-                    <span className="relative z-10">{project.title}</span>
-                    {isDesktop && (
-                      <div className="absolute -bottom-1 left-0 w-0 h-[2px] bg-gradient-to-r from-cyan-400 to-purple-400 group-hover:w-full transition-all duration-500"></div>
-                    )}
-                  </h3>
-                  
-                  {/* Description */}
-                  <p className="text-gray-300 text-sm mb-6 leading-relaxed flex-grow">
-                    {project.description}
-                  </p>
-                  
-                  {/* Tech stack s chip designem - hover pouze na desktop */}
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {project.technologies.slice(0, 3).map((tech, i) => (
-                      <span 
-                        key={i} 
-                        className={`px-2 py-1 text-xs bg-slate-700/50 text-gray-300 rounded-md border border-slate-500/30 font-mono transition-all duration-300 ${
-                          isDesktop ? 'hover:border-cyan-400/50 hover:text-cyan-300' : ''
-                        }`}
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                    {project.technologies.length > 3 && (
-                      <span className="px-2 py-1 text-xs bg-orange-600/30 text-orange-300 rounded-md border border-orange-400/50 font-mono">
-                        +{project.technologies.length - 3}
-                      </span>
-                    )}
-                  </div>
-                  
-                  {/* Results panel s console stylem */}
-                  <div className="bg-slate-800/50 rounded-lg p-4 border-l-4 border-green-400">
-                    <div className="flex items-center mb-2">
-                      <div className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></div>
-                      <span className="text-xs font-mono text-green-400 tracking-wider">SYSTEM.OUTPUT</span>
+                    
+                    {/* Název projektu */}
+                    <h3 className="relative z-10 text-xl font-bold text-white mb-3 leading-tight group-hover:text-orange-100 transition-colors duration-300">
+                      {project.title}
+                    </h3>
+                    
+                    {/* Popis */}
+                    <p className="relative z-10 text-gray-300 text-sm leading-relaxed mb-4 flex-1 group-hover:text-gray-200 transition-colors duration-300">
+                      {project.description}
+                    </p>
+                    
+                    {/* Technologie */}
+                    <div className="relative z-10 flex flex-wrap gap-2">
+                      {project.technologies.slice(0, 4).map((tech, techIndex) => (
+                        <span
+                          key={techIndex}
+                          className="text-xs bg-slate-800/60 border border-slate-600/30 text-slate-300 px-3 py-1.5 rounded-lg font-mono group-hover:border-orange-500/20 group-hover:bg-slate-800/80 transition-all duration-300"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                      {project.technologies.length > 4 && (
+                        <span className="text-xs bg-orange-900/30 border border-orange-500/30 text-orange-300 px-3 py-1.5 rounded-lg font-mono group-hover:bg-orange-900/50 transition-all duration-300">
+                          +{project.technologies.length - 4}
+                        </span>
+                      )}
                     </div>
-                    <div className="text-green-300 text-sm font-medium font-mono">
-                      {project.result}
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Dolní tech footer */}
-                <div className="px-6 py-3 bg-slate-800/30 border-t border-white/10">
-                  <div className="flex items-center justify-between text-xs text-gray-400 font-mono">
-                    <span>PROJECT_ID: {String(index + 1).padStart(3, '0')}</span>
-                    <span className="text-cyan-400">STATUS: ACTIVE</span>
+                    
+                    {/* Bottom accent line */}
+                    <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-orange-400 to-transparent transform translate-x-full group-hover:-translate-x-full transition-transform duration-1000 ease-out"></div>
                   </div>
                 </div>
               </div>
@@ -334,9 +389,9 @@ const ProjectsSection = () => {
           ))}
         </div>
         
-        {/* Modernější CTA sekce */}
-        <div className={`text-center mt-20 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
-             style={{ transitionDelay: '900ms' }}>
+        {/* CTA sekce */}
+        <div className={`text-center transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+             style={{ transitionDelay: '1200ms' }}>
           <div className="max-w-2xl mx-auto">
             <h3 className="text-3xl font-bold mb-4 bg-gradient-to-r from-white via-orange-200 to-orange-400 bg-clip-text text-transparent">
               Pojďme spolupracovat na vašem projektu!
@@ -345,13 +400,19 @@ const ProjectsSection = () => {
               Máte nápad? Proměňmo ho společně v realitu.
             </p>
             
-            <Link href="/kontakt">
-              <button className="relative bg-gradient-to-r from-orange-600 to-orange-500 rounded-2xl px-8 py-4 overflow-hidden group transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-orange-500/25">
+            <a href="/kontakt">
+              <button className="relative bg-gradient-to-r from-orange-600 to-orange-500 rounded-xl px-8 py-4 overflow-hidden group transition-all duration-300 shadow-lg border border-orange-500/20 hover:border-orange-400">
                 {/* Animated background */}
                 <div className="absolute inset-0 bg-gradient-to-r from-orange-700 via-orange-600 to-orange-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 
-                {/* Shine effect */}
+                {/* Tech scanning effect */}
                 <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000"></div>
+                
+                {/* Corner tech accents */}
+                <div className="absolute top-1 left-1 w-2 h-2 border-l border-t border-orange-300/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute top-1 right-1 w-2 h-2 border-r border-t border-orange-300/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute bottom-1 left-1 w-2 h-2 border-l border-b border-orange-300/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute bottom-1 right-1 w-2 h-2 border-r border-b border-orange-300/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 
                 {/* Button content */}
                 <div className="relative z-10 flex items-center justify-center font-bold text-white text-lg">
@@ -361,20 +422,12 @@ const ProjectsSection = () => {
                   </svg>
                 </div>
               </button>
-            </Link>
+            </a>
           </div>
         </div>
       </div>
-      
-      {/* CSS pro animace a efekty */}
-      <style jsx>{`
-        @keyframes border-pulse {
-          0%, 100% { opacity: 0.3; }
-          50% { opacity: 0.8; }
-        }
-      `}</style>
     </section>
-  )
-}
+  );
+};
 
-export default ProjectsSection
+export default ProjectsSection;

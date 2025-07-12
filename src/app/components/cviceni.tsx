@@ -12,7 +12,13 @@ import {
   Layers,
   Puzzle,
   FileQuestion,
-  Briefcase
+  Briefcase,
+  Monitor,
+  Users,
+  BarChart3,
+  Settings,
+  Zap,
+  Shield
 } from "lucide-react";
 
 // Předem definované hodnoty pro částice
@@ -232,18 +238,6 @@ const FuturisticBackground: React.FC = () => {
   );
 };
 
-// Futuristická položka s checkmarkem
-const FeatureItem: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  return (
-    <div className="flex items-start mb-4">
-      <div className="mr-3 mt-1 text-green-500 flex-shrink-0">
-        <Check className="w-5 h-5" />
-      </div>
-      <span className="text-gray-300">{children}</span>
-    </div>
-  );
-};
-
 // Futuristický balíček
 interface PricingPackageProps {
   title: string;
@@ -275,8 +269,10 @@ const PricingPackage: React.FC<PricingPackageProps> = ({
     >
       {/* Popular badge */}
       {popular && (
-        <div className="absolute top-0 right-0 bg-indigo-500 text-white text-xs font-medium px-3 py-1 rounded-bl-lg z-20">
-          Nejoblíbenější
+        <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-20">
+          <div className="flex items-center px-3 py-1.5 bg-gradient-to-r from-indigo-500 to-indigo-600 text-white rounded-full text-xs font-bold shadow-lg">
+            Nejoblíbenější
+          </div>
         </div>
       )}
       
@@ -314,16 +310,18 @@ const PricingPackage: React.FC<PricingPackageProps> = ({
           <div style={{ color }}>{icon}</div>
         </div>
         
-        {/* Název balíčku */}
-        <h3 
-          className="text-2xl font-bold mb-2" 
-          style={{ color }}
-        >
-          {title}
-        </h3>
+        {/* Název balíčku - FIXED HEIGHT pro zarovnání */}
+        <div className="min-h-[3rem] flex items-center mb-2">
+          <h3 
+            className="text-2xl font-bold leading-tight" 
+            style={{ color }}
+          >
+            {title}
+          </h3>
+        </div>
         
-        {/* Cena */}
-        <div className="mb-6">
+        {/* Cena - FIXED HEIGHT pro zarovnání */}
+        <div className="mb-6 min-h-[2.5rem] flex items-center">
           <div 
             className="text-xl font-bold inline-block px-4 py-1 rounded-full"
             style={{ 
@@ -423,7 +421,7 @@ const InteractiveServicesPage: React.FC = () => {
       {/* Futuristické animované pozadí */}
       <FuturisticBackground />
       
-      <div className="max-w-5xl mx-auto relative z-10">
+      <div className="max-w-7xl mx-auto relative z-10">
         {/* Tlačítko zpět na hlavní stránku */}
         <div className="mb-10">
           <Link 
@@ -436,34 +434,90 @@ const InteractiveServicesPage: React.FC = () => {
         </div>
         
         {/* Hlavní nadpis */}
-        <div className="text-center mb-10">
-          <h1 className="text-5xl font-bold text-indigo-500 mb-6">
-            Interaktivní cvičení
+        <div className="text-center mb-16">
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">
+            <span className="text-orange-500">Interaktivní cvičení</span>{" "}
+            <span className="text-white">která skutečně vzdělávají</span>
           </h1>
           
-          <p className="text-gray-300 text-lg max-w-3xl mx-auto mb-8">
-            E‑learningové moduly pro ZŠ a SŠ: kvízy, úlohy a hry s podporou SCORM exportu.
-            Vytvářím efektivní interaktivní obsah, který bude motivovat k učení a pomůže
-            studentům lépe pochopit probíranou látku.
+          <p className="text-gray-300 text-lg max-w-3xl mx-auto mb-10">
+            Profesionální e-learningové moduly pro základní a střední školy na platformě H5P a Articulate Storyline 360. 
+            Specializuji se na tvorbu obsahu zaměřeného na konverze a uživatelský zážitek.
           </p>
           
-          {/* Hodinová sazba */}
-          <div className="flex justify-center mb-10">
-            <div className="px-6 py-3 rounded-lg border border-indigo-500 bg-indigo-500/10 backdrop-blur-sm flex items-center">
-              <Clock className="w-5 h-5 text-indigo-500 mr-3" />
-              <span className="text-white font-medium">Hodinová sazba od</span>
-              <span className="text-indigo-500 text-xl font-bold ml-2">750 Kč</span>
-            </div>
+          {/* Dvě tlačítka */}
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-12">
+            <Link 
+              href="#pricing"
+              className="inline-flex items-center px-6 py-3 rounded-lg bg-gradient-to-r from-green-500 to-green-600 text-white font-medium hover:from-green-600 hover:to-green-700 transition-all"
+            >
+              <Zap className="w-5 h-5 mr-2" />
+              <span>Dodání do 14 dní</span>
+            </Link>
+            <Link 
+              href="#process"
+              className="inline-flex items-center px-6 py-3 rounded-lg border border-indigo-500 bg-indigo-500/10 text-indigo-300 font-medium hover:bg-indigo-500/20 transition-all"
+            >
+              <Shield className="w-5 h-5 mr-2" />
+              <span>Záruka spokojenosti</span>
+            </Link>
           </div>
           
-          {/* Vlastnosti služby */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 max-w-3xl mx-auto">
-            <FeatureItem>Responzivní design</FeatureItem>
-            <FeatureItem>Podpora na všech zařízeních</FeatureItem>
-            <FeatureItem>Různé typy interakcí</FeatureItem>
-            <FeatureItem>Export do SCORM formátu</FeatureItem>
-            <FeatureItem>Sledování výsledků</FeatureItem>
-            <FeatureItem>Individuální přístup</FeatureItem>
+          {/* Vlastnosti služby - 6 boxů v gridu */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-16 max-w-4xl mx-auto">
+            <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-4 rounded-xl border border-green-500/20 backdrop-blur-sm">
+              <div className="flex items-center">
+                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-500/20 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
+                  <Check className="w-4 h-4 text-green-400" />
+                </div>
+                <span className="text-white font-medium text-sm sm:text-base">Optimalizace konverzí</span>
+              </div>
+            </div>
+            
+            <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-4 rounded-xl border border-green-500/20 backdrop-blur-sm">
+              <div className="flex items-center">
+                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-500/20 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
+                  <Check className="w-4 h-4 text-green-400" />
+                </div>
+                <span className="text-white font-medium text-sm sm:text-base">Mobil-first design</span>
+              </div>
+            </div>
+            
+            <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-4 rounded-xl border border-green-500/20 backdrop-blur-sm">
+              <div className="flex items-center">
+                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-500/20 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
+                  <Check className="w-4 h-4 text-green-400" />
+                </div>
+                <span className="text-white font-medium text-sm sm:text-base">SEO optimalizace</span>
+              </div>
+            </div>
+            
+            <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-4 rounded-xl border border-green-500/20 backdrop-blur-sm">
+              <div className="flex items-center">
+                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-500/20 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
+                  <Check className="w-4 h-4 text-green-400" />
+                </div>
+                <span className="text-white font-medium text-sm sm:text-base">Integrované platby</span>
+              </div>
+            </div>
+            
+            <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-4 rounded-xl border border-green-500/20 backdrop-blur-sm">
+              <div className="flex items-center">
+                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-500/20 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
+                  <Check className="w-4 h-4 text-green-400" />
+                </div>
+                <span className="text-white font-medium text-sm sm:text-base">Cloudový hosting</span>
+              </div>
+            </div>
+            
+            <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 p-4 rounded-xl border border-green-500/20 backdrop-blur-sm">
+              <div className="flex items-center">
+                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-500/20 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
+                  <Check className="w-4 h-4 text-green-400" />
+                </div>
+                <span className="text-white font-medium text-sm sm:text-base">Pokročilá analytika</span>
+              </div>
+            </div>
           </div>
         </div>
         
@@ -473,14 +527,14 @@ const InteractiveServicesPage: React.FC = () => {
             <button
               onClick={() => setActiveTab('pricing')}
               className={`px-6 py-3 relative ${
-                activeTab === 'pricing' ? 'text-indigo-500' : 'text-gray-400 hover:text-white'
+                activeTab === 'pricing' ? 'text-orange-500' : 'text-gray-400 hover:text-white'
               }`}
             >
               Ceník
               {activeTab === 'pricing' && (
                 <motion.div 
                   layoutId="activeTabIndicator"
-                  className="absolute bottom-0 left-0 right-0 h-[2px] bg-indigo-500"
+                  className="absolute bottom-0 left-0 right-0 h-[2px] bg-orange-500"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.3 }}
@@ -491,14 +545,14 @@ const InteractiveServicesPage: React.FC = () => {
             <button
               onClick={() => setActiveTab('process')}
               className={`px-6 py-3 relative ${
-                activeTab === 'process' ? 'text-indigo-500' : 'text-gray-400 hover:text-white'
+                activeTab === 'process' ? 'text-orange-500' : 'text-gray-400 hover:text-white'
               }`}
             >
               Postup
               {activeTab === 'process' && (
                 <motion.div 
                   layoutId="activeTabIndicator"
-                  className="absolute bottom-0 left-0 right-0 h-[2px] bg-indigo-500"
+                  className="absolute bottom-0 left-0 right-0 h-[2px] bg-orange-500"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.3 }}
@@ -515,62 +569,205 @@ const InteractiveServicesPage: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
- {/* Balíčky služeb */}
-<div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-  <PricingPackage
-    title="H5P Základní"
-    price="od 3 000 Kč"
-    features={[
-      "H5P interaktivní kvízy",
-      "5-15 otázek různých typů",
-      "Responzivní design",
-      "Základní hodnocení",
-      "Okamžitá zpětná vazba",
-      "Export do HTML",
-      "1 revize zdarma",
-      "Dodání do 3-5 dnů"
-    ]}
-    color="#818CF8"
-    icon={<Puzzle className="w-6 h-6" />}
-  />
-  
-  <PricingPackage
-    title="H5P Pokročilý"
-    price="od 8 000 Kč"
-    features={[
-      "Komplexní H5P moduly",
-      "20-50 interaktivních prvků",
-      "Pokročilé typy úloh",
-      "Vlastní branding a design",
-      "Detailní statistiky",
-      "SCORM 1.2/2004 export", 
-      "2 revize zdarma",
-      "Dodání do 7-10 dnů"
-    ]}
-    color="#818CF8"
-    icon={<ActivitySquare className="w-6 h-6" />}
-    popular={true}
-  />
-  
-  <PricingPackage
-    title="Articulate 360 Premium"
-    price="od 15 000 Kč"
-    features={[
-      "Articulate Storyline 360",
-      "1 kompletní modul (10-20 slidů)",
-      "15-30 interaktivních otázek/aktivit",
-      "Pokročilé simulace a scénáře",
-      "Komplexní hodnocení a větve",
-      "Personalizované cesty učení",
-      "Analytics a detailní reporting",
-      "Neomezené revize během vývoje",
-      "Dodání do 14-21 dnů"
-    ]}
-    color="#818CF8"
-    icon={<Layers className="w-6 h-6" />}
-  />
-</div>
+            {/* Balíčky služeb - 3 v gridu */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16 max-w-6xl mx-auto">
+              <div className="relative">
+                <PricingPackage
+                  title="H5P Interaktivní cvičení"
+                  price="od 4 500 Kč"
+                  features={[
+                    "H5P framework (open-source)",
+                    "10-25 interaktivních prvků",
+                    "Responzivní design",
+                    "Pokročilé typy úloh",
+                    "Vlastní branding školy",
+                    "Detailní statistiky",
+                    "SCORM 1.2/2004 export",
+                    "2 revize zdarma",
+                    "Dodání do 5-7 dnů"
+                  ]}
+                  color="#818CF8"
+                  icon={<Puzzle className="w-6 h-6" />}
+                />
+              </div>
+              
+              <div className="relative">
+                {/* Badge nejoblíbenější - mimo balíček */}
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-20">
+                  <div className="flex items-center px-3 py-1.5 bg-gradient-to-r from-indigo-500 to-indigo-600 text-white rounded-full text-xs font-bold shadow-lg">
+                    Nejoblíbenější
+                  </div>
+                </div>
+                <PricingPackage
+                  title="Articulate Storyline"
+                  price="od 22 000 Kč"
+                  features={[
+                    "Articulate Storyline 360",
+                    "1 kompletní modul (15-25 slidů)",
+                    "25-50 interaktivních aktivit",
+                    "Pokročilé simulace a scénáře",
+                    "Větvení a adaptivní cesty",
+                    "Gamifikační prvky",
+                    "Analytics a reporting",
+                    "Neomezené revize",
+                    "Dodání do 14-21 dnů"
+                  ]}
+                  color="#818CF8"
+                  icon={<Layers className="w-6 h-6" />}
+                />
+              </div>
 
+              <div className="relative">
+                <PricingPackage
+                  title="Vlastní platforma"
+                  price="od 95 000 Kč"
+                  features={[
+                    "Webová platforma pro školu",
+                    "Systém správy uživatelů",
+                    "Dashboard pro učitele",
+                    "Sledování pokroku studentů",
+                    "Integrace s H5P/Storyline",
+                    "Responzivní design",
+                    "Hosting na 1 rok zdarma",
+                    "Školení a dokumentace",
+                    "Dodání do 6-8 týdnů"
+                  ]}
+                  color="#818CF8"
+                  icon={<Briefcase className="w-6 h-6" />}
+                />
+              </div>
+            </div>
+
+            {/* Konkurenceschopná cena */}
+            <div className="mb-16 max-w-5xl mx-auto">
+              <div className="p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
+                <p className="text-green-300 text-sm">
+                  <strong>💡 Proč jsou moje ceny konkurenceschopné:</strong> Nabízím kvalitu agentur za ceny blízké freelancerům, 
+                  plus přidanou hodnotu v podobě vlastních platforem a dlouhodobé podpory.
+                </p>
+              </div>
+            </div>
+
+            {/* Typy cvičení v Articulate Storyline */}
+            <div className="mb-12">
+              <h3 className="text-xl font-bold text-white mb-6 text-center">Typy cvičení v Articulate Storyline 360</h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+                <div className="bg-slate-800/50 border border-indigo-500/30 rounded-lg p-4">
+                  <h4 className="font-bold text-indigo-300 mb-2">Kvízové otázky</h4>
+                  <p className="text-sm text-gray-300">Multiple choice, True/False, Fill-in-the-blank, Matching, Hotspot otázky</p>
+                </div>
+                
+                <div className="bg-slate-800/50 border border-indigo-500/30 rounded-lg p-4">
+                  <h4 className="font-bold text-indigo-300 mb-2">Drag & Drop aktivity</h4>
+                  <p className="text-sm text-gray-300">Přetahování objektů, třídění do kategorií, sestavování puzzlí</p>
+                </div>
+                
+                <div className="bg-slate-800/50 border border-indigo-500/30 rounded-lg p-4">
+                  <h4 className="font-bold text-indigo-300 mb-2">Interaktivní simulace</h4>
+                  <p className="text-sm text-gray-300">Simulace softwaru, laboratorních pokusů, praktických úkolů</p>
+                </div>
+                
+                <div className="bg-slate-800/50 border border-indigo-500/30 rounded-lg p-4">
+                  <h4 className="font-bold text-indigo-300 mb-2">Větvené scénáře</h4>
+                  <p className="text-sm text-gray-300">Rozhodovací situace, případové studie s různými cestami</p>
+                </div>
+                
+                <div className="bg-slate-800/50 border border-indigo-500/30 rounded-lg p-4">
+                  <h4 className="font-bold text-indigo-300 mb-2">Interaktivní videa</h4>
+                  <p className="text-sm text-gray-300">Videa s otázkami, poznámkami a interaktivními prvky</p>
+                </div>
+                
+                <div className="bg-slate-800/50 border border-indigo-500/30 rounded-lg p-4">
+                  <h4 className="font-bold text-indigo-300 mb-2">Gamifikované moduly</h4>
+                  <p className="text-sm text-gray-300">Body, odznaky, žebříčky, herní mechaniky pro motivaci</p>
+                </div>
+                
+                <div className="bg-slate-800/50 border border-indigo-500/30 rounded-lg p-4">
+                  <h4 className="font-bold text-indigo-300 mb-2">Timeline interakce</h4>
+                  <p className="text-sm text-gray-300">Chronologické zobrazení událostí s interaktivními prvky</p>
+                </div>
+                
+                <div className="bg-slate-800/50 border border-indigo-500/30 rounded-lg p-4">
+                  <h4 className="font-bold text-indigo-300 mb-2">Virtuální laboratoře</h4>
+                  <p className="text-sm text-gray-300">3D prostředí pro experimentování a zkoumání</p>
+                </div>
+                
+                <div className="bg-slate-800/50 border border-indigo-500/30 rounded-lg p-4">
+                  <h4 className="font-bold text-indigo-300 mb-2">Adaptivní učení</h4>
+                  <p className="text-sm text-gray-300">Obsah se přizpůsobuje úrovni a výkonu studenta</p>
+                </div>
+              </div>
+            </div>
+            
+            {/* Vlastní platforma pro školy */}
+            <div className="mb-12">
+              <h3 className="text-xl font-bold text-white mb-6 text-center">Vlastní webová platforma pro vaši školu</h3>
+              
+              <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 rounded-xl p-8 border border-indigo-500/30">
+                <div className="grid md:grid-cols-2 gap-8">
+                  <div>
+                    <h4 className="text-lg font-bold text-indigo-300 mb-4">🏫 Co platforma obsahuje:</h4>
+                    <ul className="space-y-2 text-gray-300">
+                      <li className="flex items-start">
+                        <div className="w-2 h-2 rounded-full bg-indigo-500 mr-3 mt-2 flex-shrink-0"></div>
+                        <span>Správa uživatelů (učitelé, studenti, třídy)</span>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="w-2 h-2 rounded-full bg-indigo-500 mr-3 mt-2 flex-shrink-0"></div>
+                        <span>Dashboard s přehledem pokroku všech studentů</span>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="w-2 h-2 rounded-full bg-indigo-500 mr-3 mt-2 flex-shrink-0"></div>
+                        <span>Knihovna interaktivních cvičení</span>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="w-2 h-2 rounded-full bg-indigo-500 mr-3 mt-2 flex-shrink-0"></div>
+                        <span>Systém zadávání a hodnocení úkolů</span>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="w-2 h-2 rounded-full bg-indigo-500 mr-3 mt-2 flex-shrink-0"></div>
+                        <span>Detailní statistiky a reporty</span>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="w-2 h-2 rounded-full bg-indigo-500 mr-3 mt-2 flex-shrink-0"></div>
+                        <span>Integrace s H5P a Articulate Storyline</span>
+                      </li>
+                    </ul>
+                  </div>
+                  
+                  <div>
+                    <h4 className="text-lg font-bold text-indigo-300 mb-4">💡 Výhody vlastní platformy:</h4>
+                    <ul className="space-y-2 text-gray-300">
+                      <li className="flex items-start">
+                        <div className="w-2 h-2 rounded-full bg-green-500 mr-3 mt-2 flex-shrink-0"></div>
+                        <span>Plná kontrola nad daty studentů</span>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="w-2 h-2 rounded-full bg-green-500 mr-3 mt-2 flex-shrink-0"></div>
+                        <span>Žádné měsíční poplatky třetím stranám</span>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="w-2 h-2 rounded-full bg-green-500 mr-3 mt-2 flex-shrink-0"></div>
+                        <span>Design v barvách a stylu vaší školy</span>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="w-2 h-2 rounded-full bg-green-500 mr-3 mt-2 flex-shrink-0"></div>
+                        <span>Možnost budoucích rozšíření</span>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="w-2 h-2 rounded-full bg-green-500 mr-3 mt-2 flex-shrink-0"></div>
+                        <span>Integrace s existujícími školními systémy</span>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="w-2 h-2 rounded-full bg-green-500 mr-3 mt-2 flex-shrink-0"></div>
+                        <span>Dlouhodobá udržitelnost a nezávislost</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
             
             {/* Technologie */}
             <div className="mb-12">
@@ -609,9 +806,9 @@ const InteractiveServicesPage: React.FC = () => {
             
             {/* Doplňkové služby */}
             <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-6 mb-12">
-              <h3 className="text-xl font-bold text-white mb-4">Doplňkové služby</h3>
+              <h3 className="text-xl font-bold text-white mb-4">Doplňkové služby a možnosti</h3>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div className="flex items-start">
                   <div 
                     className="mr-4 p-2 rounded-full"
@@ -621,7 +818,8 @@ const InteractiveServicesPage: React.FC = () => {
                   </div>
                   <div>
                     <h4 className="font-bold text-white mb-1">Dodatečné cvičení</h4>
-                    <p className="text-sm text-gray-300">od 3 000 Kč / cvičení</p>
+                    <p className="text-sm text-gray-300">od 2 200 Kč / H5P cvičení</p>
+                    <p className="text-sm text-gray-300">od 8 500 Kč / Storyline modul</p>
                   </div>
                 </div>
                 
@@ -633,8 +831,9 @@ const InteractiveServicesPage: React.FC = () => {
                     <Layers className="w-5 h-5 text-indigo-500" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-white mb-1">Konverze do SCORM</h4>
-                    <p className="text-sm text-gray-300">od 2 500 Kč</p>
+                    <h4 className="font-bold text-white mb-1">SCORM balíček</h4>
+                    <p className="text-sm text-gray-300">Export + optimalizace</p>
+                    <p className="text-sm text-gray-300">od 1 800 Kč</p>
                   </div>
                 </div>
                 
@@ -646,8 +845,23 @@ const InteractiveServicesPage: React.FC = () => {
                     <FileQuestion className="w-5 h-5 text-indigo-500" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-white mb-1">Vytvoření scénáře</h4>
-                    <p className="text-sm text-gray-300">od 4 000 Kč</p>
+                    <h4 className="font-bold text-white mb-1">Vytvoření obsahu</h4>
+                    <p className="text-sm text-gray-300">Kompletní tvorba učebních materiálů</p>
+                    <p className="text-sm text-gray-300">od 5 500 Kč</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start">
+                  <div 
+                    className="mr-4 p-2 rounded-full"
+                    style={{ backgroundColor: 'rgba(129, 140, 248, 0.1)' }}
+                  >
+                    <Briefcase className="w-5 h-5 text-indigo-500" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-white mb-1">Školení pedagogů</h4>
+                    <p className="text-sm text-gray-300">Jak pracovat s cvičeními</p>
+                    <p className="text-sm text-gray-300">4 500 Kč / den</p>
                   </div>
                 </div>
                 
@@ -660,7 +874,50 @@ const InteractiveServicesPage: React.FC = () => {
                   </div>
                   <div>
                     <h4 className="font-bold text-white mb-1">Express dodání</h4>
-                    <p className="text-sm text-gray-300">+40% k ceně</p>
+                    <p className="text-sm text-gray-300">Zkrácení termínu na polovinu</p>
+                    <p className="text-sm text-gray-300">+50% k ceně</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start">
+                  <div 
+                    className="mr-4 p-2 rounded-full"
+                    style={{ backgroundColor: 'rgba(129, 140, 248, 0.1)' }}
+                  >
+                    <Settings className="w-5 h-5 text-indigo-500" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-white mb-1">Hosting a údržba</h4>
+                    <p className="text-sm text-gray-300">Měsíční správa platformy</p>
+                    <p className="text-sm text-gray-300">od 3 200 Kč / měsíc</p>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Speciální balíček pro školy */}
+              <div className="mt-8 p-6 bg-gradient-to-r from-indigo-500/10 to-indigo-600/10 border border-indigo-500/30 rounded-lg">
+                <h4 className="text-xl font-bold text-white mb-3">🎓 Speciální balíčky pro školy</h4>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <h5 className="font-bold text-indigo-300 mb-2">Půlroční balíček</h5>
+                    <ul className="text-sm text-gray-300 space-y-1">
+                      <li>• 10 H5P cvičení dle výběru</li>
+                      <li>• 2 Storyline moduly</li>
+                      <li>• Vlastní branding školy</li>
+                      <li>• SCORM export zdarma</li>
+                    </ul>
+                    <p className="text-indigo-400 font-bold mt-2">75 000 Kč (sleva 25%)</p>
+                  </div>
+                  <div>
+                    <h5 className="font-bold text-indigo-300 mb-2">Roční balíček + platforma</h5>
+                    <ul className="text-sm text-gray-300 space-y-1">
+                      <li>• Vlastní webová platforma</li>
+                      <li>• 20 H5P cvičení</li>
+                      <li>• 5 Storyline modulů</li>
+                      <li>• Školení pedagogů</li>
+                      <li>• Hosting a podpora na rok</li>
+                    </ul>
+                    <p className="text-indigo-400 font-bold mt-2">180 000 Kč (sleva 35%)</p>
                   </div>
                 </div>
               </div>
@@ -811,14 +1068,13 @@ const InteractiveServicesPage: React.FC = () => {
               </div>
             </motion.div>
           )}
-        </div>
-  
+
         {/* FAQ Sekce */}
         <div className="max-w-4xl mx-auto mt-20 relative z-10">
           <h2 className="text-3xl font-bold text-white text-center mb-10">
             Často kladené otázky
           </h2>
-  
+
           <div className="space-y-6">
             {/* FAQ Item 1 */}
             <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-6">
@@ -830,30 +1086,29 @@ const InteractiveServicesPage: React.FC = () => {
                 nebo Microsoft Teams. SCORM také umožňuje sledování pokroku a výsledků studentů.
               </p>
             </div>
-  
+
             {/* FAQ Item 2 */}
             <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-white mb-3">Jaký je rozdíl mezi základním a pokročilým interaktivním cvičením?</h3>
+              <h3 className="text-xl font-bold text-white mb-3">Jaký je rozdíl mezi H5P a Articulate Storyline?</h3>
               <p className="text-gray-300">
-                Základní cvičení obvykle obsahují jednodušší interakce jako kvízy a přiřazování, 
-                s jednoduchým designem a lineární strukturou. Pokročilá cvičení využívají komplexnější 
-                interakce, propracovaný design, větvení scénářů, adaptivní učení a pokročilejší hodnocení 
-                výsledků. Articulate Storyline 360 pak umožňuje vytváření sofistikovaných simulací, 
-                komplexních scénářů a personalizaci obsahu.
+                H5P je open-source framework vhodný pro základní až středně pokročilá interaktivní cvičení 
+                s rychlou implementací a nižšími náklady. Articulate Storyline 360 je profesionální nástroj 
+                umožňující vytváření komplexních simulací, větvených scénářů a pokročilých interakcí. 
+                Storyline nabízí větší flexibilitu a možnosti customizace, ale vyžaduje více času a zdrojů.
               </p>
             </div>
-  
+
             {/* FAQ Item 3 */}
             <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-white mb-3">Na jakých zařízeních budou interaktivní cvičení fungovat?</h3>
+              <h3 className="text-xl font-bold text-white mb-3">Proč si nechat vytvořit vlastní platformu místo používání Moodle?</h3>
               <p className="text-gray-300">
-                Vytvářená cvičení jsou plně responzivní a fungují na všech běžných zařízeních 
-                - počítačích, tabletech i chytrých telefonech s podporou moderních webových prohlížečů. 
-                Při vývoji dbám na optimalizaci pro různé velikosti obrazovek a zajišťuji, 
-                aby cvičení fungovala jak s myší, tak s dotykovým ovládáním.
+                Vlastní platforma vám dává úplnou kontrolu nad funkcionalitou, designem a daty. Neplatíte 
+                měsíční poplatky za hosting a licence, můžete ji přizpůsobit přesně vašim potřebám a 
+                firemní identitě. Dlouhodobě je to často ekonomičtější řešení než placené LMS platformy, 
+                a navíc získáváte nezávislost na externích poskytovatelích.
               </p>
             </div>
-  
+
             {/* FAQ Item 4 */}
             <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-6">
               <h3 className="text-xl font-bold text-white mb-3">Mohu získat zdrojové soubory k vytvořeným cvičením?</h3>
@@ -864,24 +1119,20 @@ const InteractiveServicesPage: React.FC = () => {
                 Pro úpravy je však nutné mít příslušný software (např. licenci Articulate Storyline).
               </p>
             </div>
-  
+
             {/* FAQ Item 5 */}
             <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-white mb-3">Vytváříte i obsah cvičení, nebo jen technické řešení?</h3>
+              <h3 className="text-xl font-bold text-white mb-3">Jak dlouho trvá vytvoření interaktivního cvičení?</h3>
               <p className="text-gray-300">
-                Nabízím obě možnosti. Mohu pracovat s vaším vlastním obsahem a materiály, 
-                které převedu do interaktivní podoby. Případně mohu pomoci i s vytvořením 
-                samotného vzdělávacího obsahu ve spolupráci s vašimi pedagogy nebo odborníky. 
-                Za příplatek zajistím i kompletní tvorbu vzdělávacího obsahu od základů.
+                Závisí na složitosti: základní H5P kvíz zabere 3-5 dnů, pokročilé H5P cvičení 
+                s custom designem 5-7 dnů a kompletní Articulate Storyline modul 14-21 dnů. 
+                Vlastní platforma trvá 6-8 týdnů včetně testování a školení. Termíny mohou být 
+                zkráceny za příplatek, nebo prodlouženy pokud potřebujeme více revizí a úprav.
               </p>
             </div>
           </div>
         </div>
-  
-        
-  
-          
-  
+
         {/* Závěrečná CTA */}
         <div className="max-w-4xl mx-auto mt-20 mb-10 relative z-10">
           <div className="bg-gradient-to-r from-indigo-500/20 to-indigo-600/20 rounded-xl p-8 border border-indigo-500/30">
@@ -903,8 +1154,9 @@ const InteractiveServicesPage: React.FC = () => {
             </div>
           </div>
         </div>
-      </section>
-    );
-  };
-  
-  export default InteractiveServicesPage;
+      </div>
+    </section>
+  );
+};
+
+export default InteractiveServicesPage;
