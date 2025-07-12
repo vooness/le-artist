@@ -10,7 +10,7 @@ const inter = Inter({ subsets: ["latin"] });
 // Metadata for SEO and social sharing
 export const metadata: Metadata = {
   title:
-    "Le Artist - Profesionální webové služby, grafika, video editing, reklamy, lektorství a úpravy Shoptetu v České republice (včetně Ostravy)",
+    "Le Artist - Grafické studio",
   description:
     "Le Artist nabízí komplexní služby v oblasti webdesignu, grafického designu, video editace, tvorby reklamních kampaní, odborného lektorství a úprav Shoptetu pro e-shopy. Moderní a kreativní přístup k tvorbě webů, firemní identity a marketingových materiálů pro firmy po celé České republice, včetně Ostravy a remote spolupráce.",
   keywords: [
