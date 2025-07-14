@@ -9,6 +9,7 @@ const IntroSection = () => {
   const [hoveredServiceId, setHoveredServiceId] = useState<number | null>(null);
   const [isMobileOrTablet, setIsMobileOrTablet] = useState(false);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const [cardsInView, setCardsInView] = useState<boolean[]>(new Array(6).fill(false));
 
   const testimonials = [
     {
@@ -74,6 +75,33 @@ const IntroSection = () => {
     }
   }, [isMobileOrTablet, testimonials.length]);
 
+  // Observer pro animace karet na mobilu
+  useEffect(() => {
+    if (isMobileOrTablet) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const index = parseInt(entry.target.getAttribute('data-card-index') || '0');
+              setCardsInView(prev => {
+                const newState = [...prev];
+                newState[index] = true;
+                return newState;
+              });
+            }
+          });
+        },
+        { threshold: 0.3 }
+      );
+
+      // Pozorovat všechny karty
+      const cards = document.querySelectorAll('[data-card-index]');
+      cards.forEach(card => observer.observe(card));
+
+      return () => observer.disconnect();
+    }
+  }, [isMobileOrTablet]);
+
   const isHovered = (id: number | null) => !isMobileOrTablet && hoveredServiceId === id;
 
   const TestimonialCard = ({ testimonial, isMobile = false }: { 
@@ -93,7 +121,7 @@ const IntroSection = () => {
             ))}
           </div>
           <div className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 px-3 py-1.5 rounded-full flex items-center justify-center">
-            <span className="text-green-400 text-sm font-bold">
+            <span className="text-green-400 text-sm font-bold text-center">
               {testimonial.metric}
             </span>
           </div>
@@ -132,7 +160,7 @@ const IntroSection = () => {
     {
       id: 1,
       name: "Webové stránky",
-      shortDesc: "Digitální prezence",
+      shortDesc: "Web co prodává 24/7",
       description: "Moderní, responzivní a přehledné webové stránky navržené na míru.",
       icon: (
         <svg
@@ -144,8 +172,8 @@ const IntroSection = () => {
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
-            strokeWidth="1.5"
-            d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
+            strokeWidth="2"
+            d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
           />
         </svg>
       ),
@@ -157,7 +185,7 @@ const IntroSection = () => {
     {
       id: 2,
       name: "Shoptet e-shop",
-      shortDesc: "E-commerce řešení",
+      shortDesc: "Objednávky i v noci",
       description: "Kompletní řešení e-shopu na platformě Shoptet, včetně úprav šablon na míru.",
       icon: (
         <svg
@@ -169,7 +197,7 @@ const IntroSection = () => {
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
-            strokeWidth="1.5"
+            strokeWidth="2"
             d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
           />
         </svg>
@@ -182,7 +210,7 @@ const IntroSection = () => {
     {
       id: 3,
       name: "Grafický design",
-      shortDesc: "Vizuální identita",
+      shortDesc: "Logo za 3 dny",
       description: "Tvorba log, tiskovin a kompletní vizuální identity.",
       icon: (
         <svg
@@ -194,7 +222,7 @@ const IntroSection = () => {
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
-            strokeWidth="1.5"
+            strokeWidth="2"
             d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
           />
         </svg>
@@ -207,7 +235,7 @@ const IntroSection = () => {
     {
       id: 4,
       name: "Video tvorba",
-      shortDesc: "Dynamický obsah",
+      shortDesc: "Viral obsah pro sítě",
       description: "Střih spotů, reklam a videí pro sociální sítě.",
       icon: (
         <svg
@@ -219,7 +247,7 @@ const IntroSection = () => {
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
-            strokeWidth="1.5"
+            strokeWidth="2"
             d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
           />
         </svg>
@@ -232,7 +260,7 @@ const IntroSection = () => {
     {
       id: 5,
       name: "Interaktivní kvízy",
-      shortDesc: "Gamifikace",
+      shortDesc: "Studenti to milují",
       description: "E‑learningové moduly pro ZŠ a SŠ: kvízy, úlohy a SCORM export.",
       icon: (
         <svg
@@ -244,7 +272,7 @@ const IntroSection = () => {
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
-            strokeWidth="1.5"
+            strokeWidth="2"
             d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
           />
         </svg>
@@ -257,7 +285,7 @@ const IntroSection = () => {
     {
       id: 6,
       name: "Online kurzy",
-      shortDesc: "Vzdělávací platformy",
+      shortDesc: "Učte se kdykoli",
       description: "Interaktivní online kurzy pro rozvoj vašich dovedností v webdesignu, programování a grafice.",
       icon: (
         <svg
@@ -269,7 +297,7 @@ const IntroSection = () => {
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
-            strokeWidth="1.5"
+            strokeWidth="2"
             d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
           />
         </svg>
@@ -321,7 +349,7 @@ const IntroSection = () => {
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
-        {/* Header */}
+        {/* Header - zkrácený bez "Můj přístup" textu */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -353,29 +381,14 @@ const IntroSection = () => {
             </div>
           </h1>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="max-w-4xl mx-auto mb-8"
-          >
-            <p className="text-lg md:text-xl text-gray-300 leading-relaxed mb-4">
-              Specializuji se na <span className="text-orange-400 font-semibold">digitální řešení, která skutečně fungují</span>. 
-              Nejen že vytvořím krásný web nebo e-shop, ale především <span className="text-white font-medium">zajistím, aby vám přinášel zákazníky a zisk</span>.
-            </p>
-            <p className="text-gray-400 mb-4">
-              Každý projekt začínám důkladnou analýzou vašeho byznysu a cílové skupiny. 
-              Teprve pak navrhuji řešení, které <span className="text-orange-400">kombinuje atraktivní design s psychologií prodeje</span> a moderními technologiemi.
-            </p>
-            <p className="text-gray-300">
-              <span className="text-orange-400 font-medium">Můj přístup:</span> Neprodávám vám technologie, ale řešení konkrétních problémů. 
-              Každá stránka, každé tlačítko a každý text má svůj důvod - přeměnit návštěvníka v zákazníka.
-            </p>
-          </motion.div>
+          <p className="text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto mb-8 leading-relaxed">
+            <span className="text-orange-400 font-semibold">Jeden partner, šest služeb.</span> 
+            Vytvářím kompletní digitální řešení, která <span className="text-white font-medium">skutečně prodávají.</span>
+          </p>
         </motion.div>
 
-        {/* Služby - Grid 3x2 z prvního kódu */}
-        <div className="grid lg:grid-cols-3 gap-6 mb-16">
+        {/* Služby - Grid 3x2 */}
+        <div className="grid lg:grid-cols-3 gap-6 mb-20">
           {services.map((service, idx) => (
             <motion.div
               key={service.id}
@@ -385,6 +398,7 @@ const IntroSection = () => {
               onHoverStart={() => !isMobileOrTablet && setHoveredServiceId(service.id)}
               onHoverEnd={() => !isMobileOrTablet && setHoveredServiceId(null)}
               className="group"
+              data-card-index={idx}
             >
               <Link href={service.link}>
                 <div className="relative h-full cursor-pointer">
@@ -424,14 +438,40 @@ const IntroSection = () => {
                       </div>
                     </div>
 
-                    {/* Text */}
-                    <h3
-                      className={`text-xl font-bold mb-1 transition-colors ${
-                        isHovered(service.id) ? "text-orange-400" : "text-white"
-                      }`}
-                    >
-                      {service.name}
-                    </h3>
+                    {/* Text s animovaným podtržením */}
+                    <div className="mb-6">
+                      <h3 
+                        className={`text-xl font-bold transition-colors relative ${
+                          isHovered(service.id) ? "text-white" : "text-white"
+                        }`}
+                        style={{ 
+                          color: service.id === 1 || service.id === 2 ? "#f97316" :
+                                 service.id === 3 ? "#3b82f6" :
+                                 service.id === 4 ? "#ec4899" :
+                                 service.id === 5 ? "#6366f1" :
+                                 service.id === 6 ? "#06b6d4" : "#f97316"
+                        }}
+                      >
+                        {service.name}
+                        
+                        <div 
+                          className={`absolute -bottom-1 left-0 h-[2px] transition-all duration-500 ease-out ${
+                            isMobileOrTablet 
+                              ? (cardsInView[idx] ? 'w-2/3' : 'w-0')
+                              : 'w-0 group-hover:w-2/3'
+                          }`}
+                          style={{ 
+                            background: `linear-gradient(to right, ${
+                              service.id === 1 || service.id === 2 ? "#f97316" :
+                              service.id === 3 ? "#3b82f6" :
+                              service.id === 4 ? "#ec4899" :
+                              service.id === 5 ? "#6366f1" :
+                              service.id === 6 ? "#06b6d4" : "#f97316"
+                            }, transparent)`,
+                          }}
+                        />
+                      </h3>
+                    </div>
                     <p className="text-sm text-orange-400/80 mb-3">
                       {service.shortDesc}
                     </p>
@@ -487,22 +527,42 @@ const IntroSection = () => {
           ))}
         </div>
 
-        {/* Scrollující testimonials */}
+        {/* Můj přístup - přesunuto sem pod služby */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="max-w-4xl mx-auto mb-24 text-center"
+        >
+          <h2 className="text-2xl md:text-3xl font-bold text-white mb-8">
+            Jak přistupuji k projektům
+          </h2>
+          <p className="text-gray-400 mb-6 text-lg md:text-xl">
+            Každý projekt začínám důkladnou analýzou vašeho byznysu a cílové skupiny. 
+            Teprve pak navrhuji řešení, které <span className="text-orange-400">kombinuje atraktivní design s psychologií prodeje</span> a moderními technologiemi.
+          </p>
+          <p className="text-gray-300 text-lg md:text-xl">
+            <span className="text-orange-400 font-medium">Můj přístup:</span> Neprodávám vám technologie, ale řešení konkrétních problémů. 
+            Každá stránka, každé tlačítko a každý text má svůj důvod - přeměnit návštěvníka v zákazníka.
+          </p>
+        </motion.div>
+
+        {/* Scrollující testimonials s lepšími mezerami */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.6 }}
-          className="mb-20"
+          className="mb-24"
         >
-          <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold text-white mb-4">
+          <div className="text-center mb-16">
+            <h3 className="text-3xl md:text-4xl font-bold text-white mb-6">
               Co říkají spokojení klienti
             </h3>
-            <p className="text-gray-400 text-lg">
+            <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-8">
               Reálné výsledky od skutečných klientů
             </p>
             {isMobileOrTablet && (
-              <div className="flex justify-center space-x-2 mt-6">
+              <div className="flex justify-center space-x-3 mt-8">
                 {testimonials.map((_, index) => (
                   <button
                     key={index}
@@ -520,14 +580,14 @@ const IntroSection = () => {
           
           {/* Desktop scrollování */}
           {!isMobileOrTablet && (
-            <div className="relative overflow-hidden">
+            <div className="relative overflow-hidden py-8">
               <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#0f172a] to-transparent z-10 pointer-events-none" />
               <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#0f172a] to-transparent z-10 pointer-events-none" />
               
               <motion.div 
-                className="flex space-x-6 py-4"
+                className="flex space-x-8 py-4"
                 animate={{ 
-                  x: [0, -384 * 6 - 24 * 6] 
+                  x: [0, -384 * 6 - 32 * 6] 
                 }}
                 transition={{
                   duration: 30,
@@ -546,7 +606,7 @@ const IntroSection = () => {
 
           {/* Mobilní single view s rotací */}
           {isMobileOrTablet && (
-            <div className="relative px-4">
+            <div className="relative px-4 py-8">
               <motion.div
                 key={currentTestimonial}
                 initial={{ opacity: 0, x: 50 }}
@@ -566,32 +626,48 @@ const IntroSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 1.0 }}
-          className="relative mb-16"
+          className="relative mb-20"
         >
-          <div className="p-8 rounded-2xl bg-gradient-to-br from-slate-800/90 to-slate-700/70 backdrop-blur-sm border border-orange-500/20">
-            <div className="text-center mb-8">
-              <h3 className="text-2xl font-bold text-white mb-2">
-                Proč spolupracovat právě se mnou?
-              </h3>
-              <p className="text-gray-400">
-                Kombinuji technické dovednosti s obchodním myšlením a psychologií prodeje
-              </p>
+          <div className="relative p-8 rounded-2xl bg-slate-800/90 backdrop-blur-sm border-2 border-orange-500/30 overflow-hidden">
+            {/* Oranžový glow efekt */}
+            <div className="absolute -inset-0.5 bg-gradient-to-br from-orange-500/0 via-orange-500/20 to-orange-600/0 rounded-2xl blur opacity-50" />
+            
+            {/* Top gradient line */}
+            <div className="absolute top-0 left-8 right-8 h-0.5 bg-gradient-to-r from-transparent via-orange-400 to-transparent" />
+            
+            <div className="relative z-10">
+              <div className="text-center mb-8">
+                <div className="flex items-center justify-center gap-3 mb-4">
+                  <div>
+                    <h3 className="text-2xl font-bold text-white">
+                      Proč spolupracovat právě se mnou?
+                    </h3>
+                    <div className="h-0.5 bg-gradient-to-r from-orange-500 to-orange-600 rounded-full mt-1"></div>
+                  </div>
+                </div>
+                <p className="text-gray-400">
+                  Kombinuji technické dovednosti s obchodním myšlením a psychologií prodeje
+                </p>
+              </div>
+              <div className="grid md:grid-cols-4 gap-6 mb-8">
+                {benefits.map((b, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.4, delay: 1.1 + i * 0.1 }}
+                    className="text-center"
+                  >
+                    <div className="text-3xl mb-3">{b.icon}</div>
+                    <h4 className="font-semibold text-white mb-1">{b.title}</h4>
+                    <p className="text-sm text-slate-400">{b.desc}</p>
+                  </motion.div>
+                ))}
+              </div>
             </div>
-            <div className="grid md:grid-cols-4 gap-6 mb-8">
-              {benefits.map((b, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.4, delay: 1.1 + i * 0.1 }}
-                  className="text-center"
-                >
-                  <div className="text-3xl mb-3">{b.icon}</div>
-                  <h4 className="font-semibold text-white mb-1">{b.title}</h4>
-                  <p className="text-sm text-slate-400">{b.desc}</p>
-                </motion.div>
-              ))}
-            </div>
+
+            {/* Bottom gradient line */}
+            <div className="absolute bottom-0 left-8 right-8 h-0.5 bg-gradient-to-r from-transparent via-orange-400/50 to-transparent" />
           </div>
 
           {!isMobileOrTablet &&

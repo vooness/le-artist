@@ -114,7 +114,7 @@ const InvestmentSection = () => {
   return (
     <section 
       ref={sectionRef}
-      className="relative bg-[#0a0e1c] py-16 md:py-24 px-4 sm:px-6 lg:px-8 overflow-hidden"
+      className="relative bg-[#0f172a] py-16 md:py-24 px-4 sm:px-6 lg:px-8 overflow-hidden"
     >
       {/* Background elements - optimalizováno pro mobilní zařízení */}
       <div className="absolute inset-0">

@@ -70,8 +70,6 @@ const Navbar: React.FC = () => {
   const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
-  const mobileMenuRef = useRef<HTMLDivElement | null>(null);
-  const servicesRef = useRef<HTMLDivElement | null>(null);
   const dropdownTimeout = useRef<NodeJS.Timeout | null>(null);
 
   // Optimalizovaný listener pro scrollování pomocí Intersection Observer
@@ -131,31 +129,11 @@ const Navbar: React.FC = () => {
     }, 150);
   };
 
-  // Funkce pro mobilní služby dropdown
+  // Funkce pro mobilní služby dropdown - ODSTRANĚNO automatické scrollování
   const handleMobileServicesToggle = (event: React.MouseEvent) => {
-    event.stopPropagation(); // Zabrání propagaci eventu
+    event.stopPropagation();
     event.preventDefault();
-    
     setIsMobileServicesOpen(!isMobileServicesOpen);
-    
-    // Automatické scrollování
-    setTimeout(() => {
-      if (mobileMenuRef.current && servicesRef.current) {
-        if (!isMobileServicesOpen) {
-          // Otevírá se - scrolluj na služby
-          servicesRef.current.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'start' 
-          });
-        } else {
-          // Zavírá se - scrolluj nahoru
-          mobileMenuRef.current.scrollTo({ 
-            top: 0, 
-            behavior: 'smooth' 
-          });
-        }
-      }
-    }, 100);
   };
 
   // Animační varianty pro hamburger menu
@@ -388,7 +366,7 @@ const Navbar: React.FC = () => {
       <AnimatePresence mode="wait">
         {isOpen && (
           <motion.div
-            className="fixed top-0 right-0 h-full w-80 bg-[#0f172a] backdrop-blur-md z-40 lg:hidden shadow-2xl border-l border-orange-500/20"
+            className="fixed top-0 right-0 h-full w-80 bg-[#0f172a] backdrop-blur-md z-40 lg:hidden shadow-2xl border-l border-orange-500/20 flex flex-col"
             initial={{ 
               x: "100%",
               opacity: 0
@@ -409,9 +387,9 @@ const Navbar: React.FC = () => {
               opacity: { duration: 0.2 }
             }}
           >
-            {/* Animovaný header s close tlačítkem */}
+            {/* FIXED header s close tlačítkem */}
             <motion.div 
-              className="flex items-center justify-between p-6 border-b border-orange-500/20"
+              className="flex items-center justify-between p-6 border-b border-orange-500/20 bg-[#0f172a] sticky top-0 z-50"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ 
@@ -433,16 +411,11 @@ const Navbar: React.FC = () => {
               </motion.button>
             </motion.div>
 
-            {/* Scrollable menu content */}
-            <div 
-              ref={mobileMenuRef}
-              className="flex-1 overflow-y-auto" 
-              style={{ maxHeight: 'calc(100vh - 300px)' }}
-            >
+            {/* Scrollable menu content - flex-1 zabere zbytek místa */}
+            <div className="flex-1 overflow-y-auto">
               <div className="pt-4 pb-4">
                 {/* Služby expandovatelná sekce */}
                 <motion.div
-                  ref={servicesRef}
                   initial={{ opacity: 0, x: 50, scale: 0.9 }}
                   animate={{ opacity: 1, x: 0, scale: 1 }}
                   transition={{ 
@@ -583,9 +556,9 @@ const Navbar: React.FC = () => {
               </div>
             </div>
 
-            {/* Spodní kontaktní panel - RELATIVNÍ POZICE místo absolutní */}
+            {/* Spodní kontaktní panel - STICKY bottom */}
             <motion.div
-              className="mt-auto p-6 bg-gradient-to-t from-[#0f172a] to-transparent border-t border-gray-800/30"
+              className="p-6 bg-gradient-to-t from-[#0f172a] to-transparent border-t border-gray-800/30 sticky bottom-0 bg-[#0f172a]"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ 
@@ -666,7 +639,7 @@ const Navbar: React.FC = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
                   </div>
-                  <span className="break-all">dotazy.le.artist@gmail.com</span>
+                  <span className="break-all">vooness@stream.cz</span>
                 </motion.a>
               </div>
             </motion.div>

@@ -3,26 +3,14 @@
 import { useEffect, useState, useRef, Suspense, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import Navbar from "./components/Navbar";
-import { HeroSection } from "./components/HeroSection";
+import  HeroSection  from "./components/HeroSection";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
-// Vylepšený skeleton loader s flexibilní výškou
-const Skeleton = ({ 
-  height = 'auto', 
-  minHeight = 400,
-  className = ''
-}: { 
-  height?: string | number; 
-  minHeight?: number;
-  className?: string;
-}) => (
+// Skeleton loader for lazy components
+const Skeleton = ({ height = 400 }: { height?: number }) => (
   <div
-    className={`animate-pulse bg-gradient-to-b from-slate-900/40 to-slate-800/40 rounded-md ${className}`}
-    style={{ 
-      height: typeof height === 'number' ? `${height}px` : height,
-      minHeight: `${minHeight}px`,
-      contain: 'layout style' // Zabráníme layout shiftu
-    }}
+    className="animate-pulse bg-gradient-to-b from-slate-900/40 to-slate-800/40 rounded-md"
+    style={{ height: `${height}px` }}
   >
     <div className="h-full flex items-center justify-center">
       <div className="w-12 h-12 border-t-2 border-b-2 border-orange-500 rounded-full animate-spin"></div>
@@ -30,190 +18,125 @@ const Skeleton = ({
   </div>
 );
 
-// Optimalizovaný lazy loading wrapper
+// Lazy-loading wrapper with optimized IntersectionObserver
 interface LazyComponentProps {
   children: React.ReactNode;
-  height?: string | number;
-  minHeight?: number;
+  height?: number;
   priority?: boolean;
-  preloadMargin?: string;
-  className?: string;
 }
 
-const LazyComponent = ({ 
-  children, 
-  height = 'auto',
-  minHeight = 400,
-  priority = false,
-  preloadMargin = '300px',
-  className = ''
-}: LazyComponentProps) => {
+const LazyComponent = ({ children, height = 400, priority = false }: LazyComponentProps) => {
   const [isVisible, setIsVisible] = useState(priority);
-  const [hasStartedLoading, setHasStartedLoading] = useState(priority);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (priority) {
       setIsVisible(true);
-      setHasStartedLoading(true);
       return;
     }
-
     if (!ref.current) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && !hasStartedLoading) {
-          setHasStartedLoading(true);
-          // Rychlejší načtení bez rAF
-          setIsVisible(true);
+        if (entry.isIntersecting) {
+          // Use rAF for next-paint scheduling
+          requestAnimationFrame(() => {
+            setIsVisible(true);
+          });
           observer.disconnect();
         }
       },
-      { 
-        rootMargin: preloadMargin,
-        threshold: 0.01
-      }
+      { rootMargin: '600px', threshold: 0.01 }
     );
 
     observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [priority, hasStartedLoading, preloadMargin]);
+    return () => { if (ref.current) observer.unobserve(ref.current); };
+  }, [priority]);
 
   return (
-    <div 
-      ref={ref} 
-      className={className}
-      style={{ 
-        contain: 'layout',
-        minHeight: typeof minHeight === 'number' ? `${minHeight}px` : minHeight
-      }}
-    >
+    <div ref={ref}>
       {isVisible ? (
-        <Suspense 
-          fallback={
-            <Skeleton 
-              height={height} 
-              minHeight={typeof minHeight === 'number' ? minHeight : 400}
-            />
-          }
-        >
+        <Suspense fallback={<Skeleton height={height} />}>
           {children}
         </Suspense>
       ) : (
-        <Skeleton 
-          height={height} 
-          minHeight={typeof minHeight === 'number' ? minHeight : 400}
-        />
+        <Skeleton height={height} />
       )}
     </div>
   );
 };
 
-// Vylepšená preload strategie
+// Preload lowest-priority components after mount
 function usePreloadComponents() {
   useEffect(() => {
-    // Preload po dokončení první fáze renderingu
     const timer = setTimeout(() => {
-      // Preload v pořadí podle priority
-      const preloadPromises = [
-        import('./components/ServiceGrid'),
-        import('./components/Project'),
-        import('./components/Footer'),
-      ];
+      import('./components/WhatIDo');
       
-      Promise.allSettled(preloadPromises).catch(() => {
-        // Tichý fallback
-      });
-    }, 500); // Kratší delay
-
+      import('./components/ServiceGrid');
+      import('./components/Comparison'); // Preload nové komponenty
+    }, 1000);
     return () => clearTimeout(timer);
   }, []);
 }
 
-// Dynamic imports s optimalizací
-// WhatIDo necháme se SSR pro lepší above-the-fold loading
+// Dynamic imports with ssr:false to shrink SSR payload, plus skeleton fallback
 const WhatIDo = dynamic(() => import('./components/WhatIDo'), {
-  ssr: true, // Změněno na true pro above-the-fold obsah
-  loading: () => <Skeleton height="auto" minHeight={500} />,
+  ssr: false,
+  loading: () => <Skeleton height={400} />,
 });
 
 const ServicesGrid = dynamic(() => import('./components/ServiceGrid'), {
   ssr: false,
-  loading: () => <Skeleton height="auto" minHeight={600} />,
+  loading: () => <Skeleton height={400} />,
 });
+
 
 const ProjectsSection = dynamic(() => import('./components/Project'), {
   ssr: false,
-  loading: () => <Skeleton height="auto" minHeight={800} />,
+  loading: () => <Skeleton height={400} />,
 });
 
 const Footer = dynamic(() => import('./components/Footer'), {
   ssr: false,
-  loading: () => <Skeleton height="auto" minHeight={300} />,
+  loading: () => <Skeleton height={200} />,
 });
 
 export default function Home() {
   usePreloadComponents();
 
-  // CSS optimalizace pro plynulé scrollování
+  // Smooth-scroll styling
   useEffect(() => {
-    const root = document.documentElement;
-    root.style.scrollBehavior = 'smooth';
-    
-    // Optimalizace pro webkit rendering
-    document.body.style.transform = 'translateZ(0)';
-    document.body.style.backfaceVisibility = 'hidden';
-    
+    document.documentElement.style.scrollBehavior = 'smooth';
     return () => {
-      root.style.scrollBehavior = 'auto';
-      document.body.style.transform = '';
-      document.body.style.backfaceVisibility = '';
+      document.documentElement.style.scrollBehavior = 'auto';
     };
   }, []);
 
   return (
     <>
-      {process.env.NODE_ENV === 'development' && <SpeedInsights />}
-      
-      {/* Above-the-fold obsah - vždy eagerly loaded */}
+      {/* Only run SpeedInsights in dev for profiling */}
+      {process.env.NODE_ENV !== 'production' && <SpeedInsights />}
       <Navbar />
       <HeroSection />
 
-      {/* První sekce - vysoká priorita, kratší preload margin */}
-      <LazyComponent 
-        priority 
-        height="auto" 
-        minHeight={500}
-        className="will-change-transform"
-      >
+      {/* Eagerly load first two sections */}
+      <LazyComponent priority height={500}>
         <WhatIDo />
       </LazyComponent>
+      
 
-      {/* Zbývající sekce s optimalizovaným lazy loadingem */}
-      <LazyComponent 
-        height="auto" 
-        minHeight={600}
-        preloadMargin="200px"
-        className="will-change-transform"
-      >
+      {/* Remaining sections lazy-load on scroll */}
+      <LazyComponent height={500}>
         <ServicesGrid />
       </LazyComponent>
-
-      <LazyComponent 
-        height="auto" 
-        minHeight={800}
-        preloadMargin="150px"
-        className="will-change-transform"
-      >
+     
+      {/* Přidání nové komponenty Comparison hned po WhyTrustMe */}
+     
+      <LazyComponent height={500}>
         <ProjectsSection />
       </LazyComponent>
-
-      <LazyComponent 
-        height="auto" 
-        minHeight={300}
-        preloadMargin="100px"
-      >
+      
+      <LazyComponent height={200}>
         <Footer />
       </LazyComponent>
     </>

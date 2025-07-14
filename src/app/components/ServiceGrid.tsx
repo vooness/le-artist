@@ -171,8 +171,9 @@ const ServiceCard: React.FC<{
   isVisible: boolean, 
   animationDelay: number,
   isRevealed: boolean,
-  cardPosition?: 'prev' | 'current' | 'next'
-}> = ({ service, index, isVisible, animationDelay, isRevealed, cardPosition = 'current' }) => {
+  cardPosition?: 'prev' | 'current' | 'next',
+  isMobile?: boolean
+}> = ({ service, index, isVisible, animationDelay, isRevealed, cardPosition = 'current', isMobile = false }) => {
   const router = useRouter();
   
   // Určení opacity, scale a efektů na základě pozice
@@ -187,12 +188,17 @@ const ServiceCard: React.FC<{
   
   return (
     <div 
-      className={`w-full max-w-sm group relative overflow-visible transition-all duration-700 ease-in-out ${
-        isRevealed 
-          ? 'opacity-100 translate-y-0 scale-100' 
-          : 'opacity-0 translate-y-8 scale-95'
-      } ${getCardStyles()}`}
-      style={{
+      className={`w-full max-w-sm relative overflow-visible ${
+        // Na mobilu úplně prostý div bez group efektů
+        isMobile 
+          ? '' 
+          : `group transition-all duration-700 ease-in-out ${
+              isRevealed 
+                ? 'opacity-100 translate-y-0 scale-100' 
+                : 'opacity-0 translate-y-8 scale-95'
+            } ${getCardStyles()}`
+      }`}
+      style={isMobile ? {} : {
         transitionDelay: `${animationDelay}ms`,
         filter: cardPosition === 'current' ? 'brightness(1.1)' : 'brightness(0.9)',
       }}
@@ -216,34 +222,54 @@ const ServiceCard: React.FC<{
       
       {/* Základní kontejner */}
       <div 
-        className="relative bg-slate-800/60 backdrop-blur-lg rounded-xl border border-white/10 shadow-lg transition-all duration-500 overflow-hidden hover:shadow-xl"
-        style={{
+        className={`relative rounded-xl border overflow-hidden ${
+          isMobile 
+            ? 'bg-slate-800 border-white/10 shadow-md' 
+            : 'bg-slate-800/60 backdrop-blur-lg border-white/10 shadow-lg transition-all duration-500 hover:shadow-xl'
+        }`}
+        style={isMobile ? {} : {
           boxShadow: `0 6px 20px ${service.color}15`,
         }}
       >
         {/* Vnitřní ohraničení s gradientem */}
         <div className="absolute inset-0 rounded-xl overflow-hidden">
           <div 
-            className={`absolute inset-0 transition-opacity duration-500 ${
-              cardPosition === 'current' ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+            className={`absolute inset-0 ${
+              isMobile 
+                ? 'opacity-0' 
+                : `transition-opacity duration-500 ${
+                    cardPosition === 'current' ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                  }`
             }`}
             style={{
-              background: `linear-gradient(120deg, transparent, ${service.color}10, transparent)`
+              background: isMobile ? 'none' : `linear-gradient(120deg, transparent, ${service.color}10, transparent)`,
             }}
           />
         </div>
         
         {/* Animované ohraničení */}
         <div className="absolute inset-0 rounded-xl overflow-hidden">
-          <div className={`absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/30 to-transparent transition-opacity duration-700 ${
-            cardPosition === 'current' ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+          <div className={`absolute top-0 left-0 w-full h-px ${
+            isMobile 
+              ? 'opacity-0' 
+              : `bg-gradient-to-r from-transparent via-white/30 to-transparent transition-opacity duration-700 ${
+                  cardPosition === 'current' ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                }`
           }`}/>
-          <div className={`absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/30 to-transparent transition-opacity duration-700 ${
-            cardPosition === 'current' ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+          <div className={`absolute bottom-0 left-0 w-full h-px ${
+            isMobile 
+              ? 'opacity-0' 
+              : `bg-gradient-to-r from-transparent via-white/30 to-transparent transition-opacity duration-700 ${
+                  cardPosition === 'current' ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                }`
           }`}/>
           
-          <div className={`absolute inset-0 rounded-xl border transition-colors duration-500 ${
-            cardPosition === 'current' ? 'border-white/20' : 'border-white/0 group-hover:border-white/20'
+          <div className={`absolute inset-0 rounded-xl border ${
+            isMobile 
+              ? 'border-white/10' 
+              : `transition-colors duration-500 ${
+                  cardPosition === 'current' ? 'border-white/20' : 'border-white/0 group-hover:border-white/20'
+                }`
           }`}></div>
           
           {/* Rohové akcenty */}
@@ -268,11 +294,15 @@ const ServiceCard: React.FC<{
         {/* Gradient overlay */}
         <div className="absolute inset-0 rounded-xl overflow-hidden pointer-events-none">
           <div 
-            className={`absolute top-0 w-full h-full bg-gradient-to-l from-transparent via-white/5 to-transparent transition-all duration-1000 ${
-              cardPosition === 'current' ? 'right-0 opacity-100' : '-right-full opacity-0 group-hover:right-0 group-hover:opacity-100'
+            className={`absolute top-0 w-full h-full bg-gradient-to-l from-transparent via-white/5 to-transparent ${
+              isMobile 
+                ? 'opacity-0' 
+                : `transition-all duration-1000 ${
+                    cardPosition === 'current' ? 'right-0 opacity-100' : '-right-full opacity-0 group-hover:right-0 group-hover:opacity-100'
+                  }`
             }`}
             style={{ 
-              transition: 'right 1s ease-in-out, opacity 1s ease-in-out',
+              transition: isMobile ? 'none' : 'right 1s ease-in-out, opacity 1s ease-in-out',
             }}
           />
         </div>
@@ -282,16 +312,24 @@ const ServiceCard: React.FC<{
           {/* Ikona a nadpis */}
           <div className="flex justify-center items-center mb-6">
             <div 
-              className={`relative mr-4 transition-transform duration-500 ${
-                cardPosition === 'current' ? 'scale-110 rotate-3' : 'group-hover:scale-110 group-hover:rotate-3'
+              className={`relative mr-4 ${
+                isMobile 
+                  ? '' 
+                  : `transition-transform duration-500 ${
+                      cardPosition === 'current' ? 'scale-110 rotate-3' : 'group-hover:scale-110 group-hover:rotate-3'
+                    }`
               }`}
               style={{ color: service.color }}
             >
               {service.icon}
               
               <div 
-                className={`absolute inset-0 -m-1 rounded-full transition-opacity duration-500 ${
-                  cardPosition === 'current' ? 'opacity-50' : 'opacity-0 group-hover:opacity-50'
+                className={`absolute inset-0 -m-1 rounded-full ${
+                  isMobile 
+                    ? 'opacity-0' 
+                    : `transition-opacity duration-500 ${
+                        cardPosition === 'current' ? 'opacity-50' : 'opacity-0 group-hover:opacity-50'
+                      }`
                 }`}
                 style={{ 
                   background: `radial-gradient(circle, ${service.color}40 0%, transparent 70%)`,
@@ -300,14 +338,20 @@ const ServiceCard: React.FC<{
               />
             </div>
             <h3 
-              className="text-2xl sm:text-3xl font-bold relative transition-all duration-500" 
+              className={`text-2xl sm:text-3xl font-bold relative ${
+                isMobile ? '' : 'transition-all duration-500'
+              }`} 
               style={{ color: service.color }}
             >
               {service.title}
               
               <div 
-                className={`absolute -bottom-1 left-0 h-[2px] transition-all duration-500 ease-out ${
-                  cardPosition === 'current' ? 'w-full' : 'w-0 group-hover:w-full'
+                className={`absolute -bottom-1 left-0 h-[2px] ${
+                  isMobile 
+                    ? 'w-full' 
+                    : `transition-all duration-500 ease-out ${
+                        cardPosition === 'current' ? 'w-full' : 'w-0 group-hover:w-full'
+                      }`
                 }`}
                 style={{ 
                   background: `linear-gradient(to right, ${service.color}, transparent)`,
@@ -320,8 +364,12 @@ const ServiceCard: React.FC<{
           <div className="mb-6">
             <p className="text-gray-300 text-sm leading-relaxed">{service.description}</p>
             <div 
-              className={`mt-4 h-[1px] mx-auto transition-all duration-700 ease-in-out ${
-                cardPosition === 'current' ? 'w-2/3' : 'w-1/3 group-hover:w-2/3'
+              className={`mt-4 h-[1px] mx-auto ${
+                isMobile 
+                  ? 'w-2/3' 
+                  : `transition-all duration-700 ease-in-out ${
+                      cardPosition === 'current' ? 'w-2/3' : 'w-1/3 group-hover:w-2/3'
+                    }`
               }`}
               style={{ 
                 background: `linear-gradient(to right, transparent, ${service.color}40, transparent)`,
@@ -334,8 +382,10 @@ const ServiceCard: React.FC<{
             {service.checkmarks.map((check, idx) => (
               <li 
                 key={idx} 
-                className="flex items-start text-gray-300 text-sm transition-all duration-300"
-                style={{ 
+                className={`flex items-start text-gray-300 text-sm ${
+                  isMobile ? '' : 'transition-all duration-300'
+                }`}
+                style={isMobile ? {} : { 
                   transitionDelay: `${idx * 50}ms`, 
                   transitionDuration: '300ms' 
                 }}
@@ -343,7 +393,7 @@ const ServiceCard: React.FC<{
                 <div className="flex-shrink-0 mr-3 text-green-500">
                   <CheckCircle2 />
                 </div>
-                <span className={`transition-colors duration-300 ${
+                <span className={isMobile ? 'text-white' : `transition-colors duration-300 ${
                   cardPosition === 'current' ? 'text-white' : 'group-hover:text-white'
                 }`}>
                   {check}
@@ -355,21 +405,31 @@ const ServiceCard: React.FC<{
           {/* CTA tlačítko */}
           <button
             onClick={() => router.push("/kontakt")}
-            className="w-full relative group/btn overflow-hidden rounded-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+            className={`w-full relative group/btn overflow-hidden rounded-xl ${
+              isMobile ? '' : 'transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]'
+            }`}
             style={{
               background: `linear-gradient(135deg, ${service.color}15, ${service.color}10)`,
               border: `1px solid ${service.color}30`,
             }}
           >
             <div 
-              className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"
+              className={`absolute inset-0 ${
+                isMobile 
+                  ? 'opacity-0' 
+                  : 'opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300'
+              }`}
               style={{
                 background: `linear-gradient(135deg, ${service.color}25, ${service.color}15)`,
               }}
             />
             
             <div 
-              className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700 ease-in-out"
+              className={`absolute inset-0 ${
+                isMobile 
+                  ? 'opacity-0' 
+                  : '-translate-x-full group-hover/btn:translate-x-full transition-transform duration-700 ease-in-out'
+              }`}
               style={{
                 background: `linear-gradient(90deg, transparent, ${service.color}30, transparent)`,
               }}
@@ -385,7 +445,11 @@ const ServiceCard: React.FC<{
                 Začněme spolupráci
               </span>
               <div 
-                className="transition-all duration-300 group-hover/btn:translate-x-1 group-hover/btn:scale-110"
+                className={`${
+                  isMobile 
+                    ? '' 
+                    : 'transition-all duration-300 group-hover/btn:translate-x-1 group-hover/btn:scale-110'
+                }`}
                 style={{ color: service.color }}
               >
                 <ArrowRight />
@@ -393,7 +457,11 @@ const ServiceCard: React.FC<{
             </div>
             
             <div 
-              className="absolute bottom-0 left-0 h-[2px] w-0 group-hover/btn:w-full transition-all duration-500 ease-out"
+              className={`absolute bottom-0 left-0 h-[2px] ${
+                isMobile 
+                  ? 'w-0' 
+                  : 'w-0 group-hover/btn:w-full transition-all duration-500 ease-out'
+              }`}
               style={{ background: service.color }}
             />
           </button>
@@ -587,7 +655,7 @@ const TechCarouselServices: React.FC = () => {
     };
   }, []);
   
-  // Observer pro reveal animace karet (pouze mobilní)
+  // Observer pro reveal animace karet (pouze desktop)
   useEffect(() => {
     if (isDesktop) {
       // Na desktopu se rovnou zobrazí
@@ -595,34 +663,8 @@ const TechCarouselServices: React.FC = () => {
       return;
     }
     
-    const cardsObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const index = parseInt(entry.target.getAttribute('data-index') || '0');
-            setCardsRevealed((prev) => {
-              const newState = [...prev];
-              newState[index] = true;
-              return newState;
-            });
-          }
-        });
-      },
-      {
-        threshold: 0.2,
-        rootMargin: '0px 0px -100px 0px'
-      }
-    );
-
-    cardsRef.current.forEach((card) => {
-      if (card) cardsObserver.observe(card);
-    });
-
-    return () => {
-      cardsRef.current.forEach((card) => {
-        if (card) cardsObserver.unobserve(card);
-      });
-    };
+    // Na mobilu už žádný observer - karty jsou vždy viditelné
+    setCardsRevealed(new Array(services.length).fill(true));
   }, [isDesktop]);
   
   // Funkce pro získání všech karet s jejich pozicemi
@@ -728,6 +770,7 @@ const TechCarouselServices: React.FC = () => {
                         animationDelay={0}
                         isRevealed={true}
                         cardPosition={card.position as 'prev' | 'current' | 'next'}
+                        isMobile={false}
                       />
                     </div>
                   ))}
@@ -749,22 +792,21 @@ const TechCarouselServices: React.FC = () => {
                 </button>
               </div>
             ) : (
-              /* Mobilní grid - všechny karty pod sebou bez carouselu */
-              <div className="grid grid-cols-1 sm:grid-cols-2 justify-items-center gap-6 sm:gap-8 mb-12">
+              /* Mobilní flexbox - bez grid efektů */
+              <div className="flex flex-col items-center space-y-12 mb-16 px-4">
                 {services.map((service, i) => (
                   <div
                     key={i}
-                    ref={(el) => { cardsRef.current[i] = el; }}
-                    data-index={i}
                     className="w-full max-w-sm"
                   >
                     <ServiceCard 
                       service={service} 
                       index={i} 
                       isVisible={true}
-                      animationDelay={i * 100}
-                      isRevealed={cardsRevealed[i]}
+                      animationDelay={0}
+                      isRevealed={true}
                       cardPosition="current"
+                      isMobile={true}
                     />
                   </div>
                 ))}
