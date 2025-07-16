@@ -74,7 +74,7 @@ const ModernBenefitsSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12 md:mb-16"
         >
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 leading-tight">
+          <h2 className="text-3xl md:text-3xl lg:text-5xl font-bold mb-12 leading-tight">
             <span className="text-orange-500">Proč váš web neprodává</span> <span className="text-white">a jak to změnit</span>
           </h2>
           <p className="text-base md:text-lg text-gray-300 max-w-2xl mx-auto">
