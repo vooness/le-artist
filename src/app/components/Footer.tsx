@@ -5,17 +5,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, useInView } from "framer-motion";
 import { 
-  FaFacebookF, 
-  FaTwitter, 
-  FaLinkedinIn, 
-  FaInstagram, 
   FaEnvelope, 
   FaPhone, 
-  FaIdCard 
+  FaIdCard
 } from "react-icons/fa";
 import ParticlesBackground from "./ParticlesBakckground";
 
-// Předem definované hodnoty pro světelné body - toto opraví problém s hydratací
+// Předem definované hodnoty pro světelné body
 const lightDots = [
   { width: "4.14px", height: "7.90px", top: "48.30%", left: "98.99%", delay: 0.2, duration: 4.8 },
   { width: "6.17px", height: "5.70px", top: "49.24%", left: "25.57%", delay: 0.7, duration: 5.3 },
@@ -47,7 +43,6 @@ const Footer: React.FC = () => {
     <footer 
       ref={footerRef}
       className="relative bg-[#0f172a] text-gray-200 pt-16 pb-6 overflow-hidden"
-      
     >
       <ParticlesBackground />
       {/* Futuristické pozadí */}
@@ -92,16 +87,14 @@ const Footer: React.FC = () => {
           animate={isInView ? { opacity: 1, scaleX: 1 } : {}}
           transition={{ duration: 1.5, ease: "easeOut" }}
         />
-        
-        
       </div>
 
       {/* Hlavní obsah */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           {/* Logo & About */}
           <motion.div 
-            className="flex flex-col items-start space-y-5"
+            className="flex flex-col items-start space-y-5 sm:col-span-2 lg:col-span-1"
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, ease: "easeOut" }}
@@ -207,7 +200,7 @@ const Footer: React.FC = () => {
                     />
                     <span className="relative">
                       {link.text}
-                      <span className="absolute left-0 bottom-0 w-full h-[1px] bg-white scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                      <span className="absolute left-0 bottom-0 w-3/4 h-[1px] bg-white scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
                     </span>
                   </Link>
                 </motion.li>
@@ -217,7 +210,7 @@ const Footer: React.FC = () => {
             <div className="absolute -right-2 bottom-0 w-6 h-6 border-b-2 border-r-2 border-orange-500/20 rounded-br-md" />
           </motion.div>
 
-          {/* Services Overview - Futuristické */}
+          {/* Kompletní přehled služeb - VŠECH 6 SLUŽEB */}
           <motion.div
             className="relative"
             initial={{ opacity: 0, y: 30 }}
@@ -232,15 +225,17 @@ const Footer: React.FC = () => {
                 animate={{ opacity: [0.5, 1, 0.5] }}
                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
               />
-              Naše služby
+              Kompletní nabídka
             </h4>
             
             <ul className="space-y-3">
               {[
-                { text: "Webový design", href: "/sluzby#webdesign" },
-                { text: "Grafický design", href: "/sluzby#grafika" },
-                { text: "Editace videí", href: "/sluzby#video" },
-                { text: "Online kurzy", href: "/sluzby#kurzy" }
+                { text: "Webové stránky", href: "/sluzby/web" },
+                { text: "Shoptet e-shop", href: "/sluzby/shoptet" },
+                { text: "Grafický design", href: "/sluzby/grafika" },
+                { text: "Video tvorba", href: "/sluzby/videa" },
+                { text: "Interaktivní kvízy", href: "/sluzby/interaktivni-cviceni" },
+                { text: "Online kurzy", href: "/sluzby/online-kurzy" }
               ].map((service, index) => (
                 <motion.li 
                   key={index}
@@ -270,7 +265,7 @@ const Footer: React.FC = () => {
             <div className="absolute -right-2 bottom-0 w-6 h-6 border-b-2 border-r-2 border-orange-500/20 rounded-br-md" />
           </motion.div>
 
-          {/* Contact & Social - Futuristické */}
+          {/* Contact */}
           <motion.div 
             className="relative"
             initial={{ opacity: 0, y: 30 }}
@@ -288,98 +283,77 @@ const Footer: React.FC = () => {
               Kontaktujte nás
             </h4>
             
-            <ul className="space-y-3 text-sm">
+            <ul className="space-y-4 text-sm">
               <motion.li 
-                className="flex items-center"
+                className="flex items-start"
                 initial={{ opacity: 0 }}
                 animate={isInView ? { opacity: 1 } : {}}
                 transition={{ duration: 0.5, delay: 0.7 }}
               >
                 <div className="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-orange-600/20 to-orange-500/10 
-                  rounded-full mr-3 border border-orange-500/30">
+                  rounded-full mr-3 border border-orange-500/30 flex-shrink-0 mt-0.5">
                   <FaEnvelope className="text-orange-500 text-xs" />
                 </div>
-                <Link href="mailto:vooness@stream.cz" className="hover:text-white transition-colors duration-200">
-                  vooness@stream.cz
-                </Link>
+                <div>
+                  <Link href="mailto:vooness@stream.cz" className="hover:text-white transition-colors duration-200 block">
+                    vooness@stream.cz
+                  </Link>
+                  <span className="text-xs text-gray-400">Napište nám kdykoliv</span>
+                </div>
               </motion.li>
               
               <motion.li 
-                className="flex items-center"
+                className="flex items-start"
                 initial={{ opacity: 0 }}
                 animate={isInView ? { opacity: 1 } : {}}
                 transition={{ duration: 0.5, delay: 0.8 }}
               >
                 <div className="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-orange-600/20 to-orange-500/10 
-                  rounded-full mr-3 border border-orange-500/30">
+                  rounded-full mr-3 border border-orange-500/30 flex-shrink-0 mt-0.5">
                   <FaPhone className="text-orange-500 text-xs" />
                 </div>
-                <Link href="tel:+420605707036" className="hover:text-white transition-colors duration-200">
-                  +420 605 707 036
-                </Link>
+                <div>
+                  <Link href="tel:+420605707036" className="hover:text-white transition-colors duration-200 block">
+                    +420 605 707 036
+                  </Link>
+                  <span className="text-xs text-gray-400">Po-Pá 9:00-17:00</span>
+                </div>
               </motion.li>
               
               <motion.li 
-                className="flex items-center"
+                className="flex items-start"
                 initial={{ opacity: 0 }}
                 animate={isInView ? { opacity: 1 } : {}}
                 transition={{ duration: 0.5, delay: 0.9 }}
               >
                 <div className="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-orange-600/20 to-orange-500/10 
-                  rounded-full mr-3 border border-orange-500/30">
+                  rounded-full mr-3 border border-orange-500/30 flex-shrink-0 mt-0.5">
                   <FaIdCard className="text-orange-500 text-xs" />
                 </div>
-                <span>IČO: 11834153</span>
+                <div>
+                  <span className="block">IČO: 11834153</span>
+                  <span className="text-xs text-gray-400">Oficiální registrace</span>
+                </div>
               </motion.li>
             </ul>
             
-            {/* Sociální ikony s futuristickým stylem */}
-            <motion.div 
-              className="flex space-x-3 mt-6"
-              initial={{ opacity: 0 }}
-              animate={isInView ? { opacity: 1 } : {}}
+            {/* Rychlý kontakt tlačítko */}
+            <motion.div
+              className="mt-6"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={isInView ? { opacity: 1, scale: 1 } : {}}
               transition={{ duration: 0.5, delay: 1 }}
             >
-              {[
-                { icon: <FaFacebookF />, label: "Facebook", href: "#" },
-                { icon: <FaTwitter />, label: "Twitter", href: "#" },
-                { icon: <FaLinkedinIn />, label: "LinkedIn", href: "#" },
-                { icon: <FaInstagram />, label: "Instagram", href: "#" }
-              ].map((social, index) => (
-                <motion.div
-                  key={index}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Link 
-                    href={social.href} 
-                    aria-label={social.label}
-                    className="relative flex items-center justify-center w-10 h-10 bg-gradient-to-br from-orange-600/20 to-orange-500/10 
-                    rounded-full border border-orange-500/30 hover:border-orange-500 transition-colors duration-300 group"
-                  >
-                    <span className="absolute w-full h-full rounded-full bg-orange-500/0 group-hover:bg-orange-500/20 transition-colors duration-300" />
-                    <motion.span
-                      animate={{
-                        boxShadow: [
-                          "0 0 0 0 rgba(249, 115, 22, 0)",
-                          "0 0 0 8px rgba(249, 115, 22, 0.1)",
-                          "0 0 0 0 rgba(249, 115, 22, 0)"
-                        ]
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                        delay: index * 0.5
-                      }}
-                      className="absolute inset-0 rounded-full"
-                    />
-                    <span className="relative z-10 text-orange-500 group-hover:text-orange-400 transition-colors duration-300">
-                      {social.icon}
-                    </span>
-                  </Link>
-                </motion.div>
-              ))}
+              <Link 
+                href="/kontakt" 
+                className="group relative inline-flex items-center w-full justify-center px-4 py-2 bg-gradient-to-r from-orange-600/20 to-orange-500/20 
+                text-sm text-white border border-orange-500/30 rounded-lg overflow-hidden hover:border-orange-400 transition-colors duration-300"
+              >
+                <span className="absolute inset-0 w-full h-full group-hover:translate-x-full duration-700 ease-in-out opacity-0 group-hover:opacity-30
+                  bg-gradient-to-r from-transparent via-white to-transparent"
+                />
+                <span className="relative z-10">Rychlý kontakt</span>
+              </Link>
             </motion.div>
             
             <div className="absolute -right-2 bottom-0 w-6 h-6 border-b-2 border-r-2 border-orange-500/20 rounded-br-md" />

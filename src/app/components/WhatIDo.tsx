@@ -227,7 +227,7 @@ const IntroSection = () => {
           />
         </svg>
       ),
-      link: "/sluzby/Grafika",
+      link: "/sluzby/grafika",
       color: "from-blue-400 to-blue-500",
       bgPattern:
         "radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 50%)",
@@ -277,7 +277,7 @@ const IntroSection = () => {
           />
         </svg>
       ),
-      link: "/sluzby/interaktivnicviceni",
+      link: "/sluzby/interaktivni-cviceni",
       color: "from-indigo-500 to-indigo-600",
       bgPattern:
         "radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%)",
@@ -302,33 +302,10 @@ const IntroSection = () => {
           />
         </svg>
       ),
-      link: "/sluzby/onlinekurzy",
+      link: "/sluzby/online-kurzy",
       color: "from-cyan-500 to-cyan-600",
       bgPattern:
         "radial-gradient(circle at 20% 80%, rgba(34, 211, 238, 0.15) 0%, transparent 50%)",
-    },
-  ];
-
-  const benefits = [
-    {
-      title: "Rychlé dodání",
-      desc: "Většinu projektů za 2-4 týdny",
-      icon: "⚡",
-    },
-    {
-      title: "Transparentní ceny",
-      desc: "Jasná nabídka, žádná překvapení",
-      icon: "💎",
-    },
-    {
-      title: "Dlouhodobá podpora",
-      desc: "Nepustím vás po spuštění",
-      icon: "🛡️",
-    },
-    {
-      title: "Moderní technologie",
-      desc: "Používám to nejlepší z trhu",
-      icon: "🚀",
     },
   ];
 
@@ -619,149 +596,6 @@ const IntroSection = () => {
               </motion.div>
             </div>
           )}
-        </motion.div>
-
-        {/* Benefity */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.0 }}
-          className="relative mb-20"
-        >
-          <div className="relative p-8 rounded-2xl bg-slate-800/90 backdrop-blur-sm border-2 border-orange-500/30 overflow-hidden">
-            {/* Oranžový glow efekt */}
-            <div className="absolute -inset-0.5 bg-gradient-to-br from-orange-500/0 via-orange-500/20 to-orange-600/0 rounded-2xl blur opacity-50" />
-            
-            {/* Top gradient line */}
-            <div className="absolute top-0 left-8 right-8 h-0.5 bg-gradient-to-r from-transparent via-orange-400 to-transparent" />
-            
-            <div className="relative z-10">
-              <div className="text-center mb-8">
-                <div className="flex items-center justify-center gap-3 mb-4">
-                  <div>
-                    <h3 className="text-2xl font-bold text-white">
-                      Proč spolupracovat právě se mnou?
-                    </h3>
-                    <div className="h-0.5 bg-gradient-to-r from-orange-500 to-orange-600 rounded-full mt-1"></div>
-                  </div>
-                </div>
-                <p className="text-gray-400">
-                  Kombinuji technické dovednosti s obchodním myšlením a psychologií prodeje
-                </p>
-              </div>
-              <div className="grid md:grid-cols-4 gap-6 mb-8">
-                {benefits.map((b, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.4, delay: 1.1 + i * 0.1 }}
-                    className="text-center"
-                  >
-                    <div className="text-3xl mb-3">{b.icon}</div>
-                    <h4 className="font-semibold text-white mb-1">{b.title}</h4>
-                    <p className="text-sm text-slate-400">{b.desc}</p>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-
-            {/* Bottom gradient line */}
-            <div className="absolute bottom-0 left-8 right-8 h-0.5 bg-gradient-to-r from-transparent via-orange-400/50 to-transparent" />
-          </div>
-
-          {!isMobileOrTablet &&
-            [...Array(6)].map((_, i) => (
-              <motion.div
-                key={i}
-                className="absolute w-1 h-1 bg-orange-400 rounded-full hidden lg:block"
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                }}
-                animate={{
-                  y: [0, -30, 0],
-                  opacity: [0, 1, 0],
-                }}
-                transition={{
-                  duration: 3 + Math.random() * 2,
-                  repeat: Infinity,
-                  delay: i * 0.5,
-                  ease: "easeInOut",
-                }}
-              />
-            ))}
-        </motion.div>
-
-        {/* CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.4 }}
-          className="text-center"
-        >
-          <div className="mb-8">
-            <h3 className="text-2xl font-bold text-white mb-3">
-              Připraven na projekt, který skutečně funguje?
-            </h3>
-            <p className="text-gray-400 mb-2">
-              Napište mi a během 24 hodin dostanete detailní návrh řešení
-            </p>
-            <p className="text-sm text-green-400">
-              ✓ Bezplatná konzultace  ✓ Jasný plán a cena  ✓ Bez závazků
-            </p>
-          </div>
-          
-          <div className="flex flex-col sm:flex-row gap-3 max-w-sm mx-auto">
-            <a
-              href="/kontakt"
-              className="group relative flex-1"
-            >
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-orange-600 to-orange-500 rounded-lg blur opacity-70 group-hover:opacity-100 transition duration-200"></div>
-              <div className="relative flex items-center justify-center px-4 py-2.5 bg-[#0f172a] rounded-lg border border-orange-500/50 group-hover:border-orange-400 transition-colors">
-                <span className="text-white font-semibold text-sm mr-2">
-                  Začít projekt
-                </span>
-                <svg
-                  className="w-4 h-4 text-orange-400 group-hover:translate-x-1 transition-transform"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M13 7l5 5m0 0l-5 5m5-5H6"
-                  />
-                </svg>
-              </div>
-            </a>
-            
-            <a
-              href="/portfolio"
-              className="group relative flex-1"
-            >
-              <div className="relative flex items-center justify-center px-4 py-2.5 bg-slate-800/80 rounded-lg border border-slate-600 group-hover:border-slate-500 transition-colors backdrop-blur-sm">
-                <span className="text-white font-medium text-sm mr-2">
-                  Ukázky prací
-                </span>
-                <svg
-                  className="w-4 h-4 text-slate-400 group-hover:translate-x-1 transition-transform"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M13 7l5 5m0 0l-5 5m5-5H6"
-                  />
-                </svg>
-              </div>
-            </a>
-          </div>
         </motion.div>
       </div>
     </section>

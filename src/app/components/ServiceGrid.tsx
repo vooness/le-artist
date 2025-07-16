@@ -10,6 +10,7 @@ interface Service {
   icon: React.ReactNode;
   checkmarks: string[];
   color: string;
+  link: string;
 }
 
 // Opravené ikony jako SVG komponenty
@@ -82,7 +83,7 @@ const ChevronRight = () => (
   </svg>
 );
 
-// Rozšířená data pro 6 služeb
+// Rozšířená data pro 6 služeb s přidanými linky
 const services: Service[] = [
   {
     title: "Webovky",
@@ -95,7 +96,8 @@ const services: Service[] = [
       "Rychlost načítání pod 3 sekundy",
       "Integrace s analytickými nástroji",
     ],
-    color: "#F97316" // Oranžová
+    color: "#F97316", // Oranžová
+    link: "/sluzby/web"
   },
   {
     title: "Grafika",
@@ -108,7 +110,8 @@ const services: Service[] = [
       "Firemní identita v jednotném stylu",
       "Rychlé dodání do 3-5 dnů",
     ],
-    color: "#38BDF8" // Modrá
+    color: "#38BDF8", // Modrá
+    link: "/sluzby/grafika"
   },
   {
     title: "Střih Videa",
@@ -121,7 +124,8 @@ const services: Service[] = [
       "Vlastní hudba bez autorských poplatků",
       "Express dodání do 48 hodin",
     ],
-    color: "#EC4899" // Růžová
+    color: "#EC4899", // Růžová
+    link: "/sluzby/videa"
   },
   {
     title: "E-shopy",
@@ -134,7 +138,8 @@ const services: Service[] = [
       "Multi-měnové podpory",
       "Optimalizace pro konverze",
     ],
-    color: "#10B981" // Zelená
+    color: "#10B981", // Zelená
+    link: "/sluzby/shoptet"
   },
   {
     title: "Online Kurzy",
@@ -147,7 +152,8 @@ const services: Service[] = [
       "Sledování pokroku studentů",
       "SCORM kompatibilita",
     ],
-    color: "#8B5CF6" // Fialová
+    color: "#8B5CF6", // Fialová
+    link: "/sluzby/online-kurzy"
   },
   {
     title: "E-learning",
@@ -160,7 +166,8 @@ const services: Service[] = [
       "Gamifikační mechaniky",
       "Pokročilé simulace a scénáře",
     ],
-    color: "#EF4444" // Červená
+    color: "#EF4444", // Červená
+    link: "/sluzby/interaktivni-cviceni"
   },
 ];
 
@@ -404,7 +411,7 @@ const ServiceCard: React.FC<{
           
           {/* CTA tlačítko */}
           <button
-            onClick={() => router.push("/kontakt")}
+            onClick={() => router.push(service.link)}
             className={`w-full relative group/btn overflow-hidden rounded-xl ${
               isMobile ? '' : 'transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]'
             }`}
@@ -442,7 +449,7 @@ const ServiceCard: React.FC<{
                   textShadow: `0 0 10px ${service.color}40`,
                 }}
               >
-                Začněme spolupráci
+                Více informací
               </span>
               <div 
                 className={`${

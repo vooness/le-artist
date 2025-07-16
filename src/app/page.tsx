@@ -71,7 +71,8 @@ function usePreloadComponents() {
   useEffect(() => {
     const timer = setTimeout(() => {
       import('./components/WhatIDo');
-      
+      import('./components/ModernBenefitsSection');
+      import('./components/WordPressVsCustomSection');
       import('./components/ServiceGrid');
       import('./components/Comparison'); // Preload nové komponenty
     }, 1000);
@@ -85,11 +86,20 @@ const WhatIDo = dynamic(() => import('./components/WhatIDo'), {
   loading: () => <Skeleton height={400} />,
 });
 
+const ModernBenefitsSection = dynamic(() => import('./components/ModernBenefitsSection'), {
+  ssr: false,
+  loading: () => <Skeleton height={600} />,
+});
+
+const WordPressVsCustomSection = dynamic(() => import('./components/WordPressVsCustomSection'), {
+  ssr: false,
+  loading: () => <Skeleton height={500} />,
+});
+
 const ServicesGrid = dynamic(() => import('./components/ServiceGrid'), {
   ssr: false,
   loading: () => <Skeleton height={400} />,
 });
-
 
 const ProjectsSection = dynamic(() => import('./components/Project'), {
   ssr: false,
@@ -123,19 +133,28 @@ export default function Home() {
       <LazyComponent priority height={500}>
         <WhatIDo />
       </LazyComponent>
-      
+
+      {/* Nová Benefits sekce hned pod WhatIDo */}
+      <LazyComponent height={600}>
+        <ModernBenefitsSection />
+      </LazyComponent>
+
+      {/* WordPress vs Custom React/Next.js comparison */}
+      <LazyComponent height={500}>
+        <WordPressVsCustomSection />
+      </LazyComponent>
 
       {/* Remaining sections lazy-load on scroll */}
       <LazyComponent height={500}>
         <ServicesGrid />
       </LazyComponent>
-     
+
       {/* Přidání nové komponenty Comparison hned po WhyTrustMe */}
-     
+      
       <LazyComponent height={500}>
         <ProjectsSection />
       </LazyComponent>
-      
+
       <LazyComponent height={200}>
         <Footer />
       </LazyComponent>
