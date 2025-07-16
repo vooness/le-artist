@@ -10,37 +10,62 @@ const inter = Inter({ subsets: ["latin"] });
 
 // Metadata for SEO and social sharing
 export const metadata: Metadata = {
-  title: "Le Artist - Grafické studio",
+  title: "Le Artist - Komplexní webové služby, grafika a Shoptet úpravy | Ostrava",
   description:
-    "Le Artist nabízí komplexní služby v oblasti webdesignu, grafického designu, video editace, tvorby reklamních kampaní, odborného lektorství a úprav Shoptetu pro e-shopy. Moderní a kreativní přístup k tvorbě webů, firemní identity a marketingových materiálů pro firmy po celé České republice, včetně Ostravy a remote spolupráce.",
+    "Profesionální webové stránky na míru, grafický design, video tvorba, Shoptet e-shop úpravy a online kurzy. Specializujeme se na responzivní weby, brandmanuály a interaktivní kvízy pro firmy v Ostravě a celé České republice.",
   keywords: [
+    // Hlavní brand
     "le artist",
-    "grafické studio",
+    "grafické studio ostrava",
+    
+    // Webové stránky (z výzkumu)
+    "webové stránky na míru",
+    "responzivní webové stránky",
+    "levné webové stránky",
     "webdesign ostrava",
-    "grafický design",
-    "video editace",
-    "shoptet úpravy",
-    "logo design",
-    "lektorství",
-    "online kurzy",
-    "firemní identita",
-    "branding",
     "tvorba webů",
-    "e-shop design",
-    "reklamní kampaně",
-    "marketingové materiály",
+    
+    // Shoptet (niche specializace)
+    "shoptet úpravy",
+    "shoptet customizace",
+    "shoptet specialista",
+    "shoptet api integrace",
+    
+    // Grafický design (alternativní termíny)
+    "grafické řešení",
+    "vizuální identita",
+    "brandmanuál",
+    "logo design",
+    "designové služby",
+    
+    // Video (technické termíny)
+    "video tvorba",
+    "video postprodukce",
+    "firemní video",
+    "video editace",
+    
+    // Online vzdělávání
+    "online kurzy",
+    "lektorství",
+    "firemní školení",
+    
+    // Interaktivní prvky
+    "interaktivní kvízy",
+    "kvízy pro firmy",
+    
+    // Lokální SEO
     "ostrava grafik",
     "webdesigner ostrava",
+    "moravskoslezský kraj",
     "česká republika"
   ],
   icons: {
     icon: "/favicon.png"
   },
   openGraph: {
-    title:
-      "Le Artist - Profesionální webové služby, grafika, video editing, reklamy, lektorství a úpravy Shoptetu v ČR a Ostravě",
+    title: "Le Artist - Webové stránky, grafika, Shoptet úpravy | Ostrava",
     description:
-      "Komplexní řešení v oblasti webdesignu, grafiky, video editace, tvorby reklamních kampaní, lektorství a úprav Shoptetu pro e-shopy. Nabízím také odborné lektorství a workshopy pro firmy a jednotlivce po celé České republice, včetně Ostravy a remote spolupráce.",
+      "Profesionální tvorba webových stránek na míru, grafický design, video produkce a Shoptet e-shop úpravy. Specializujeme se na responzivní weby, brandmanuály a online kurzy pro firmy v Ostravě a ČR.",
     url: "https://le-artist.cz",
     siteName: "Le Artist",
     images: [
@@ -48,7 +73,7 @@ export const metadata: Metadata = {
         url: "https://le-artist.cz/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Le Artist - Profesionální webové služby, design a úpravy Shoptetu v Ostravě a ČR"
+        alt: "Le Artist - Profesionální webové služby a design v Ostravě"
       }
     ],
     locale: "cs_CZ",
@@ -56,11 +81,24 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title:
-      "Le Artist - Profesionální webové služby, grafika, video editing, reklamy, lektorství a úpravy Shoptetu",
+    title: "Le Artist - Webové stránky, grafika, Shoptet úpravy | Ostrava",
     description:
-      "Moderní a komplexní řešení v oblasti webdesignu, grafiky, video editace, tvorby reklam a úprav Shoptetu pro e-shopy. Nabízím také odborné lektorství a kurzy pro firmy po celé České republice, včetně Ostravy, s možností remote spolupráce.",
+      "Profesionální tvorba webových stránek, grafický design, video produkce a Shoptet úpravy. Specializujeme se na responzivní weby a brandmanuály pro firmy v Ostravě a ČR.",
     images: ["https://le-artist.cz/og-image.jpg"]
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  alternates: {
+    canonical: "https://le-artist.cz"
   }
 };
 

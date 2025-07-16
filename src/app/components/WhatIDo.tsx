@@ -177,7 +177,7 @@ const IntroSection = () => {
           />
         </svg>
       ),
-      link: "/sluzby/web",
+      link: "/sluzby/tvorba-webovych-stranek",
       color: "from-orange-500 to-orange-600",
       bgPattern:
         "radial-gradient(circle at 50% 20%, rgba(249, 115, 22, 0.15) 0%, transparent 50%)",
@@ -202,7 +202,7 @@ const IntroSection = () => {
           />
         </svg>
       ),
-      link: "/sluzby/shoptet",
+      link: "/sluzby/vlastni-eshop",
       color: "from-orange-500 to-orange-600",
       bgPattern:
         "radial-gradient(circle at 50% 80%, rgba(249, 115, 22, 0.15) 0%, transparent 50%)",
@@ -227,7 +227,7 @@ const IntroSection = () => {
           />
         </svg>
       ),
-      link: "/sluzby/grafika",
+      link: "/sluzby/graficky-design",
       color: "from-blue-400 to-blue-500",
       bgPattern:
         "radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 50%)",
@@ -252,7 +252,7 @@ const IntroSection = () => {
           />
         </svg>
       ),
-      link: "/sluzby/videa",
+      link: "/sluzby/reklamni-videa",
       color: "from-pink-500 to-pink-600",
       bgPattern:
         "radial-gradient(circle at 80% 50%, rgba(236, 72, 153, 0.15) 0%, transparent 50%)",
@@ -302,7 +302,7 @@ const IntroSection = () => {
           />
         </svg>
       ),
-      link: "/sluzby/online-kurzy",
+      link: "/sluzby/firemni-online-kurzy",
       color: "from-cyan-500 to-cyan-600",
       bgPattern:
         "radial-gradient(circle at 20% 80%, rgba(34, 211, 238, 0.15) 0%, transparent 50%)",

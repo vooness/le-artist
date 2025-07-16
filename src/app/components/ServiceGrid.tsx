@@ -97,7 +97,7 @@ const services: Service[] = [
       "Integrace s analytickými nástroji",
     ],
     color: "#F97316", // Oranžová
-    link: "/sluzby/web"
+    link: "/sluzby/tvorba-webovych-stranek"
   },
   {
     title: "Grafika",
@@ -111,7 +111,7 @@ const services: Service[] = [
       "Rychlé dodání do 3-5 dnů",
     ],
     color: "#38BDF8", // Modrá
-    link: "/sluzby/grafika"
+    link: "/sluzby/graficky-design"
   },
   {
     title: "Střih Videa",
@@ -125,7 +125,7 @@ const services: Service[] = [
       "Express dodání do 48 hodin",
     ],
     color: "#EC4899", // Růžová
-    link: "/sluzby/videa"
+    link: "/sluzby/reklamni-videa"
   },
   {
     title: "E-shopy",
@@ -139,7 +139,7 @@ const services: Service[] = [
       "Optimalizace pro konverze",
     ],
     color: "#10B981", // Zelená
-    link: "/sluzby/shoptet"
+    link: "/sluzby/vlastni-eshop"
   },
   {
     title: "Online Kurzy",
@@ -153,7 +153,7 @@ const services: Service[] = [
       "SCORM kompatibilita",
     ],
     color: "#8B5CF6", // Fialová
-    link: "/sluzby/online-kurzy"
+    link: "/sluzby/firemni-online-kurzy"
   },
   {
     title: "E-learning",

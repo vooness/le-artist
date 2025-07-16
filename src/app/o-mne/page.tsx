@@ -1,55 +1,50 @@
 import Navbar from "../components/Navbar";
-
 import Footer from "../components/Footer";
 import WhyTrustMeSection from "../components/WhyTrustMe";
-
 import type { Metadata } from "next";
 import SkillSection from "../components/SkillSection";
 import WhyTrustMe from "../components/WhyTrustMe";
 
 export const metadata: Metadata = {
-  title: "Lektorské kurzy a vzdělávání - Le Artist",
+  title: "O mně - Le Artist | Webdesigner a vývojář z Ostravy",
   description:
-    "Nabízím vzdělávací kurzy financované z Evropského sociálního fondu se zaměřením na webdesign, grafiku a střih videa. Kurzy jsou určené pro zaměstnané, OSVČ i nezaměstnané (20 % nákladů hradí účastník). Získejte moderní dovednosti v oblasti tvorby webů, grafiky a video editace.",
+    "Jsem kreativní webdesigner a vývojář z Ostravy specializující se na moderní weby, grafický design a tvorbu videí. Přetvářím vize v digitální realitu pomocí React.js, Next.js a moderních technologií. Každý projekt začíná bezplatnou konzultací.",
   keywords: [
-    "lektor",
-    "lektorství",
-    "lektorské kurzy",
-    "vzdělávací kurzy",
-    "kurzy webdesignu",
-    "kurzy grafiky",
-    "kurzy střihu videa",
-    "Evropský sociální fond",
-    "ESF",
-    "kurzy zdarma",
-    "kurzy pro zaměstnané",
-    "kurzy pro OSVČ",
-    "kurzy pro nezaměstnané",
-    "profesní vzdělávání",
-    "moderní dovednosti",
-    "webdesign",
-    "grafika",
-    "video editing",
-    "motion design",
-    "Adobe Photoshop",
-    "AI tools",
-    "branding",
-    "animace",
-    "kreativní videa",
-    "marketing",
-    "HTML",
-    "CSS",
-    "JavaScript"
+    "webdesigner Ostrava",
+    "vývojář React.js",
+    "grafický design",
+    "tvorba videí",
+    "Le Artist",
+    "webové stránky",
+    "React.js vývojář",
+    "Next.js",
+    "JavaScript",
+    "Tailwind CSS",
+    "Shoptet",
+    ".NET Core",
+    "moderní webdesign",
+    "responzivní design",
+    "UX/UI design",
+    "freelancer Ostrava",
+    "digitální design",
+    "frontend vývojář",
+    "webový vývojář",
+    "kreativní řešení",
+    "profesionální weby",
+    "bezplatná konzultace",
+    "Shiba Inu",
+    "Akita Inu",
+    "Moravskoslezský kraj"
   ],
   robots: {
     index: true,
     follow: true,
   },
   alternates: {
-    canonical: "https://yourwebsite.com/lektor",
+    canonical: "https://yourwebsite.com/o-mne",
     languages: {
-      cs: "https://yourwebsite.com/cs/lektor",
-      en: "https://yourwebsite.com/en/lecturer",
+      cs: "https://yourwebsite.com/cs/o-mne",
+      en: "https://yourwebsite.com/en/about",
     },
   },
   verification: {
@@ -57,55 +52,57 @@ export const metadata: Metadata = {
     yandex: "YOUR_YANDEX_VERIFICATION_CODE",
   },
   openGraph: {
-    title: "Lektorské kurzy a vzdělávání - Le Artist",
+    title: "O mně - Le Artist | Kreativní webdesigner z Ostravy",
     description:
-      "Nabízím vzdělávací kurzy financované ESF se zaměřením na webdesign, grafiku a video editaci. Využijte příležitost získat moderní dovednosti, ať už jste zaměstnaní, OSVČ či nezaměstnaní.",
-    url: "https://yourwebsite.com/lektor",
+      "Poznajte mě blíže! Jsem vášnivý webdesigner a vývojář z Ostravy, který přetvářím digitální vize v realitu. Specializuji se na React.js, moderní design a tvorbu videí. Inspirují mě moji tři psi a každý projekt řeším s osobním přístupem.",
+    url: "https://yourwebsite.com/o-mne",
     siteName: "Le Artist",
     images: [
       {
-        url: "https://yourwebsite.com/og-image-lektor.jpg",
+        url: "https://yourwebsite.com/imgs/logo4.svg",
         width: 1200,
         height: 630,
-        alt: "Lektorské kurzy - Le Artist",
+        alt: "Le Artist - Osobní profil webdesignera z Ostravy",
       },
     ],
     locale: "cs_CZ",
-    type: "website",
+    type: "profile",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Lektorské kurzy a vzdělávání - Le Artist",
+    title: "O mně - Le Artist | Webdesigner z Ostravy",
     description:
-      "Nabízím vzdělávací kurzy financované z Evropského sociálního fondu pro všechny, kdo chtějí rozvíjet své dovednosti v oblasti webdesignu, grafiky a střihu videa.",
-    images: ["https://yourwebsite.com/og-image-lektor.jpg"],
+      "Poznajte kreativního webdesignera z Ostravy! Specializuji se na React.js, moderní webdesign a tvorbu videí. Každý projekt řeším s osobním přístupem a vášní pro detail.",
+    images: ["https://yourwebsite.com/imgs/logo4.svg"],
   },
   authors: [
     { name: "Le Artist", url: "https://yourwebsite.com" }
   ],
   viewport: "width=device-width, initial-scale=1",
-  themeColor: "#ffffff",
+  themeColor: "#f97316", // Orange color matching the design
   other: {
     abstract:
-      "Vzdělávací kurzy a lektorství pro webdesign, grafiku a střih videa, financované z ESF. Kurzy jsou určené pro všechny zájemce z řad zaměstnaných, OSVČ i nezaměstnaných.",
+      "Osobní profil kreativního webdesignera a vývojáře Le Artist z Ostravy. Specializace na React.js, Next.js, grafický design a tvorbu videí s osobním přístupem ke každému projektu.",
     distribution: "global",
     rating: "general",
     "revisit-after": "7 days",
     HandheldFriendly: "True",
+    "geo.region": "CZ-80",
+    "geo.placename": "Ostrava",
+    "geo.position": "49.8175;18.2464",
+    ICBM: "49.8175, 18.2464",
   },
 };
 
-export default function Home() {
+export default function About() {
   return (
     <>
       {/* Navbar Component */}
       <Navbar />
-
       
-        <SkillSection />
-        <WhyTrustMe />
+      <SkillSection />
+      <WhyTrustMe />
       
-
       {/* Footer Component */}
       <Footer />
     </>

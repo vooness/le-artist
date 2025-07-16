@@ -230,12 +230,12 @@ const Footer: React.FC = () => {
             
             <ul className="space-y-3">
               {[
-                { text: "Webové stránky", href: "/sluzby/web" },
-                { text: "Shoptet e-shop", href: "/sluzby/shoptet" },
-                { text: "Grafický design", href: "/sluzby/grafika" },
-                { text: "Video tvorba", href: "/sluzby/videa" },
+                { text: "Webové stránky", href: "/sluzby/tvorba-webovych-stranek" },
+                { text: "Shoptet e-shop", href: "/sluzby/vlastni-eshop" },
+                { text: "Grafický design", href: "/sluzby/graficky-design" },
+                { text: "Video tvorba", href: "/sluzby/reklamni-videa" },
                 { text: "Interaktivní kvízy", href: "/sluzby/interaktivni-cviceni" },
-                { text: "Online kurzy", href: "/sluzby/online-kurzy" }
+                { text: "Online kurzy", href: "/sluzby/firemni-online-kurzy" }
               ].map((service, index) => (
                 <motion.li 
                   key={index}

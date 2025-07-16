@@ -4,75 +4,110 @@ import Footer from "../components/Footer";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Kontaktujte mě - Le Artist",
+  title: "Kontakt a poptávka služeb | Le Artist Ostrava",
   description:
-    "Máte dotazy ohledně mých služeb v oblasti webdesignu, grafiky, video editace, reklam, lektorství a úprav Shoptetu? Kontaktujte mě a já Vám rád pomohu s profesionálním řešením, přizpůsobeným Vašim potřebám.",
+    "Kontaktujte Le Artist pro poptávku webových řešení, Shoptet customizace, grafických služeb, video tvorby a online kurzů. Bezplatná konzultace a cenová nabídka pro firmy v Ostravě a České republice.",
   keywords: [
+    // Kontaktní kombinace s službami - nízká konkurence
+    "kontakt webdesign ostrava",
+    "kontakt grafické služby ostrava",
+    "kontakt shoptet specialista",
+    "kontakt video tvorba ostrava",
+    "kontakt online kurzy",
+    
+    // Poptávkové termíny - vysoká konverze
+    "poptávka webových stránek",
+    "poptávka grafického designu",
+    "poptávka shoptet úprav",
+    "poptávka video služeb",
+    "poptávka online kurzů",
+    
+    // Konzultační termíny
+    "bezplatná konzultace webdesign",
+    "konzultace grafické služby",
+    "konzultace shoptet řešení",
+    "konzultace video projektů",
+    
+    // Cenové dotazy
+    "cenová nabídka webové stránky",
+    "cenová nabídka logo design",
+    "cenová nabídka shoptet úpravy",
+    "cenová nabídka video tvorba",
+    
+    // Lokální business termíny
+    "digitální služby ostrava kontakt",
+    "webové služby ostrava kontakt",
+    "grafické studio ostrava kontakt",
+    "video produkce ostrava kontakt",
+    
+    // Specifické služby kontakt
+    "kontakt webové řešení",
+    "kontakt brandmanuál",
+    "kontakt firemní video",
+    "kontakt interaktivní kvízy",
+    "kontakt AI kurzy",
+    
+    // Procesní kontakt
+    "jak objednat webové stránky",
+    "jak objednat logo design",
+    "jak objednat shoptet úpravy",
+    "jak objednat video",
+    
+    // Tradiční kontaktní termíny
     "kontakt",
     "kontaktujte mě",
-    "webdesign",
-    "grafika",
-    "video editing",
-    "video editace",
-    "reklamy",
-    "lektorství",
-    "úpravy Shoptetu",
+    "le artist kontakt",
     "osobní služby",
     "remote služby",
-    "profesionální služby"
+    "profesionální služby",
+    
+    // Lokální SEO
+    "ostrava kontakt",
+    "moravskoslezský kraj služby",
+    "česká republika digitální služby",
+    "severní morava webdesign"
   ],
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    }
   },
   alternates: {
-    canonical: "https://yourwebsite.com/kontakt",
-    languages: {
-      cs: "https://yourwebsite.com/cs/kontakt",
-      en: "https://yourwebsite.com/en/contact",
-    },
-  },
-  verification: {
-    google: "YOUR_GOOGLE_SITE_VERIFICATION_CODE",
-    yandex: "YOUR_YANDEX_VERIFICATION_CODE",
+    canonical: "https://le-artist.cz/kontakt"
   },
   openGraph: {
-    title: "Kontaktujte mě - Le Artist",
+    title: "Kontakt a poptávka služeb | Le Artist Ostrava",
     description:
-      "Máte dotazy ohledně mých služeb? Kontaktujte mě pro profesionální webdesign, grafiku, video editaci, reklamy, lektorství a úpravy Shoptetu. Jsem zde, abych Vám pomohl.",
-    url: "https://yourwebsite.com/kontakt",
+      "Kontaktujte Le Artist pro poptávku webových řešení, grafických služeb, video tvorby a online kurzů. Bezplatná konzultace a cenová nabídka v Ostravě a ČR.",
+    url: "https://le-artist.cz/kontakt",
     siteName: "Le Artist",
     images: [
       {
-        url: "https://yourwebsite.com/og-image-kontakt.jpg",
+        url: "https://le-artist.cz/og-image-kontakt.jpg",
         width: 1200,
         height: 630,
-        alt: "Kontaktujte mě - Le Artist",
-      },
+        alt: "Kontakt a poptávka služeb | Le Artist Ostrava"
+      }
     ],
     locale: "cs_CZ",
-    type: "website",
+    type: "website"
   },
   twitter: {
     card: "summary_large_image",
-    title: "Kontaktujte mě - Le Artist",
+    title: "Kontakt a poptávka služeb | Le Artist Ostrava",
     description:
-      "Kontaktujte mě pro profesionální řešení v oblasti webdesignu, grafiky, video editace, reklam, lektorství a úprav Shoptetu.",
-    images: ["https://yourwebsite.com/og-image-kontakt.jpg"],
+      "Kontaktujte Le Artist pro webové řešení, grafické služby, video tvorbu a online kurzy. Bezplatná konzultace a cenová nabídka v Ostravě a ČR.",
+    images: ["https://le-artist.cz/og-image-kontakt.jpg"]
   },
   authors: [
-    { name: "Le Artist", url: "https://yourwebsite.com" }
-  ],
-  viewport: "width=device-width, initial-scale=1",
-  themeColor: "#ffffff",
-  other: {
-    abstract:
-      "Kontaktujte mě osobně pro profesionální služby v oblasti webdesignu, grafiky, video editace, reklam, lektorství a úprav Shoptetu.",
-    distribution: "global",
-    rating: "general",
-    "revisit-after": "7 days",
-    HandheldFriendly: "True",
-  },
+    { name: "Le Artist", url: "https://le-artist.cz" }
+  ]
 };
 
 export default function Home() {
