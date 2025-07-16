@@ -27,37 +27,37 @@ import {
 const serviceItems = [
   {
     title: "Webové stránky",
-    href: "/sluzby/web",
+    href: "/sluzby/tvorba-webovych-stranek",
     icon: <FaGlobe className="text-orange-500" />,
     description: "Moderní responzivní weby"
   },
   {
     title: "Shoptet e-shop",
-    href: "/sluzby/shoptet",
+    href: "/sluzby/vlastni-eshop",
     icon: <FaShoppingCart className="text-orange-500" />,
     description: "Kompletní e-shop řešení"
   },
   {
     title: "Grafický design",
-    href: "/sluzby/Grafika",
+    href: "/sluzby/graficky-design",
     icon: <FaPaintBrush className="text-blue-400" />,
     description: "Loga a vizuální identita"
   },
   {
     title: "Video tvorba",
-    href: "/sluzby/videa",
+    href: "/sluzby/reklamni-videa",
     icon: <FaVideo className="text-pink-400" />,
     description: "Střih videí a reklam"
   },
   {
     title: "Interaktivní kvízy",
-    href: "/sluzby/interaktivnicviceni",
+    href: "/sluzby/interaktivni-cviceni",
     icon: <FaGamepad className="text-indigo-400" />,
     description: "E-learning moduly"
   },
   {
     title: "Online kurzy",
-    href: "/sluzby/onlinekurzy",
+    href: "/sluzby/firemni-online-kurzy",
     icon: <FaGraduationCap className="text-sky-400" />,
     description: "Interaktivní vzdělávání"
   }
