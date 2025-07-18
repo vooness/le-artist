@@ -554,7 +554,7 @@ const WebServicesPage: React.FC = () => {
                 title="Prezentační"
                 price="od 15 000 Kč"
                 features={[
-                  "Do 5 podstránek",
+                  "jednostránkový web",
                   "Responzivní design",
                   "Kontaktní formulář",
                   "Základní SEO",
@@ -569,13 +569,13 @@ const WebServicesPage: React.FC = () => {
               
               <PricingPackage
                 title="Business"
-                price="od 35 000 Kč"
+                price="od 30 000 Kč"
                 features={[
-                  "8-12 podstránek",
+                  "5-10 podstránek",
                   "Blog systém",
                   "Pokročilé SEO",
+                  "Unikátní moderní vzhled",
                   "Google Mapy integrace",
-                  "Napojení na sociální sítě",
                   "Kontaktní a objednávkové formuláře",
                   "Analytics a konverze tracking",
                   "Performance optimalizace",
@@ -593,7 +593,7 @@ const WebServicesPage: React.FC = () => {
                   "15+ podstránek",
                   "Vícejazyčná verze",
                   "Pokročilá analytika",
-                  "API integrace (CRM, newslettery)",
+                  "Profesionální vzhled",
                   "Vlastní funkce na míru",
                   "A/B testing setup",
                   "Schema markup",
